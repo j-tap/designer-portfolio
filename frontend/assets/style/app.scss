@@ -1,0 +1,14 @@
+@use 'normalize';
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  color: $color__white;
+  background-color: $color__black;
+}
+
+a {
+  color: inherit;
+}

@@ -1,6 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import en from './locales/en'
-import ru from './locales/ru'
+import i18n from './config/i18n'
+import strapi from './config/strapi'
 export default defineNuxtConfig({
 	vite: {
 		css: {
@@ -23,18 +23,6 @@ export default defineNuxtConfig({
 		'@nuxtjs/strapi',
 	  '@nuxtjs/i18n',
   ],
-  strapi: {
-    url: process.env.STRAPI_URL,
-    prefix: '/api',
-    version: 'v4',
-    cookie: {},
-    cookieName: 'strapi_jwt',
-  },
-	i18n: {
-		locales: ['en', 'ru'],
-		defaultLocale: 'en',
-		vueI18n: {
-			messages: { en, ru },
-		},
-	},
+  strapi,
+	i18n,
 })

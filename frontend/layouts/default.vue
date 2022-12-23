@@ -1,18 +1,39 @@
 <script setup>
+import TheHeader from '~/components/TheHeader/index.vue'
+
 const route = useRoute()
 const title = computed(() => route.meta.title)
 </script>
 
 <template>
   <div class="layout-default">
-    <header class="header">
-      <h1>{{ title }}</h1>
-    </header>
-    <main class="main">
+    <TheHeader class="layout-default__header"/>
+    <main class="layout-default__main">
       <slot />
     </main>
-    <footer class="footer"></footer>
+    <footer class="ayout-default__footer"></footer>
   </div>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.layout-default {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  justify-content: space-between;
+  flex-direction: column;
+  align-items: flex-start;
+
+  &__header {
+    width: 100%;
+  }
+  &__main {
+    margin-top: $header__height;
+    padding-top: 85px;
+    width: 100%;
+  }
+  &__footer {
+    width: 100%;
+  }
+}
+</style>

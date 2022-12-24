@@ -1,6 +1,8 @@
 <template>
   <div class="page-project">
-    <h1 class="page-project__title">{{ project.title }}</h1>
+    <TitleOutline class="page-project__title" tag="h1">
+      {{ project.title }}
+    </TitleOutline>
     <ul>
       <li v-for="page in project.pages" :key="strToNumHash(page.title)">
         <h2>{{ page.title }}</h2>
@@ -37,6 +39,7 @@
 </template>
 
 <script setup>
+import { TitleOutline } from '~/components/common'
 import projects from '~/mocks/projects.js'
 
 const route = useRoute()

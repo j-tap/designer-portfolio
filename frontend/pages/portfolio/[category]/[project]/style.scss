@@ -1,7 +1,5 @@
 .page-project {
   &__title {
-    font-weight: 700;
-    font-size: 100px;
-    @include text-outline($color__white, $color__dark);
+    font-size: clamp(36px, 100px, 9vw);
   }
 }

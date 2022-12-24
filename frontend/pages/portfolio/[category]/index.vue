@@ -1,6 +1,8 @@
 <template>
   <div class="page-category">
-    <h1 class="page-category__title">{{ category.title }}</h1>
+    <TitleOutline class="page-category__title" tag="h1">
+      {{ category.title }}
+    </TitleOutline>
     <ul>
       <li v-for="item in projectsList" :key="item.name">
         <NuxtLink :to="{ name: 'portfolio-category-project', params: { category: categoryName, project: item.name } }">
@@ -12,6 +14,7 @@
 </template>
 
 <script setup>
+import { TitleOutline } from '~/components/common'
 import categories from '~/mocks/categories.js'
 import projects from '~/mocks/projects.js'
 

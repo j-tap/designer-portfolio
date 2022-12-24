@@ -1,0 +1,32 @@
+.title-outline {
+  margin: 0;
+  font-style: normal;
+  font-weight: 700;
+  font-size: clamp(36px, 170px, 9vw);
+  text-decoration: none;
+  text-transform: uppercase;
+  @include text-outline($color__white);
+
+  &_hoverable {
+    position: relative;
+    display: inline-block;
+    white-space: nowrap;
+
+    &::after {
+      content: attr(data-hover);
+      color: $color__white;
+      overflow: hidden;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      transition: width .5s cubic-bezier(0.17, 0.67, 0.32, 0.87);
+    }
+
+    &:hover {
+      &:after {
+        width: 100%;
+      }
+    }
+  }
+}

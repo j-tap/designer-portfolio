@@ -18,10 +18,16 @@
     font-style: normal;
     font-weight: 700;
     font-size: 170px;
+    text-transform: uppercase;
     @include text-outline($color__white, $color__black);
 
     a {
       text-decoration: none;
+      transition: color .2s ease-in;
+
+      &:hover {
+        color: $color__white;
+      }
     }
   }
 }

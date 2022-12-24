@@ -1,0 +1,47 @@
+.page-contacts {
+  &__title {
+
+  }
+  &__lis {
+
+  }
+}
+
+.page-title {
+  &__item {
+    font-family: 'Vipnagorgialla';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 170px;
+    text-transform: uppercase;
+    @include text-outline($color__white, $color__black);
+
+    &:first-child {
+      color: $color__white;
+    }
+  }
+}
+
+.contacts-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  &__item {
+    display: flex;
+    width: 100%;
+    font-family: 'Vipnagorgialla';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 170px;
+    line-height: 100%;
+    text-transform: uppercase;
+    gap: 60px;
+  }
+  &__link {
+    color: $color__blue;
+    text-decoration: none;
+    font-family: 'Manrope';
+    font-size: 100px;
+  }
+}

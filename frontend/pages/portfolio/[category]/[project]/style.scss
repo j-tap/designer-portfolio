@@ -1,9 +1,7 @@
 .page-project {
   &__title {
-    font-family: 'Manrope';
-    font-style: normal;
     font-weight: 700;
     font-size: 100px;
-    @include text-outline($color__white, $color__black);
+    @include text-outline($color__white, $color__dark);
   }
 }

@@ -9,12 +9,12 @@
 
 .page-title {
   &__item {
-    font-family: 'Vipnagorgialla';
+    font-family: $font__decor;
     font-style: normal;
     font-weight: 700;
     font-size: 170px;
     text-transform: uppercase;
-    @include text-outline($color__white, $color__black);
+    @include text-outline($color__white, $color__dark);
 
     &:first-child {
       color: $color__white;
@@ -30,7 +30,7 @@
   &__item {
     display: flex;
     width: 100%;
-    font-family: 'Vipnagorgialla';
+    font-family: $font__decor;
     font-style: normal;
     font-weight: 700;
     font-size: 170px;
@@ -41,7 +41,7 @@
   &__link {
     color: $color__blue;
     text-decoration: none;
-    font-family: 'Manrope';
+    font-family: $font__default;
     font-size: 100px;
   }
 }

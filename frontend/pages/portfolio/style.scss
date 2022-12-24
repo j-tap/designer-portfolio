@@ -14,16 +14,18 @@
 
   }
   &__title {
-    font-family: 'Manrope';
-    font-style: normal;
-    font-weight: 700;
-    font-size: 170px;
-    text-transform: uppercase;
-    @include text-outline($color__white, $color__black);
+    margin: 0;
 
     a {
+      font-family: 'Manrope';
+      font-style: normal;
+      font-weight: 700;
+      font-size: 170px;
+      font-size: clamp(36px, 170px, 12vw);
       text-decoration: none;
+      text-transform: uppercase;
       transition: color .2s ease-in;
+      @include text-outline($color__white, $color__dark);
 
       &:hover {
         color: $color__white;

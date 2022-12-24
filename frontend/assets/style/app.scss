@@ -1,4 +1,10 @@
-@use 'normalize';
+@import 'fonts';
+@import 'normalize';
+
+::selection {
+  color: $color__dark;
+  background: $color__white;
+}
 
 * {
   box-sizing: border-box;
@@ -6,7 +12,8 @@
 
 body {
   color: $color__white;
-  background-color: $color__black;
+  background-color: $color__dark;
+  font-family: $font__default;
 }
 
 a {

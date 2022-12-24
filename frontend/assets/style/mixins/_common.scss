@@ -1,0 +1,10 @@
+@mixin text-outline($colorBase, $colorBg) {
+  color: $colorBg;
+  //text-shadow:
+  //  1px 1px $colorBase,
+  //  -1px 1px $colorBase,
+  //  1px -1px $colorBase,
+  //  -1px -1px $colorBase;
+  -webkit-text-stroke: 1px $colorBase;
+  text-stroke: $colorBase;
+}

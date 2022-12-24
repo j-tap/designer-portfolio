@@ -6,7 +6,7 @@ export default defineNuxtConfig({
 		css: {
 			preprocessorOptions: {
 				scss: {
-					additionalData: '@use "./assets/style/variables.scss" as *;',
+					additionalData: '@use "./assets/style/variables.scss" as *; @use "./assets/style/mixins.scss" as *;',
 				},
 			}
 		},

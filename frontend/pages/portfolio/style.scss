@@ -1,0 +1,27 @@
+.page-portfolio {
+  &__title {
+    position: absolute;
+    left: -9999px;
+  }
+}
+
+.portfolio-categories {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  &__item {
+
+  }
+  &__title {
+    font-family: 'Manrope';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 170px;
+    @include text-outline($color__white, $color__black);
+
+    a {
+      text-decoration: none;
+    }
+  }
+}

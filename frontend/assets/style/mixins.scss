@@ -1,0 +1,4 @@
+@mixin text-outline($colorBase, $colorBg) {
+  color: $colorBg;
+  text-shadow: 0 0 1px $colorBase, 0 0 1px $colorBase, 0 0 1px $colorBase, 0 0 1px $colorBase;
+}

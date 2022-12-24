@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <h1>{{ project.title }}</h1>
+  <div class="page-project">
+    <h1 class="page-project__title">{{ project.title }}</h1>
     <ul>
       <li v-for="page in project.pages" :key="strToNumHash(page.title)">
         <h2>{{ page.title }}</h2>

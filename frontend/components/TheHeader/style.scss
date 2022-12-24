@@ -31,5 +31,10 @@
   &__link {
     font: inherit;
     text-decoration: none;
+    transition: color .2s ease-in;
+
+    &:hover {
+      color: $color__blue;
+    }
   }
 }

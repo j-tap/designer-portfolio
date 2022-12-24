@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <h1>{{ category.title }}</h1>
+  <div class="page-category">
+    <h1 class="page-category__title">{{ category.title }}</h1>
     <ul>
       <li v-for="item in projectsList" :key="item.name">
         <NuxtLink :to="{ name: 'portfolio-category-project', params: { category: categoryName, project: item.name } }">

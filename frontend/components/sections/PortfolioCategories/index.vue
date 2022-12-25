@@ -5,8 +5,15 @@
       :key="item.name"
       class="portfolio-categories__item"
     >
-      <NuxtLink class="portfolio-categories__title" :to="{ name: 'portfolio-category', params: { category: item.name } }">
-        <TitleOutline tag="h2" :data-hover="item.title">
+      <NuxtLink
+        class="portfolio-categories__title"
+        :to="{ name: 'portfolio-category', params: { category: item.name } }"
+      >
+        <TitleOutline
+          class="portfolio-categories__title-text"
+          tag="h2"
+          :data-hover="item.title"
+        >
           {{ item.title }}
         </TitleOutline>
       </NuxtLink>

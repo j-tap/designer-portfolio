@@ -1,21 +1,24 @@
 <template>
   <div class="page-main">
     <section class="page-main__section-head">
-      <div class="marquee">
-        <div class="marquee__inner">
+      <ClientOnly>
+        <MarqueeBlock>
           <TitleOutline tag="span">ui/ux designer</TitleOutline>
-          <TitleOutline tag="span">ui/ux designer</TitleOutline>
-          <TitleOutline tag="span">ui/ux designer</TitleOutline>
-          <TitleOutline tag="span">ui/ux designer</TitleOutline>
-        </div>
-      </div>
+        </MarqueeBlock>
+      </ClientOnly>
       <h1 class="page-main__title">
-        <TitleOutline tag="div">Портфолио</TitleOutline>
-        <div>ui/ux designer</div>
-        <TitleOutline tag="div">Конойко Диана</TitleOutline>
+        <span class="page-main__title-sub">
+          <TitleOutline tag="div">Портфолио</TitleOutline>
+          <span>ui/ux designer</span>
+        </span>
+        <MarqueeBlock reverse>
+          <TitleOutline tag="div">Конойко Диана</TitleOutline>
+        </MarqueeBlock>
       </h1>
-      <h2>тут я собрала все свои последние клевые проекты</h2>
-      <TitleOutline tag="div">ui/ux designer</TitleOutline>
+      <h2 class="page-main__title-two">
+        <span>тут я собрала все свои последние клевые проекты</span>
+        <TitleOutline class="page-main__title-two-sub" tag="div">ui/ux designer</TitleOutline>
+      </h2>
     </section>
     <section class="page-main__section-info">
       <h3>О моем опыте</h3>
@@ -53,7 +56,7 @@
 </template>
 
 <script setup>
-import { TitleOutline } from '~/components/common'
+import { TitleOutline, MarqueeBlock } from '~/components/common'
 import { PortfolioCategories } from '~/components/sections'
 import categories from '~/mocks/categories'
 

@@ -10,4 +10,8 @@
   &__title {
     text-decoration: none;
   }
+
+  &__title-text {
+    font-size: clamp(36px, 120px, 7vw);
+  }
 }

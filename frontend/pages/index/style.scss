@@ -1,4 +1,16 @@
 .page-main {
+  &__section-head {
+
+  }
+
+  &__section-info {
+
+  }
+
+  &__section-portfolio {
+
+  }
+
   &__title {
     font-family: $font__decor;
     font-style: normal;
@@ -6,5 +18,42 @@
     font-size: 170px;
     text-transform: uppercase;
     margin: 0;
+  }
+}
+
+$count-elements: 2;
+$offset: 20vw;
+$move-initial: calc(-25% + $offset);
+$move-final: calc(-50% + $offset);
+
+.marquee {
+  overflow: hidden;
+  position: relative;
+
+  //&:hover & {
+  //  &__inner {
+  //    animation-play-state: paused;
+  //  }
+  //}
+
+  &__inner {
+    width: fit-content;
+    height: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    transform: translate3d($move-initial, 0, 0);
+    animation: marquee 6s linear infinite;
+    animation-play-state: running;
+  }
+}
+
+@keyframes marquee {
+  0% {
+    transform: translate3d($move-initial, 0, 0);
+  }
+  100% {
+    transform: translate3d($move-final, 0, 0);
   }
 }

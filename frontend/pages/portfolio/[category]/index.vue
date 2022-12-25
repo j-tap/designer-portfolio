@@ -27,6 +27,10 @@ const projectsList = computed(() => projects.map(o => ({
   preview: o.preview,
   title: o.title,
 })))
+
+definePageMeta({
+  key: route => route.fullPath
+})
 </script>
 
 <style lang="scss" src="./style.scss" scoped/>

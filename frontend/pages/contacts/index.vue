@@ -11,7 +11,14 @@
         <ClientOnly>
           <TitleOutline tag="span">{{ item.name }}</TitleOutline>
         </ClientOnly>
-        <a class="contacts-list__link" :href="item.link" target="_blank" rel="nofollow">{{ item.name }}</a>
+        <NuxtLink
+          class="contacts-list__link"
+          :to="item.link"
+          target="_blank"
+          external
+        >
+          {{ item.name }}
+        </NuxtLink>
         <ClientOnly>
           <TitleOutline tag="span">{{ item.name }}</TitleOutline>
         </ClientOnly>
@@ -24,9 +31,9 @@
 import { TitleOutline } from '~/components/common'
 
 const contacts = [
-  { name: 'telegram', link: '//tg.me' },
-  { name: 'behance', link: '//behance.net' },
-  { name: 'email', link: 'mailto:test@test.ts' },
+  { name: 'telegram', link: 'https://t.me/DianaKonoyko' },
+  { name: 'behance', link: 'https://www.behance.net/diana_konoyko' },
+  { name: 'email', link: 'mailto:dianakonoyko@gmail.com' },
 ]
 </script>
 

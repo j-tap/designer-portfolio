@@ -1,5 +1,18 @@
+<template>
+  <div class="app-container">
+    <NuxtLayout>
+      <NuxtLoadingIndicator :color="loadingColors"/>
+      <NuxtPage/>
+    </NuxtLayout>
+  </div>
+</template>
+
 <script setup>
+import { colorBlue } from '~/assets/style/app.module.scss'
+
 const route = useRoute()
+
+const loadingColors = colorBlue
 
 useHead({
   title: route.meta.title,
@@ -9,13 +22,5 @@ useHead({
   ],
 })
 </script>
-
-<template>
-  <div class="app-container">
-    <NuxtLayout>
-      <NuxtPage/>
-    </NuxtLayout>
-  </div>
-</template>
 
 <style lang="scss" src="~/assets/style/app.scss"/>

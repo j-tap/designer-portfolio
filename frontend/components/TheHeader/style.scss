@@ -33,6 +33,8 @@
     text-decoration: none;
     transition: color .2s ease-in;
 
+    &.router-link-active,
+    &.router-link-exact-active,
     &:hover {
       color: $color__blue;
     }

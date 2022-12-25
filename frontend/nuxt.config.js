@@ -18,6 +18,7 @@ export default defineNuxtConfig({
       title: 'App',
     },
 	  pageTransition: { name: 'page', mode: 'out-in' },
+		layoutTransition: { name: 'layout', mode: 'out-in' },
   },
   modules: [
 		'@nuxtjs/strapi',

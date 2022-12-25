@@ -1,19 +1,19 @@
-<script setup>
-import TheHeader from '~/components/TheHeader/index.vue'
-
-const route = useRoute()
-const title = computed(() => route.meta.title)
-</script>
-
 <template>
   <div class="layout-default">
     <TheHeader class="layout-default__header"/>
     <main class="layout-default__main">
       <slot />
     </main>
-    <footer class="ayout-default__footer"></footer>
+    <footer class="layout-default__footer"></footer>
   </div>
 </template>
+
+<script setup>
+import TheHeader from '~/components/TheHeader/index.vue'
+
+const route = useRoute()
+const title = computed(() => route.meta.title)
+</script>
 
 <style lang="scss" scoped>
 .layout-default {

@@ -1,0 +1,9 @@
+:export {
+  breakpointMobile: strip-unit($mobile);
+  breakpointTablet: strip-unit($tablet);
+  breakpointDesktop: strip-unit($desktop);
+
+  colorDark: $color__dark;
+  colorWhite: $color__white;
+  colorBlue: $color__blue;
+}

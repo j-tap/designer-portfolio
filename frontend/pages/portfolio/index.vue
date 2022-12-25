@@ -1,21 +1,13 @@
 <template>
   <div class="page-portfolio">
     <h1 class="page-portfolio__title">Portfolio</h1>
-    <ul class="portfolio-categories">
-      <li class="portfolio-categories__item" v-for="item in categories" :key="item.name">
-        <NuxtLink class="portfolio-categories__title" :to="{ name: 'portfolio-category', params: { category: item.name } }">
-          <TitleOutline tag="h2" :data-hover="item.title">
-            {{ item.title }}
-          </TitleOutline>
-        </NuxtLink>
-      </li>
-    </ul>
+    <PortfolioCategories :items="categories" />
   </div>
 </template>
 
 <script setup>
-import { TitleOutline } from '~/components/common'
-import categories from '~/mocks/categories.js'
+import { PortfolioCategories } from '~/components/sections'
+import categories from '~/mocks/categories'
 </script>
 
 <style lang="scss" scoped src="./style.scss"/>

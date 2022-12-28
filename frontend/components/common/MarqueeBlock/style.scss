@@ -4,9 +4,7 @@ $move-initial: calc(-25% + $offset);
 $move-final: calc(-50% + $offset);
 
 .marquee-block {
-  overflow: hidden;
   position: relative;
-  padding: 2% 0;
 
   &_reverse & {
     &__inner {

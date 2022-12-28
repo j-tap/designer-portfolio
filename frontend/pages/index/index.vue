@@ -23,27 +23,33 @@
 
     <section class="page-main__section-info info-section">
       <h3 class="info-section__title">О моем опыте</h3>
-      <p>В сфере дизайна я более 3х лет. За это время мне удалось поработать с разносторонними проектами, как мелкие стартапы, так и масштабные.</p>
+      <p class="info-section__description">В сфере дизайна я более 3х лет. За это время мне удалось поработать с разносторонними проектами, как мелкие стартапы, так и масштабные.</p>
 
-      <TitleOutline tag="h3">инструменты</TitleOutline>
-      <div>
-        <p>Я работаю в программах:</p>
-        <ul>
-          <li>Figma;</li>
-          <li>Adobe пакет;</li>
-          <li>Axure;</li>
-          <li>Blender;</li>
-          <li>И многие другие.</li>
-        </ul>
-      </div>
-      <TitleOutline tag="h3">Навыки</TitleOutline>
-      <div>
-        <ul>
-          <li>Имеются знание и опыт принципов и методологий проектирования сложных систем и интерфейсов, atomic design.</li>
-          <li>Опыт работы в качестве UX\UI дизайнера.</li>
-          <li>Навык проектирования, прототипирования и реализации интерфейсов взаимодействия с пользователями в вебе и на мобильных устройствах.</li>
-          <li>Навык анимации и 3D проектирования.</li>
-        </ul>
+      <div class="info-section__details info-details">
+        <div class="info-details__one">
+          <TitleOutline tag="h3">инструменты</TitleOutline>
+          <div>
+            <p>Я работаю в программах:</p>
+            <ul>
+              <li>Figma;</li>
+              <li>Adobe пакет;</li>
+              <li>Axure;</li>
+              <li>Blender;</li>
+              <li>И многие другие.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="info-details_two">
+          <TitleOutline tag="h3">Навыки</TitleOutline>
+          <div>
+            <ul>
+              <li>Имеются знание и опыт принципов и методологий проектирования сложных систем и интерфейсов, atomic design.</li>
+              <li>Опыт работы в качестве UX\UI дизайнера.</li>
+              <li>Навык проектирования, прототипирования и реализации интерфейсов взаимодействия с пользователями в вебе и на мобильных устройствах.</li>
+              <li>Навык анимации и 3D проектирования.</li>
+            </ul>
+          </div>
+        </div>
       </div>
 
       <TitleOutline tag="h3">тоже важное</TitleOutline>

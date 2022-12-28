@@ -1,5 +1,5 @@
 <template>
-  <div class="layout-default">
+  <div :class="classes">
     <TheHeader class="layout-default__header"/>
     <main class="layout-default__main">
       <slot />
@@ -12,17 +12,47 @@
 import TheHeader from '~/components/TheHeader/index.vue'
 
 const route = useRoute()
+const isLoaded = ref(false)
 const title = computed(() => route.meta.title)
+const classes = computed(() => [
+  'layout-default',
+  { 'layout-default_loaded': isLoaded.value },
+])
+
+onMounted(() => {
+  isLoaded.value = true
+})
 </script>
 
 <style lang="scss" scoped>
 .layout-default {
+  position: relative;
   display: flex;
   min-height: 100vh;
   width: 100%;
   justify-content: space-between;
   flex-direction: column;
   align-items: flex-start;
+
+  &::after {
+    content: ' ';
+    position: absolute;
+    z-index: 90;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 1;
+    backdrop-filter: blur(40px);
+    transition: opacity .3s ease-in, visibility .3s ease-in;
+  }
+
+  &_loaded {
+    &::after {
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
 
   &__header {
     width: 100%;

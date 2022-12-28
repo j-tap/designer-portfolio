@@ -29,7 +29,7 @@ const title = computed(() => route.meta.title)
   }
   &__main {
     margin-top: $header__height;
-    padding-top: 85px;
+    padding-top: 50px;
     width: 100%;
   }
   &__footer {

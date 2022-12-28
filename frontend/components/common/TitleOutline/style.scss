@@ -1,11 +1,6 @@
 .title-outline {
   display: inline-block;
   margin: 0;
-  font-style: normal;
-  font-weight: 700;
-  font-size: clamp(36px, 170px, 9vw);
-  text-decoration: none;
-  text-transform: uppercase;
   @include text-outline($color__white);
 
   &_hoverable {

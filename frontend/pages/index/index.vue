@@ -1,27 +1,28 @@
 <template>
   <div class="page-main">
-    <section class="page-main__section-head">
+    <section class="page-main__section-head title-section">
       <ClientOnly>
-        <MarqueeBlock>
-          <TitleOutline tag="span">ui/ux designer</TitleOutline>
+        <MarqueeBlock class="title-section__row title-section__row_1">
+          <TitleOutline tag="span">ui/ux designer&nbsp;</TitleOutline>
         </MarqueeBlock>
       </ClientOnly>
       <h1 class="page-main__title">
-        <span class="page-main__title-sub">
+        <span class="title-section__row title-section__row_2">
           <TitleOutline tag="div">Портфолио</TitleOutline>
-          <span>ui/ux designer</span>
+          <span class="title-section__row_2__sub-small">ui/ux designer</span>
         </span>
-        <MarqueeBlock reverse>
-          <TitleOutline tag="div">Конойко Диана</TitleOutline>
+        <MarqueeBlock class="title-section__row title-section__row_3" reverse>
+          <TitleOutline tag="div">Конойко Диана&nbsp;</TitleOutline>
         </MarqueeBlock>
       </h1>
-      <h2 class="page-main__title-two">
-        <span>тут я собрала все свои последние клевые проекты</span>
-        <TitleOutline class="page-main__title-two-sub" tag="div">ui/ux designer</TitleOutline>
+      <h2 class="title-section__row title-section__row_4">
+        <span class="title-section__row_4__sub-small">тут я собрала все свои последние клевые проекты</span>
+        <TitleOutline class="title-section__row_4__sub-large" tag="div">ui/ux designer</TitleOutline>
       </h2>
     </section>
-    <section class="page-main__section-info">
-      <h3>О моем опыте</h3>
+
+    <section class="page-main__section-info info-section">
+      <h3 class="info-section__title">О моем опыте</h3>
       <p>В сфере дизайна я более 3х лет. За это время мне удалось поработать с разносторонними проектами, как мелкие стартапы, так и масштабные.</p>
 
       <TitleOutline tag="h3">инструменты</TitleOutline>

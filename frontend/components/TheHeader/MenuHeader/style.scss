@@ -1,0 +1,46 @@
+.menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  align-items: center;
+  gap: 55px;
+
+  @include screen('sm') {
+    @include widget-bg();
+    display: none;
+    padding: 0 20px;
+  }
+  @include screen('md-up') {
+    display: flex;
+  }
+  @include screen('sm') {
+    position: absolute;
+    top: 100%;
+    right: 0;
+
+    &_open {
+      display: block;
+    }
+  }
+
+  &__item {
+    font-weight: 400;
+    font-size: calc(13px + .391vmax);
+  }
+  &__link {
+    display: block;
+    font: inherit;
+    text-decoration: none;
+    transition: color .2s ease-in;
+
+    @include screen('sm') {
+      padding: 8px 0;
+    }
+
+    &.router-link-active,
+    &.router-link-exact-active,
+    &:hover {
+      color: $color__blue;
+    }
+  }
+}

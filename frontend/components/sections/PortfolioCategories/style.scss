@@ -12,6 +12,6 @@
   }
 
   &__title-text {
-    font-size: clamp(36px, 120px, 7vw);
+    font-size: clamp(36px, 120px, 7vmax);
   }
 }

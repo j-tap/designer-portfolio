@@ -1,43 +1,37 @@
 .header {
+  @include widget-bg();
   position: fixed;
   z-index: 70;
   top: 0;
   left: 0;
   right: 0;
-  height: $header__height;
   display: flex;
   align-items: center;
-  padding: 0 60px;
-  background: rgba(26, 26, 26, 0.8);
-  backdrop-filter: blur(6.5px);
+
+  @include screen('sm') {
+    height: $header__height_sm;
+    padding: 0 20px;
+  }
+  @include screen('md') {
+    height: $header__height_md;
+    padding: 0 30px;
+  }
+  @include screen('lg') {
+    height: $header__height_lg;
+    padding: 0 60px;
+  }
 
   &__nav {
     margin-left: auto;
   }
-}
 
-.nav {
-  &__list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    gap: 55px;
-  }
-  &__item {
-    font-weight: 400;
-    font-size: 20px;
-  }
-  &__link {
-    font: inherit;
-    text-decoration: none;
-    transition: color .2s ease-in;
+  &__menu {
 
-    &.router-link-active,
-    &.router-link-exact-active,
-    &:hover {
-      color: $color__blue;
+  }
+
+  &__burger {
+    @include screen('md-up') {
+      display: none;
     }
   }
 }

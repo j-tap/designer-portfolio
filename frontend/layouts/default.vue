@@ -28,9 +28,20 @@ const title = computed(() => route.meta.title)
     width: 100%;
   }
   &__main {
-    margin-top: $header__height;
-    padding-top: 50px;
     width: 100%;
+
+    @include screen('sm') {
+      margin-top: $header__height_sm;
+      padding-top: 20px;
+    }
+    @include screen('md') {
+      margin-top: $header__height_md;
+      padding-top: 20px;
+    }
+    @include screen('lg') {
+      margin-top: $header__height_lg;
+      padding-top: 76px;
+    }
   }
   &__footer {
     width: 100%;

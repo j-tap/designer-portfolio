@@ -1,0 +1,13 @@
+@mixin text-outline($color) {
+  font-family: $font__decor;
+  color: transparent;
+  -webkit-text-stroke: 1px $color;
+  text-stroke: $color;
+}
+
+@mixin widget-bg() {
+  color: $color__white;
+  background-color: rgba(26, 26, 26, 0.8);
+  backdrop-filter: blur(6.5px);
+}
+

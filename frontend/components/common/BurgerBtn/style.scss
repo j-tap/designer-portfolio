@@ -1,0 +1,58 @@
+$line-height: 3px;
+
+.burger-btn {
+  position: relative;
+  padding: 0;
+  margin: 0;
+  width: 25px;
+  height: 17px;
+  cursor: pointer;
+  border: none;
+  color: inherit;
+  background: transparent;
+  appearance: none;
+
+  span {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: $line-height;
+    border-radius: 10px;
+    background-color: currentColor;
+    transition:
+      top .2s ease-in-out,
+      width .2s ease-in-out,
+      left .2s ease-in-out,
+      transform .2s ease-in-out;
+
+    &:nth-child(1) {
+      top: 0;
+    }
+    &:nth-child(2),
+    &:nth-child(3) {
+      top: calc(50% - $line-height / 2);
+    }
+    &:nth-child(4) {
+      bottom: 0;
+    }
+  }
+
+  &_active {
+    span {
+      &:nth-child(1),
+      &:nth-child(4) {
+        top: calc(50% - $line-height / 2);
+        width: 0;
+        left: 50%;
+      }
+
+      &:nth-child(2) {
+        transform: rotate(45deg);
+      }
+
+      &:nth-child(3) {
+        transform: rotate(-45deg);
+      }
+    }
+  }
+}

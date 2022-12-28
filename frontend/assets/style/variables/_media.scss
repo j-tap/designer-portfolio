@@ -2,12 +2,11 @@ $mobile: 360px;
 $tablet: 768px;
 $desktop: 1024px;
 
-// TODO: сделать через миксин
-// @media #{map-get($media, 'md-to-lg')} {}
+$screen-and: 'only screen and';
 $media: (
-  'sm': 'only screen and (max-width: #{$tablet - 1})',
-  'md': 'only screen and (min-width: #{$tablet}) and (max-width: #{$desktop - 1})',
-  'md-down': 'only screen and (max-width: #{$desktop - 1})',
-  'md-up': 'only screen and (min-width: #{$tablet})',
-  'lg': 'only screen and (min-width: #{$desktop})',
+  'sm': '#{$screen-and} (max-width: #{$tablet - 1})',
+  'md': '#{$screen-and} (min-width: #{$tablet}) and (max-width: #{$desktop - 1})',
+  'md-down': '#{$screen-and} (max-width: #{$desktop - 1})',
+  'md-up': '#{$screen-and} (min-width: #{$tablet})',
+  'lg': '#{$screen-and} (min-width: #{$desktop})',
 );

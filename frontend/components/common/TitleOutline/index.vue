@@ -10,12 +10,16 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  inverse: Boolean,
 })
 const elem = ref(null);
 const hoverable = computed(() => elem?.value?.hasAttribute('data-hover'))
 const classes = computed(() => [
   'title-outline',
-  { 'title-outline_hoverable': hoverable.value },
+  {
+    'title-outline_hoverable': hoverable.value,
+    'title-outline_inverse': props.inverse,
+  },
 ])
 </script>
 

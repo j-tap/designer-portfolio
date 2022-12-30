@@ -27,8 +27,8 @@
 
       <div class="info-section__details info-details">
         <div class="info-details__one">
-          <TitleOutline tag="h3">инструменты</TitleOutline>
-          <div>
+          <TitleOutline class="info-details__title" tag="h3">инструменты</TitleOutline>
+          <div class="html-text">
             <p>Я работаю в программах:</p>
             <ul>
               <li>Figma;</li>
@@ -39,9 +39,9 @@
             </ul>
           </div>
         </div>
-        <div class="info-details_two">
-          <TitleOutline tag="h3">Навыки</TitleOutline>
-          <div>
+        <div class="info-details__two">
+          <TitleOutline class="info-details__title" tag="h3">Навыки</TitleOutline>
+          <div class="html-text">
             <ul>
               <li>Имеются знание и опыт принципов и методологий проектирования сложных систем и интерфейсов, atomic design.</li>
               <li>Опыт работы в качестве UX\UI дизайнера.</li>
@@ -52,12 +52,18 @@
         </div>
       </div>
 
-      <TitleOutline tag="h3">тоже важное</TitleOutline>
-      <p>Есть базовые знания html/css и большой опыт взаимодействия с разработчиками, что упрощает процесс работы.</p>
-    </section>
+      <div class="info-important">
+        <TitleOutline
+          class="info-important__title"
+          tag="h3"
+          inverse
+        >
+          тоже важное
+        </TitleOutline>
+        <p>Есть базовые знания html/css и большой опыт взаимодействия с разработчиками, что упрощает процесс работы.</p>
+      </div>
 
-    <section class="page-main__section-portfolio">
-      <PortfolioCategories :items="categories" />
+      <PortfolioCategories class="info-section__portfolio" :items="categories" />
     </section>
   </div>
 </template>

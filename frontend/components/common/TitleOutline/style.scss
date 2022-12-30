@@ -1,7 +1,14 @@
 .title-outline {
   display: inline-block;
   margin: 0;
-  @include text-outline($color__white);
+
+  &:not(&_inverse) {
+    @include text-outline($color__white);
+  }
+
+  &_inverse {
+    @include text-outline($color__dark);
+  }
 
   &_hoverable {
     position: relative;

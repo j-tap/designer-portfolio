@@ -4,7 +4,9 @@
   padding: 0;
 
   &__item {
-
+    & + * {
+      margin-top: 3vmax;
+    }
   }
 
   &__title {
@@ -12,6 +14,7 @@
   }
 
   &__title-text {
-    font-size: clamp(36px, 120px, 7vmax);
+    font-size: clamp(36px, 120px, 6vmax);
+    text-transform: uppercase;
   }
 }

@@ -1,6 +1,7 @@
 @import 'fonts';
 @import 'normalize';
 @import 'animations';
+@import 'html-text';
 
 ::selection {
   color: $color__dark;
@@ -21,7 +22,6 @@ body {
 a {
   color: inherit;
 }
-
 
 .page-enter-active,
 .page-leave-active {

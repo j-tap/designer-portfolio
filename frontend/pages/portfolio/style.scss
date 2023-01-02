@@ -1,4 +1,17 @@
 .page-portfolio {
+  @include screen('sm') {
+    margin-left: $content__indent-x_sm;
+    margin-right: $content__indent-x_sm;
+  }
+  @include screen('md') {
+    margin-left: $content__indent-x_md;
+    margin-right: $content__indent-x_md;
+  }
+  @include screen('lg') {
+    margin-left: $content__indent-x_lg;
+    margin-right: $content__indent-x_lg;
+  }
+
   &__title {
     position: absolute;
     left: -9999px;

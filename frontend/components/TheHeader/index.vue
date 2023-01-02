@@ -9,7 +9,6 @@
         class="header__menu"
         :items="menuMain"
         :open="openMenu"
-        v-click-outside="closeMenu"
         @click-item="closeMenu"
       />
     </nav>

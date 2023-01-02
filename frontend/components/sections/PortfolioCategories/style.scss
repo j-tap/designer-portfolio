@@ -14,7 +14,8 @@
   }
 
   &__title-text {
-    font-size: clamp(36px, 120px, 6vmax);
+    font-size: clamp(30px, 6vmax, 120px);
     text-transform: uppercase;
+    font-weight: 700;
   }
 }

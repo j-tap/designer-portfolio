@@ -12,7 +12,10 @@
 
   &_hoverable {
     position: relative;
-    white-space: nowrap;
+
+    @include screen('md-up') {
+      white-space: nowrap;
+    }
 
     &::after {
       content: attr(data-hover);

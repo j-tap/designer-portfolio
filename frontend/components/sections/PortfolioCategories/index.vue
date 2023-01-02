@@ -11,7 +11,7 @@
       >
         <TitleOutline
           class="portfolio-categories__title-text"
-          tag="h2"
+          tag="span"
           :data-hover="item.title"
         >
           {{ item.title }}

@@ -38,7 +38,7 @@
   }
 
   h1 {
-    margin: 1vmax 0;
+    margin: 1vw 0;
   }
 
   img {
@@ -94,7 +94,7 @@
 
   kbd {
     display: inline-block;
-    padding: .5vmax;
+    padding: .5vw;
     vertical-align: middle;
     border: 1px solid;
     border-radius: 3px;
@@ -106,16 +106,16 @@
     margin-bottom: 0;
 
     & + p {
-      margin-top: 1.5vmax;
+      margin-top: 1.5vw;
     }
     & + ul {
-      margin-top: 1.5vmax;
+      margin-top: 1.5vw;
     }
   }
 
   blockquote {
     margin: 0;
-    padding: 0 1vmax;
+    padding: 0 1vw;
     border-left: 1px solid;
 
     & > :first-child {
@@ -133,7 +133,7 @@
   pre {
     margin-top: 0;
     margin-bottom: 0;
-    padding: 1vmax;
+    padding: 1vw;
     overflow: auto;
     box-shadow:
       0 2px 1px -1px rgba(0, 0, 0, .2) inset,
@@ -176,10 +176,10 @@
 
   li {
     & > p {
-      margin-top: 1vmax;
+      margin-top: 1vw;
     }
     & + li {
-      margin-top: 1vmax;
+      margin-top: 1vw;
     }
   }
 
@@ -188,24 +188,24 @@
 
     dt {
       padding: 0;
-      margin-top: 1vmax;
+      margin-top: 1vw;
     }
     dd {
-      padding: 0 1vmax;
-      margin-bottom: 1vmax;
+      padding: 0 1vw;
+      margin-bottom: 1vw;
     }
   }
 
   img[align=right] {
-    padding-left: 2vmax;
+    padding-left: 2vw;
   }
 
   img[align=left] {
-    padding-right: 2vmax;
+    padding-right: 2vw;
   }
 
   code {
-    padding: 1vmax;
+    padding: 1vw;
     margin: 0;
     background-color: rgba(27, 31, 35, .05);
     border-radius: 3px;

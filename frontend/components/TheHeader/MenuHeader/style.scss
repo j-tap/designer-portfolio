@@ -32,7 +32,7 @@
       font-size: 16px;
     }
     @include screen('md-up') {
-      font-size: calc(13px + .391vmax);
+      font-size: calc(13px + .391vw);
     }
   }
   &__link {

@@ -5,7 +5,7 @@
 
   &__item {
     & + * {
-      margin-top: 3vmax;
+      margin-top: 3vw;
     }
   }
 
@@ -14,7 +14,7 @@
   }
 
   &__title-text {
-    font-size: clamp(30px, 6vmax, 120px);
+    font-size: clamp(30px, 6vw, 120px);
     text-transform: uppercase;
     font-weight: 700;
   }

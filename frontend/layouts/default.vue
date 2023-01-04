@@ -75,7 +75,7 @@ onMounted(() => {
   }
   &__footer {
     width: 100%;
-    height: 6vmax;
+    height: 6vw;
   }
 }
 </style>

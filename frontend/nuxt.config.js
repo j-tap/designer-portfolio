@@ -1,6 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import i18n from './config/i18n'
 import strapi from './config/strapi'
+
 export default defineNuxtConfig({
 	vite: {
 		css: {
@@ -23,6 +24,7 @@ export default defineNuxtConfig({
   modules: [
 		'@nuxtjs/strapi',
 	  '@nuxtjs/i18n',
+		'@pinia/nuxt',
   ],
   strapi,
 	i18n,

@@ -20,6 +20,9 @@ useHead({
     { name: 'description', content: route.meta.description },
     { property: 'og:title', content: route.meta.title },
   ],
+  bodyAttrs: {
+    class: '',
+  },
 })
 </script>
 

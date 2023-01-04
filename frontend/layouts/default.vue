@@ -5,18 +5,29 @@
       <slot />
     </main>
     <footer class="layout-default__footer"></footer>
+    <div :class="blurClasses" />
   </div>
 </template>
 
 <script setup>
 import TheHeader from '~/components/TheHeader/index.vue'
+import {useCommonStore} from '~/stores/commonStore'
 
 const route = useRoute()
+const commonStore = useCommonStore()
+
 const isLoaded = ref(false)
+
 const title = computed(() => route.meta.title)
+
 const classes = computed(() => [
   'layout-default',
   { 'layout-default_loaded': isLoaded.value },
+])
+
+const blurClasses = computed(() => [
+  'blur-backdrop',
+  { 'blur-backdrop_display': commonStore.getDisplayMobileMenu },
 ])
 
 onMounted(() => {
@@ -76,6 +87,27 @@ onMounted(() => {
   &__footer {
     width: 100%;
     height: 6vw;
+  }
+}
+
+.blur-backdrop {
+  backdrop-filter: blur(6.5px);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .2s ease-in, visibility .2s ease-in;
+
+  @include screen('md-up') {
+    display: none;
+  }
+
+  &_display {
+    opacity: 1;
+    visibility: visible;
   }
 }
 </style>

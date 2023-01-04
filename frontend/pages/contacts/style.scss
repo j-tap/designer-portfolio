@@ -1,4 +1,6 @@
 .page-contacts {
+  overflow: hidden;
+
   &__title {
 
   }
@@ -8,6 +10,22 @@
 }
 
 .page-title {
+  font-size: clamp(68px, 8.9vw, 170px);
+  text-transform: uppercase;
+  white-space: nowrap;
+  line-height: 1;
+  margin: 0;
+
+  @include screen('sm') {
+    padding-left: $content__indent-x_sm;
+  }
+  @include screen('md') {
+    padding-left: $content__indent-x_md;
+  }
+  @include screen('lg') {
+    padding-left: $content__indent-x_lg;
+  }
+
   &__item {
     font-family: $font__decor;
 
@@ -24,19 +42,42 @@
 
   &__item {
     display: flex;
+    align-items: center;
     width: 100%;
     font-family: $font__decor;
+    line-height: 1;
     font-style: normal;
     font-weight: 700;
-    font-size: 170px;
-    line-height: 100%;
+    font-size: clamp(68px, 8.9vw, 170px);
     text-transform: uppercase;
-    gap: 60px;
+    white-space: nowrap;
+    line-height: 1;
+    gap: clamp(15px, 3.2vw, 60px);
+    margin-top: clamp(15px, 3.2vw, 60px);
+
+    &:nth-child(1) {
+      margin-left: min(-320px, -26vw);
+    }
+    &:nth-child(2) {
+      margin-left: min(-365px, -37vw);
+    }
+    &:nth-child(3) {
+      @include screen('sm') {
+        margin-left: -70px;
+      }
+      @include screen('md') {
+        margin-left: $content__indent-x_md;
+      }
+      @include screen('lg') {
+        margin-left: $content__indent-x_lg;
+      }
+    }
   }
+
   &__link {
     color: $color__blue;
     text-decoration: none;
     font-family: $font__default;
-    font-size: 100px;
+    font-size: clamp(36px, 5vw, 100px);
   }
 }

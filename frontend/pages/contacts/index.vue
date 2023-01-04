@@ -3,7 +3,7 @@
     <h1 class="page-contacts__title page-title">
       <TitleOutline class="page-title__item" tag="span">Контакты</TitleOutline>
       <ClientOnly>
-        <TitleOutline class="page-title__item" tag="span">Контакты</TitleOutline>
+        &nbsp;<TitleOutline class="page-title__item" tag="span">Контакты</TitleOutline>
       </ClientOnly>
     </h1>
     <ul class="page-contacts__lis contacts-list">

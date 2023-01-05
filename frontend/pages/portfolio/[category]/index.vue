@@ -1,20 +1,30 @@
 <template>
   <div class="page-category">
-    <TitleOutline class="page-category__title" tag="h1">
-      {{ category.title }}
-    </TitleOutline>
-    <ul>
-      <li v-for="item in projectsList" :key="item.name">
-        <NuxtLink :to="{ name: 'portfolio-category-project', params: { category: categoryName, project: item.name } }">
-          <img :src="item.preview" :alt="item.name">
-        </NuxtLink>
-      </li>
-    </ul>
+    <ContentWrap>
+      <TitleOutline class="page-category__title" tag="h1">
+        {{ category.title }}
+      </TitleOutline>
+      <ul class="page-category__projects projects-list">
+        <li
+          v-for="item in projectsList"
+          :key="item.name"
+          class="projects-list__item project-item"
+        >
+          <NuxtLink
+            :to="{ name: 'portfolio-category-project', params: { category: categoryName, project: item.name } }"
+          >
+            <img class="project-item__img" :src="item.preview" :alt="item.name">
+            <h2 class="project-item__title">{{ item.title }}</h2>
+          </NuxtLink>
+        </li>
+      </ul>
+    </ContentWrap>
   </div>
 </template>
 
 <script setup>
 import { TitleOutline } from '~/components/common'
+import { ContentWrap } from '~/components/structure'
 import categories from '~/mocks/categories.js'
 import projects from '~/mocks/projects.js'
 

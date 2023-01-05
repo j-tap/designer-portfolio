@@ -1,0 +1,14 @@
+.content-wrap {
+  @include screen('sm') {
+    padding-left: $content__indent-x_sm;
+    padding-right: $content__indent-x_sm;
+  }
+  @include screen('md') {
+    padding-left: $content__indent-x_md;
+    padding-right: $content__indent-x_md;
+  }
+  @include screen('lg') {
+    padding-left: $content__indent-x_lg;
+    padding-right: $content__indent-x_lg;
+  }
+}

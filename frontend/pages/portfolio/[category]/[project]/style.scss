@@ -1,5 +1,21 @@
 .page-project {
   &__title {
-    font-size: clamp(36px, 100px, 9vw);
+    font-size: clamp(36px, 9vw, 100px);
+    text-transform: uppercase;
+  }
+
+  &__back {
+    margin-top: 6.4vw;
+    font-size: clamp(14px, 2vw, 25px);
+    text-transform: uppercase;
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+  }
+
+  &__content {
+    margin-top: 5vw;
   }
 }

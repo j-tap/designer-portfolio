@@ -7,29 +7,30 @@
 
   @include screen('sm') {
     @include widget-bg();
-    display: none;
     padding: 0 20px;
-  }
-  @include screen('md-up') {
-    display: flex;
-  }
-  @include screen('sm') {
     width: 100%;
     height: 100vh;
     position: absolute;
     top: 100%;
-    right: 0;
+    right: -100%;
+    transition: right .2s ease-in;
 
     &_open {
-      display: block;
+      right: 0;
     }
+  }
+  @include screen('md-up') {
+    display: flex;
   }
 
   &__item {
     font-weight: 400;
+    line-height: 1;
 
     @include screen('sm') {
-      font-size: 16px;
+      font-size: 33px;
+      text-transform: uppercase;
+      font-weight: 700;
     }
     @include screen('md-up') {
       font-size: calc(13px + .391vw);
@@ -42,13 +43,25 @@
     transition: color .2s ease-in;
 
     @include screen('sm') {
-      padding: 15px 0;
+      padding: 20px 0;
     }
 
     &.router-link-active,
     &.router-link-exact-active,
     &:hover {
       color: $color__blue;
+    }
+  }
+  &__link-text {
+    &_sm {
+      @include screen('md-up') {
+        display: none;
+      }
+    }
+    &_md-up {
+      @include screen('sm') {
+        display: none;
+      }
     }
   }
 }

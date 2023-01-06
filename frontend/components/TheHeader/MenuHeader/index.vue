@@ -10,13 +10,16 @@
         :to="{ name: item.name }"
         @click.native="onClickItem(item)"
       >
-        {{ $t(item.locale) }}
+        <TitleOutline class="menu__link-text_sm">{{ $t(item.locale) }}</TitleOutline>
+        <span class="menu__link-text_md-up">{{ $t(item.locale) }}</span>
       </NuxtLink>
     </li>
   </ul>
 </template>
 
 <script setup>
+import { TitleOutline } from '~/components/common'
+
 const props = defineProps({
   items: {
     type: Array,

@@ -3,13 +3,16 @@
     <section class="page-main__section-head title-section">
       <ClientOnly>
         <MarqueeBlock class="title-section__row title-section__row_1">
-          <TitleOutline tag="span">ui/ux designer&nbsp;</TitleOutline>
+          <TitleOutline tag="span">ui/ux designer</TitleOutline>&nbsp;
         </MarqueeBlock>
       </ClientOnly>
       <h1 class="page-main__title">
-        <div class="title-section__row title-section__row_2">
-          <TitleOutline tag="div">Портфолио</TitleOutline>
-          <div class="title-section__row_2__sub-small">ui/ux designer</div>
+        <div class="title-section__row title-section__row_2 row-title-2">
+          <MarqueeBlock class="row-title-2__sub-large_sm" reverse>
+            <TitleOutline tag="div">Портфолио</TitleOutline>&nbsp;
+          </MarqueeBlock>
+          <TitleOutline class="row-title-2__sub-large_md-up" tag="div">Портфолио</TitleOutline>
+          <div class="row-title-2__sub-small">ui/ux designer</div>
         </div>
         <div class="title-section__row title-section__row_3 row-title-3">
           <MarqueeBlock class="row-title-3__marquee" reverse>

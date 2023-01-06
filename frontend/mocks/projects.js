@@ -1,11 +1,15 @@
 const src = 'https://via.placeholder.com/600x1500?text=Test+image'
 const example = {
   fonts: ['Vipnagorgialla', 'Manrope'],
-  colors: ['#fffff', '#fffff', '#fffff'],
+  colors: ['#ffffff', '#ffffff', '#ffffff'],
   pages: [
     {
-      title: 'Личный кабинет 1',
+      title: 'Окно регистрации',
+      subtitle:'Registration Window',
       images: [
+        { src },
+        { src },
+        { src },
         { src },
         { src },
       ]

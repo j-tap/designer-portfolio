@@ -1,0 +1,67 @@
+.images-items {
+  &__notify {
+    text-align: right;
+  }
+
+  &__wrap-list {
+    @include screen('sm') {
+      margin-left: -$content__indent-x_sm;
+      margin-right: -$content__indent-x_sm;
+    }
+    @include screen('md') {
+      margin-left: -$content__indent-x_md;
+      margin-right: -$content__indent-x_md;
+    }
+    @include screen('lg') {
+      margin-left: -$content__indent-x_lg;
+      margin-right: -$content__indent-x_lg;
+    }
+  }
+
+  &__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: clamp(26px, 5vw, 80px);
+  }
+
+  &__item {
+    overflow-x: hidden;
+    overflow-y: auto;
+    width: 360px;
+    height: 740px;
+    flex-shrink: 0;
+
+    &:first-child {
+      @include screen('sm') {
+        margin-left: $content__indent-x_sm;
+      }
+      @include screen('md') {
+        margin-left: $content__indent-x_md;
+      }
+      @include screen('lg') {
+        margin-left: $content__indent-x_lg;
+      }
+    }
+    &:last-child {
+      @include screen('sm') {
+        margin-right: $content__indent-x_sm;
+      }
+      @include screen('md') {
+        margin-right: $content__indent-x_md;
+      }
+      @include screen('lg') {
+        margin-right: $content__indent-x_lg;
+      }
+    }
+
+    img {
+      display: block;
+      width: 100%;
+      height: auto;
+      user-select: none;
+      pointer-events: none;
+    }
+  }
+}

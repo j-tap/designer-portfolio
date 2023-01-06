@@ -1,1 +1,6 @@
 export { default as PortfolioCategories } from './PortfolioCategories'
+export { default as ImagesItems } from './ImagesItems'
+export { default as ProjectMobile } from './project/ProjectMobile'
+export { default as ProjectUiUx } from './project/ProjectUiUx'
+export { default as ProjectWeb } from './project/ProjectWeb'
+export { default as ProjectIdentity } from './project/ProjectIdentity'

@@ -7,13 +7,19 @@
         </MarqueeBlock>
       </ClientOnly>
       <h1 class="page-main__title">
-        <span class="title-section__row title-section__row_2">
+        <div class="title-section__row title-section__row_2">
           <TitleOutline tag="div">Портфолио</TitleOutline>
-          <span class="title-section__row_2__sub-small">ui/ux designer</span>
-        </span>
-        <MarqueeBlock class="title-section__row title-section__row_3" reverse>
-          <TitleOutline tag="div">Конойко Диана&nbsp;</TitleOutline>
-        </MarqueeBlock>
+          <div class="title-section__row_2__sub-small">ui/ux designer</div>
+        </div>
+        <div class="title-section__row title-section__row_3 row-title-3">
+          <MarqueeBlock class="row-title-3__marquee" reverse>
+            <TitleOutline tag="div">Конойко Диана&nbsp;</TitleOutline>
+          </MarqueeBlock>
+          <TitleOutline class="row-title-3__static" tag="div">
+            Конойко
+            <div class="row-title-3__static-small">Диана</div>
+          </TitleOutline>
+        </div>
       </h1>
       <h2 class="title-section__row title-section__row_4">
         <span class="title-section__row_4__sub-small">тут я собрала все свои последние клевые проекты</span>

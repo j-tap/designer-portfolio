@@ -73,11 +73,11 @@ onMounted(() => {
 
     @include screen('sm') {
       margin-top: $header__height_sm;
-      padding-top: 20px;
+      padding-top: 42px;
     }
     @include screen('md') {
       margin-top: $header__height_md;
-      padding-top: 20px;
+      padding-top: 42px;
     }
     @include screen('lg') {
       margin-top: $header__height_lg;

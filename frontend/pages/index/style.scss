@@ -28,12 +28,12 @@
       //
     }
     &_2 {
-      margin-top: clamp(15px, 3.2vw, 60px);
+      margin-top: clamp(5px, 2vw, 60px);
 
       @include screen('sm') {
-        margin-right: $content__indent-x_sm;
-        margin-left: $content__indent-x_sm;
-        font-size: clamp(40px, 11vw, 68px);
+        text-indent: -15px;
+        margin-right: 0;
+        margin-left: 0;
       }
       @include screen('md') {
         margin-right: $content__indent-x_md;
@@ -54,13 +54,22 @@
         font-weight: 700;
         white-space: nowrap;
 
+        @include screen('sm') {
+          font-size: clamp(40px, 11vw, 68px);
+          margin-left: 30px;
+          margin-top: 10px;
+        }
         @include screen('md-up') {
           margin-left: clamp(20px, 3vw, 60px);
         }
       }
     }
     &_3 {
-      margin-top: clamp(15px, 3.2vw, 60px);
+      margin-top: clamp(20px, 3.2vw, 60px);
+
+      @include screen('sm') {
+        text-indent: -15px;
+      }
     }
     &_4 {
       margin-top: clamp(15px, 3.2vw, 60px);
@@ -105,6 +114,23 @@
         }
       }
     }
+  }
+}
+
+.row-title-3 {
+  &__marquee {
+    @include screen('sm') {
+      display: none;
+    }
+  }
+  &__static {
+    @include screen('md-up') {
+      display: none;
+    }
+  }
+  &__static-small {
+    margin-top: 5px;
+    margin-left: 60px;
   }
 }
 
@@ -208,7 +234,7 @@
   margin-left: auto;
   background: $color__white;
   color: $color__dark;
-  padding: 2vw;
+  padding: max(2vw, 20px);
 
   @include screen('sm') {
     margin-right: -$content__indent-x_sm;

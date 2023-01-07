@@ -37,8 +37,7 @@
       <div class="info-section__details info-details">
         <div class="info-details__one">
           <TitleOutline class="info-details__title" tag="h3">инструменты</TitleOutline>
-          <div class="html-text">
-            <p>Я работаю в программах:</p>
+          <div class="info-details__list-column html-text">
             <ul>
               <li>Figma;</li>
               <li>Adobe пакет;</li>
@@ -69,7 +68,9 @@
         >
           тоже важное
         </TitleOutline>
-        <p>Есть базовые знания html/css и большой опыт взаимодействия с разработчиками, что упрощает процесс работы.</p>
+        <div class="info-important__text">
+          Есть базовые знания html/css и большой опыт взаимодействия с разработчиками, что упрощает процесс работы.
+        </div>
       </div>
 
       <PortfolioCategories class="info-section__portfolio" :items="categories" />

@@ -9,10 +9,13 @@
 
 <script setup>
 import { colorBlue } from '~/assets/style/app.module.scss'
+import { initLocale } from '~/composables/useInitLocale'
 
 const route = useRoute()
 
 const loadingColors = colorBlue
+
+initLocale()
 
 useHead({
   title: route.meta.title,

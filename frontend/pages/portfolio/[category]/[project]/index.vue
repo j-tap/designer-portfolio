@@ -1,9 +1,23 @@
 <template>
   <div class="page-project">
     <ContentWrap>
-      <h1 class="page-project__title">
-        {{ project.title }}
-      </h1>
+      <h1 class="page-project__title">{{ project.title }}</h1>
+      <div class="page-project__time project-time">
+        <h2 class="project-time__title">{{ $t('project.development_time') }}</h2>
+        <h2 class="project-time__title">{{ $t('project.price') }}</h2>
+      </div>
+      <div class="page-project__steps project-steps">
+        <h2 class="project-steps__title">{{ $t('project.steps') }}</h2>
+        <ol class="project-steps__list">
+          <li
+            v-for="step in project.steps"
+            :key="step.id"
+            class="project-steps__list-item"
+          >
+            {{ step.title }}
+          </li>
+        </ol>
+      </div>
       <div class="page-project__back">
         <NuxtLink
           :to="{ name: 'portfolio-category', params: { category: categoryName } }"

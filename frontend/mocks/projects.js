@@ -1,5 +1,17 @@
 const src = 'https://via.placeholder.com/600x1500?text=Test+image'
 const example = {
+  time: {
+    start: '12-08-2022',
+    end: '19-10-2022',
+  },
+  steps: [
+    { id: 1, title: 'Анализ конкурентов' },
+    { id: 2, title: 'Разработка CJM' },
+    { id: 3, title: 'Разработка Wireframe' },
+    { id: 4, title: 'Разработка Wireframe' },
+    { id: 5, title: 'Разработка Wireframe' },
+    { id: 6, title: 'Разработка Wireframe' },
+  ],
   fonts: ['Vipnagorgialla', 'Manrope'],
   colors: ['#ffffff', '#ffffff', '#ffffff'],
   pages: [

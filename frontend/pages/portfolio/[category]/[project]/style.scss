@@ -3,11 +3,20 @@
     font-size: clamp(36px, 6vw, 100px);
     text-transform: uppercase;
     font-weight: 700;
-    margin: 0;
+    line-height: 1;
+    margin: 1vw 0 0;
+  }
+
+  &__time {
+
+  }
+
+  &__steps {
+
   }
 
   &__back {
-    margin-top: 6.4vw;
+    margin-top: 8vw;
     font-size: clamp(14px, 2vw, 25px);
     text-transform: uppercase;
 
@@ -19,5 +28,21 @@
 
   &__content {
     margin-top: 5vw;
+  }
+}
+
+.project-time {
+
+}
+
+.project-steps {
+  &__title {
+
+  }
+  &__list {
+
+  }
+  &__list-item {
+
   }
 }

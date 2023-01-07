@@ -1,6 +1,7 @@
 .title-outline {
   display: inline-block;
   margin: 0;
+  font-weight: 700;
 
   &:not(&_inverse) {
     @include text-outline($color__white);

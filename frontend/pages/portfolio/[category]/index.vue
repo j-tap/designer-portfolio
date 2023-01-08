@@ -8,13 +8,14 @@
         <li
           v-for="project in projectsList"
           :key="project.name"
+          :id="`project-${project.id}`"
           class="projects-list__item"
         >
           <ProjectPreview
             :data="project"
             :to="isCategoryIdentity ? null : {
               name: 'portfolio-category-project',
-              params: { category: categoryName, project: project.name }
+              params: { category: categoryName, project: project.name, hash: `project-${project.id}` }
             }"
             title-tag="h2"
             class="more-projects__item-preview"

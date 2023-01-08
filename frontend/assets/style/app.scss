@@ -12,6 +12,18 @@
   box-sizing: border-box;
 }
 
+html {
+  @include screen('sm') {
+    scroll-padding-top: $header__height_sm;
+  }
+  @include screen('md') {
+    scroll-padding-top: $header__height_md;
+  }
+  @include screen('lg') {
+    scroll-padding-top: $header__height_lg;
+  }
+}
+
 body {
   color: $color__white;
   background-color: $color__dark;

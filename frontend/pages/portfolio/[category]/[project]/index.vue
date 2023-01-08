@@ -17,7 +17,11 @@
 
       <div class="page-project__back">
         <NuxtLink
-          :to="{ name: 'portfolio-category', params: { category: categoryName } }"
+          :to="{
+            name: 'portfolio-category',
+            params: { category: categoryName },
+            hash: `#project-${project.id}`,
+          }"
         >
           &larr; {{ $t('portfolio.back_to_portfolio') }}
         </NuxtLink>

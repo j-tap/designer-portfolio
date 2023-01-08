@@ -12,7 +12,7 @@
         >
           <ProjectPreview
             :data="project"
-            :to="{
+            :to="isCategoryIdentity ? null : {
               name: 'portfolio-category-project',
               params: { category: categoryName, project: project.name }
             }"
@@ -34,6 +34,7 @@ import projects from '~/mocks/projects.js'
 
 const route = useRoute()
 const categoryName = computed(() => route.params.category)
+const isCategoryIdentity = computed(() => categoryName.value === 'identity')
 const category = computed(() => categories.filter(o => o.name === categoryName.value).pop() || {})
 const projectsList = computed(() => projects.map(o => ({
   id: o.id,

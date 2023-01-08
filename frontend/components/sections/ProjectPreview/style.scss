@@ -4,6 +4,10 @@
   color: inherit;
   transition: color .2s ease-in;
 
+  &_unlink {
+    pointer-events: none;
+  }
+
   &:hover {
     color: $color__blue;
   }
@@ -19,6 +23,8 @@
     aspect-ratio: 6 / 5;
     object-fit: contain;
     background-color: $color__white;
+    user-select: none;
+    pointer-events: none;
   }
 
   &__title {

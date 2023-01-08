@@ -17,38 +17,19 @@
         />
       </li>
     </ul>
-
-    <div class="project-mobile__fonts project-fonts">
-      <h2 class="project-fonts__title">{{ $t('project.fonts') }}</h2>
-      <ul class="project-fonts__list">
-        <li
-          v-for="font in props.data.fonts"
-          :key="strToNumHash(font)"
-          class="project-fonts__item"
-        >
-          <TitleOutline>{{ font }}</TitleOutline>
-        </li>
-      </ul>
-    </div>
-
-    <div class="project-mobile__colors project-colors">
-      <ul class="project-colors__list">
-        <li
-          v-for="color in props.data.colors"
-          :key="strToNumHash(color)"
-          class="project-colors__item"
-        >
-          <div class="project-colors__item-color" :style="`background-color: ${color}`"/>
-          <div class="project-colors__item-title">{{ color }}</div>
-        </li>
-      </ul>
-    </div>
+    <ProjectFonts
+      :items="props.data.fonts"
+      class="project-mobile__fonts"
+    />
+    <ProjectColors
+      :items="props.data.colors"
+      class="project-mobile__colors"
+    />
   </div>
 </template>
 
 <script setup>
-import { TitleOutline } from '~/components/common'
-import { ImagesItems } from '~/components/sections'
+import { ImagesItems, ProjectColors, ProjectFonts } from '~/components/sections'
 
 const props = defineProps({
   data: Object,

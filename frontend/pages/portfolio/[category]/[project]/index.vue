@@ -42,6 +42,8 @@ import {
   ProjectSteps,
   ProjectTypeMobile,
   ProjectTypeUiUx,
+  ProjectTypeWeb,
+  ProjectTypeIdentity,
   ProjectMore,
 } from '~/components/sections'
 
@@ -50,6 +52,8 @@ import projects from '~/mocks/projects.js'
 const categoryToComponent = {
   'mobile-development': ProjectTypeMobile,
   'ui-ux-design': ProjectTypeUiUx,
+  'web-design': ProjectTypeWeb,
+  'identity': ProjectTypeIdentity,
 }
 const route = useRoute()
 const categoryName = computed(() => route.params.category)

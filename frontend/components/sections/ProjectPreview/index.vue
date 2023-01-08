@@ -1,7 +1,7 @@
 <template>
   <NuxtLink
     :to="to"
-    class="project-preview"
+    :class="classes"
   >
     <figure class="project-preview__inner">
       <img class="project-preview__img" :src="data.preview" :alt="data.name">
@@ -21,6 +21,7 @@ const props = defineProps({
     default: 'figcaption',
   }
 })
+const classes = computed(() => ['project-preview', { 'project-preview_unlink': !props.to }])
 </script>
 
 <style lang="scss" src="./style.scss" scoped />

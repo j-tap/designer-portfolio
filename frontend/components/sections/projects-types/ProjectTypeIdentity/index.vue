@@ -1,7 +1,5 @@
 <template>
-  <div class="project-identity">
-    <pre>{{ props.data }}</pre>
-  </div>
+  <div class="project-identity"></div>
 </template>
 
 <script setup>

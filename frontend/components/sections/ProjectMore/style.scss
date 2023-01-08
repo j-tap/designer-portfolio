@@ -34,27 +34,28 @@
     width: 680px;
     max-width: 100%;
     flex-shrink: 0;
+    box-sizing: content-box;
 
     &:first-child {
       @include screen('sm') {
-        margin-left: $content__indent-x_sm;
+        padding-left: $content__indent-x_sm;
       }
       @include screen('md') {
-        margin-left: $content__indent-x_md;
+        padding-left: $content__indent-x_md;
       }
       @include screen('lg') {
-        margin-left: $content__indent-x_lg;
+        padding-left: $content__indent-x_lg;
       }
     }
     &:last-child {
       @include screen('sm') {
-        margin-right: $content__indent-x_sm;
+        padding-right: $content__indent-x_sm;
       }
       @include screen('md') {
-        margin-right: $content__indent-x_md;
+        padding-right: $content__indent-x_md;
       }
       @include screen('lg') {
-        margin-right: $content__indent-x_lg;
+        padding-right: $content__indent-x_lg;
       }
     }
 

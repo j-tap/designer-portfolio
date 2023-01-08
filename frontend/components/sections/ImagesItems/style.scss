@@ -32,9 +32,9 @@
   }
 
   &__item {
-    overflow-x: hidden;
-    overflow-y: auto;
+    overflow: hidden;
     flex-shrink: 0;
+    box-sizing: content-box;
 
     @include screen('sm') {
       width: 280px;
@@ -51,24 +51,24 @@
 
     &:first-child {
       @include screen('sm') {
-        margin-left: $content__indent-x_sm;
+        padding-left: $content__indent-x_sm;
       }
       @include screen('md') {
-        margin-left: $content__indent-x_md;
+        padding-left: $content__indent-x_md;
       }
       @include screen('lg') {
-        margin-left: $content__indent-x_lg;
+        padding-left: $content__indent-x_lg;
       }
     }
     &:last-child {
       @include screen('sm') {
-        margin-right: $content__indent-x_sm;
+        padding-right: $content__indent-x_sm;
       }
       @include screen('md') {
-        margin-right: $content__indent-x_md;
+        padding-right: $content__indent-x_md;
       }
       @include screen('lg') {
-        margin-right: $content__indent-x_lg;
+        padding-right: $content__indent-x_lg;
       }
     }
 

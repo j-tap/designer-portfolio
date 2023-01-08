@@ -14,7 +14,9 @@
             :key="strToNumHash(img.src)"
             class="images-items__item"
           >
-            <img :src="img.src" alt=" ">
+            <ScrollBlock>
+              <img :src="img.src" alt=" ">
+            </ScrollBlock>
           </li>
         </ul>
       </ScrollBlock>

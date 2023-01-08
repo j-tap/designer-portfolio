@@ -6,16 +6,19 @@
       </TitleOutline>
       <ul class="page-category__projects projects-list">
         <li
-          v-for="item in projectsList"
-          :key="item.name"
-          class="projects-list__item project-item"
+          v-for="project in projectsList"
+          :key="project.name"
+          class="projects-list__item"
         >
-          <NuxtLink
-            :to="{ name: 'portfolio-category-project', params: { category: categoryName, project: item.name } }"
-          >
-            <img class="project-item__img" :src="item.preview" :alt="item.name">
-            <h2 class="project-item__title">{{ item.title }}</h2>
-          </NuxtLink>
+          <ProjectPreview
+            :data="project"
+            :to="{
+              name: 'portfolio-category-project',
+              params: { category: categoryName, project: project.name }
+            }"
+            title-tag="h2"
+            class="more-projects__item-preview"
+          />
         </li>
       </ul>
     </ContentWrap>
@@ -25,6 +28,7 @@
 <script setup>
 import { TitleOutline } from '~/components/common'
 import { ContentWrap } from '~/components/structure'
+import { ProjectPreview } from '~/components/sections'
 import categories from '~/mocks/categories.js'
 import projects from '~/mocks/projects.js'
 

@@ -12,3 +12,11 @@ export function strToNumHash (str) {
   }
   return hash;
 }
+
+export function toWithSpaces (val) {
+  return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+}
+
+export function priceFormat (val) {
+  return `${toWithSpaces(val)}\xa0₽`
+}

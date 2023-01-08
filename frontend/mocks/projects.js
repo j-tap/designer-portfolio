@@ -10,8 +10,6 @@ const example = {
     { id: 3, title: 'Разработка Wireframe' },
     { id: 4, title: 'Разработка Wireframe' },
     { id: 5, title: 'Разработка Wireframe' },
-    { id: 6, title: 'Разработка Wireframe' },
-    { id: 6, title: 'Разработка Wireframe' },
   ],
   fonts: ['Vipnagorgialla', 'Manrope'],
   colors: ['#ffffff', '#ffffff', '#ffffff'],
@@ -38,26 +36,6 @@ const example = {
       title: 'Личный кабинет 3',
       subtitle: 'Registration Window',
       images: [
-        { src },
-      ]
-    },
-  ],
-  pagesOther: [
-    {
-      title: 'Другие страницы',
-      subtitle: 'Prototype',
-      images: [
-        { src },
-        { src },
-        { src },
-      ]
-    },
-    {
-      title: 'Адаптив',
-      subtitle: 'Photo/video upload',
-      images: [
-        { src },
-        { src },
         { src },
       ]
     },

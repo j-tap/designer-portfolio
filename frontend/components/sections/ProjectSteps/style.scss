@@ -1,0 +1,33 @@
+.project-steps {
+  &__title {
+    margin: 0 0 clamp(10px, 0.8vw, 0.8vw);
+    font-size: clamp(14px, 2vw, 25px);
+    color: $color__gray;
+    font-weight: 400;
+  }
+
+  &__list {
+    list-style-type: none;
+    list-style-position: inside;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: clamp(5px, 2vw, 30px) clamp(20px, 8vw, 80px);
+  }
+
+  &__list-item {
+    min-width: 220px;
+    max-width: 50%;
+    font-size: clamp(14px, 2vw, 20px);
+    color: $color__gray;
+
+    &::marker {
+      content: counter(list-item) ' ';
+      font-size: clamp(16px, 4vw, 40px);
+      font-family: $font__decor;
+      font-weight: 700;
+      color: $color__white;
+    }
+  }
+}

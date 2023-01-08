@@ -1,0 +1,33 @@
+.project-time {
+  display: flex;
+  gap: clamp(30px, 8vw, 100px);
+
+  @include screen('sm') {
+    flex-direction: column;
+  }
+  @include screen('md-up') {
+    flex-direction: row;
+  }
+
+  &__dates {
+    width: 41%;
+  }
+
+  &__prices {
+    width: auto;
+  }
+
+  &__title {
+    margin: 0 0 clamp(10px, 0.8vw, 0.8vw);
+    font-size: clamp(14px, 2vw, 25px);
+    color: $color__gray;
+    font-weight: 400;
+  }
+
+  &__value {
+    display: block;
+    font-size: clamp(30px, 5vw, 90px);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+}

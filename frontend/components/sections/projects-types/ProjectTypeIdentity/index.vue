@@ -10,4 +10,4 @@ const props = defineProps({
 })
 </script>
 
-<style lang="scss" src="./style.scss" scoped/>
+<style lang="scss" src="./style.scss" scoped />

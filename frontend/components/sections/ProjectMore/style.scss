@@ -1,12 +1,11 @@
-.images-items {
-  &__notify {
+.more-projects {
+  &__title {
     margin: 0;
-    letter-spacing: 3px;
-    text-align: right;
+    font-size: clamp(26px, 5vw, 80px);
   }
 
   &__wrap-list {
-    margin-top: 2.8vw;
+    margin-top: 4.8vw;
     width: auto;
 
     @include screen('sm') {
@@ -28,26 +27,13 @@
     margin: 0;
     padding: 0;
     display: flex;
-    gap: clamp(26px, 5vw, 80px);
+    gap: clamp(20px, 4vw, 70px);
   }
 
-  &__item {
-    overflow-x: hidden;
-    overflow-y: auto;
+  &__list-item {
+    width: 680px;
+    max-width: 100%;
     flex-shrink: 0;
-
-    @include screen('sm') {
-      width: 280px;
-      height: 360px;
-    }
-    @include screen('md') {
-      width: 320px;
-      height: 480px;
-    }
-    @include screen('lg') {
-      width: 360px;
-      height: 740px;
-    }
 
     &:first-child {
       @include screen('sm') {
@@ -72,12 +58,13 @@
       }
     }
 
-    img {
-      display: block;
-      width: 100%;
-      height: auto;
-      user-select: none;
-      pointer-events: none;
+    a {
+      text-decoration: none;
+      color: inherit;
     }
+  }
+
+  &__item-preview {
+
   }
 }

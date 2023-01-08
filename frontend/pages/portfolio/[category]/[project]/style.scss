@@ -4,7 +4,7 @@
     text-transform: uppercase;
     font-weight: 700;
     line-height: 1;
-    margin: 1vw 0 0;
+    margin: 1vw 0 7.6vw;
   }
 
   &__time {
@@ -12,11 +12,11 @@
   }
 
   &__steps {
-
+    margin-top: clamp(30px, 6vw, 50px);
   }
 
   &__back {
-    margin-top: 8vw;
+    margin-top: clamp(30px, 6vw, 6vw);
     font-size: clamp(14px, 2vw, 25px);
     text-transform: uppercase;
 
@@ -27,57 +27,10 @@
   }
 
   &__content {
-    margin-top: 5vw;
-  }
-}
-
-.project-time {
-  display: flex;
-  gap: clamp(60px, 10vw, 180px);
-
-  &__dates {
-    width: 50%;
-  }
-  &__prices {
-    width: 50%;
+    margin-top: clamp(30px, 6vw, 6vw);
   }
 
-  &__title {
-    margin: 0;
-    font-size: clamp(14px, 2vw, 25px);
-    color: $color__gray;
-    font-weight: 400;
-  }
-  &__value {
-    display: block;
-    font-size: clamp(30px, 8vw, 90px);
-    text-transform: uppercase;
-  }
-}
-
-.project-steps {
-  &__title {
-    margin: 0;
-    font-size: clamp(14px, 2vw, 25px);
-    color: $color__gray;
-    font-weight: 400;
-  }
-  &__list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: clamp(20px, 8vw, 80px);
-  }
-  &__list-item {
-    min-width: 220px;
-    font-size: clamp(14px, 2vw, 20px);
-    color: $color__gray;
-
-    &::marker {
-      content: counter(list-item) ' ';
-      font-size: clamp(16px, 4vw, 40px);
-      font-family: $font__decor;
-      font-weight: 700;
-      color: $color__white;
-    }
+  &__more-projects {
+    margin-top: clamp(50px, 9vw, 9vw);
   }
 }

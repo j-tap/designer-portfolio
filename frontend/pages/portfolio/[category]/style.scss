@@ -1,13 +1,12 @@
 .page-category {
   &__title {
-    margin: 4.7vw 0 0;
+    margin: 6.7vw 0 0 auto;
     font-size: clamp(20px, 5vw, 130px);
     text-transform: uppercase;
     font-weight: 700;
     line-height: 1;
     display: block;
     max-width: 55%;
-    margin-left: auto;
   }
 
   &__projects {
@@ -26,53 +25,78 @@
   gap: 0;
 
   &__item {
-    &:nth-child(5n + 1) {
-      margin-top: 6vw;
+    position: relative;
+
+    &:nth-child(7n + 1) {
+      margin-top: 4vw;
       width: 38%;
 
-      .project-item__img {
+      &:deep(.project-preview__img) {
         aspect-ratio: 4 / 3.4;
       }
     }
 
-    &:nth-child(5n + 2) {
-      margin-top: 28.4vw;
+    &:nth-child(7n + 2) {
+      margin-top: 26.6vw;
       margin-left: 7.5%;
       width: 54.5%;
 
-      .project-item__img {
+      &:deep(.project-preview__img) {
         aspect-ratio: 16 / 9.5;
       }
     }
 
-    &:nth-child(5n + 3) {
-      margin-top: -12.6vw;
+    &:nth-child(7n + 3) {
+      margin-top: -14.6vw;
       width: 26%;
       margin-left: 6%;
 
-      .project-item__img {
+      &:deep(.project-preview__img) {
         aspect-ratio: 1 / 1;
       }
     }
 
-    &:nth-child(5n + 4) {
-      margin-top: 14.2vw;
+    &:nth-child(7n + 4) {
+      margin-top: 13.8vw;
       width: 36%;
       margin-left: 5%;
 
-      .project-item__img {
+      &:deep(.project-preview__img) {
         aspect-ratio: 2 / 1.78;
       }
     }
 
-    &:nth-child(5n + 5) {
-      margin-top: 5vw;
+    &:nth-child(7n + 5) {
+      margin-top: 6.6vw;
       width: 21%;
       margin-left: 6%;
 
-      .project-item__img {
+      &:deep(.project-preview__img) {
         aspect-ratio: 1 / 1;
       }
+    }
+
+    &:nth-child(7n + 6) {
+      margin-top: -22.5vw;
+      width: 27.5%;
+
+      &:deep(.project-preview__img) {
+        aspect-ratio: 5 / 4;
+      }
+    }
+
+    &:nth-child(7n + 7) {
+      margin-top: 5.8vw;
+      width: 34.2%;
+      margin-left: 54.6%;
+
+      &:deep(.project-preview__img) {
+        aspect-ratio: 7 / 4.4;
+      }
+    }
+
+    &:nth-child(n+8) {
+      top: -21vw;
     }
 
     a {
@@ -84,29 +108,5 @@
         color: $color__blue;
       }
     }
-  }
-}
-
-.project-item {
-  margin: 0;
-  padding: 0;
-
-  &__img {
-    width: 100%;
-    display: block;
-    object-fit: contain;
-    background-color: $color__white;
-  }
-
-  & &__title-text {
-    margin: 2vw 0 0;
-  }
-
-  &__title-text {
-    margin: 0;
-    font-size: clamp(12px, 2.4vw, 40px);
-    text-transform: uppercase;
-    font-weight: 500;
-    line-height: 1;
   }
 }

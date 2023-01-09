@@ -1,39 +1,9 @@
 .project-mobile {
-  &__pages {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-  &__pages-item {
-    & + * {
-      margin-top: 10.8vw;
-    }
-  }
-
   & &__fonts {
     margin-top: 8vw;
   }
 
   & &__colors {
     margin-top: 4.7vw;
-  }
-}
-
-.page-item {
-  &__header {
-    padding-bottom: 1.6vw;
-    border-bottom: 1px solid;
-  }
-  &__title {
-    margin: 0;
-    font-size: clamp(26px, 5vw, 80px);
-  }
-  &__subtitle {
-    margin: 1vw 0 0;
-    font-size: clamp(12px, 1.6vw, 25px);
-    color: $color__gray;
-  }
-  &__images-items {
-    margin-top: 2vw;
   }
 }

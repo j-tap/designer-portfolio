@@ -1,22 +1,10 @@
 <template>
   <div class="project-mobile">
-    <ul class="project-mobile__pages">
-      <li
-        v-for="(page, ind) in props.data.pages"
-        :key="strToNumHash(page.title)"
-        class="project-mobile__pages-item page-item"
-      >
-        <header class="page-item__header">
-          <h2 class="page-item__title">{{ page.title }}</h2>
-          <h3 v-if="page.subtitle" class="page-item__subtitle">{{ page.subtitle }}</h3>
-        </header>
-        <ImagesItems
-          :images="page.images"
-          :display-hint="ind === 0"
-          class="page-item__images-items"
-        />
-      </li>
-    </ul>
+    <ProjectViews
+      :list="pagesDefault"
+      images-size="small"
+      class="project-mobile__pages"
+    />
     <ProjectFonts
       :items="props.data.fonts"
       class="project-mobile__fonts"
@@ -29,11 +17,14 @@
 </template>
 
 <script setup>
-import { ImagesItems, ProjectColors, ProjectFonts } from '~/components/sections'
+import { ProjectViews, ProjectColors, ProjectFonts } from '~/components/sections'
+import { pageTypes, getPagesByType } from '~/composables/useProject'
 
 const props = defineProps({
   data: Object,
 })
+
+const pagesDefault = computed(() => getPagesByType(props.data.pages, pageTypes.default))
 </script>
 
-<style lang="scss" src="./style.scss" scoped/>
+<style lang="scss" src="./style.scss" scoped />

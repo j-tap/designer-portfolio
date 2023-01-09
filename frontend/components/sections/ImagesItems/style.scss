@@ -1,4 +1,20 @@
 .images-items {
+  $self: &;
+
+  &_size-small {
+    #{$self}__item {
+      width: clamp(320px, 19vw, 360px);
+      aspect-ratio: 9 / 16;
+    }
+  }
+
+  &_size-large {
+    #{$self}__item {
+      width: clamp(320px, 42vw, 810px);
+      aspect-ratio: 5 / 6;
+    }
+  }
+
   &__notify {
     margin: 0;
     letter-spacing: 3px;
@@ -36,19 +52,6 @@
     overflow: hidden;
     flex-shrink: 0;
     box-sizing: content-box;
-
-    @include screen('sm') {
-      width: 280px;
-      height: 360px;
-    }
-    @include screen('md') {
-      width: 320px;
-      height: 480px;
-    }
-    @include screen('lg') {
-      width: 360px;
-      height: 740px;
-    }
 
     &:first-child {
       @include screen('sm') {

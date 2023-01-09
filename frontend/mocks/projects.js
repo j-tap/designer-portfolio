@@ -1,5 +1,20 @@
 const src = 'https://via.placeholder.com/600x1500?text=Test+image'
+const page = {
+  id: null,
+  type: 'default',
+  title: 'Окно регистрации',
+  subtitle:'Registration Window',
+  images: [],
+}
 const example = {
+  id: null,
+  name: null,
+  title: null,
+  preview: null,
+  images: [
+    { src },
+    { src },
+  ],
   time: {
     start: '08/12/2022',
     end: '10/19/2022',
@@ -15,6 +30,7 @@ const example = {
   colors: ['#ffffff', '#ffffff', '#ffffff'],
   pages: [
     {
+      ...page,
       title: 'Окно регистрации',
       subtitle:'Registration Window',
       images: [
@@ -23,21 +39,103 @@ const example = {
         { src },
         { src },
         { src },
-      ]
+      ],
     },
     {
+      ...page,
       title: 'Личный кабинет 2',
       subtitle: 'Registration Window',
       images: [
         { src },
-      ]
+      ],
     },
     {
+      ...page,
       title: 'Личный кабинет 3',
       subtitle: 'Registration Window',
       images: [
         { src },
-      ]
+      ],
+    },
+    {
+      ...page,
+      title: 'Личный кабинет 4',
+      subtitle: 'Registration Window',
+      images: [
+        { src },
+      ],
+    },
+    {
+      ...page,
+      type: 'other',
+      title: 'Тестовая страница другие 1',
+      subtitle: 'Test page',
+      images: [
+        { src },
+        { src },
+        { src },
+        { src },
+      ],
+    },
+    {
+      ...page,
+      type: 'other',
+      title: 'Тестовая страница другие 2',
+      subtitle: 'Test page 2',
+      images: [
+        { src },
+        { src },
+        { src },
+      ],
+    },
+    {
+      ...page,
+      type: 'other',
+      title: 'Тестовая страница другие 3',
+      subtitle: 'Test page 3',
+      images: [
+        { src },
+      ],
+    },
+    {
+      ...page,
+      type: 'other',
+      title: 'Тестовая страница другие 4',
+      subtitle: 'Test page 4',
+      images: [
+        { src },
+        { src },
+      ],
+    },
+    {
+      ...page,
+      type: 'mobile',
+      title: 'Тестовая страница мобильная 1',
+      subtitle: 'Test page 1',
+      images: [
+        { src },
+      ],
+    },
+    {
+      ...page,
+      type: 'mobile',
+      title: 'Тестовая страница мобильная 2',
+      subtitle: 'Test page 2',
+      images: [
+        { src },
+        { src },
+        { src },
+        { src },
+      ],
+    },
+    {
+      ...page,
+      type: 'mobile',
+      title: 'Тестовая страница мобильная 3',
+      subtitle: 'Test page 3',
+      images: [
+        { src },
+      ],
     },
   ],
 }

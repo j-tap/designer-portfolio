@@ -10,6 +10,10 @@ export default {
   'project.development_time': 'Время разработки',
   'project.fonts': 'Шрифт',
   'project.more_my_projects': 'Больше моих проектов',
+  'project.other_pages': 'Другие страницы',
+  'project.adaptive_version': 'Адаптивная версия',
+  'project.other_pages_subtitle': 'Помимо уникальных страниц так же есть типовые',
+  'project.adaptive_version_subtitle': 'Adaptive version',
 
   'carousel.pull_to_side_to_see_more': 'потяните вбок поле с окнами, чтобы посмотреть больше',
 

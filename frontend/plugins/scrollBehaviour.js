@@ -6,7 +6,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     // })
     let goTo = {
       top: 0,
-      behavior: 'smooth',
+      behavior: 'auto',
     }
 
     if (to.hash) {
@@ -23,7 +23,7 @@ export default defineNuxtPlugin((nuxtApp) => {
       // TODO: Заменить на завершение всех загрузок
       setTimeout(() => {
         resolve(goTo)
-      }, 350)
+      }, 500)
     })
   }
 })

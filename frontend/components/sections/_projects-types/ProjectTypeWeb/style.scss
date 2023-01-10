@@ -1,0 +1,87 @@
+.project-web {
+  &__img-top {
+    display: block;
+    height: auto;
+
+    @include screen('sm') {
+      width: calc(100% + $content__indent-x_sm * 2);
+      margin-left: -$content__indent-x_sm;
+      margin-right: -$content__indent-x_sm;
+    }
+    @include screen('md') {
+      width: calc(100% + $content__indent-x_md * 2);
+      margin-left: -$content__indent-x_md;
+      margin-right: -$content__indent-x_md;
+    }
+    @include screen('lg') {
+      width: calc(100% + $content__indent-x_lg * 2);
+      margin-left: -$content__indent-x_lg;
+      margin-right: -$content__indent-x_lg;
+    }
+  }
+
+  & &__fonts {
+    margin-top: 4.7vw;
+  }
+
+  & &__colors {
+    margin-top: 4.7vw;
+  }
+
+  & &__images {
+    margin-top: 8vw;
+  }
+
+  &__img-bottom {
+    display: block;
+    height: auto;
+    margin-top: 4.7vw;
+
+    @include screen('sm') {
+      width: calc(100% + $content__indent-x_sm * 2);
+      margin-left: -$content__indent-x_sm;
+      margin-right: -$content__indent-x_sm;
+    }
+    @include screen('md') {
+      width: calc(100% + $content__indent-x_md * 2);
+      margin-left: -$content__indent-x_md;
+      margin-right: -$content__indent-x_md;
+    }
+    @include screen('lg') {
+      width: calc(100% + $content__indent-x_lg * 2);
+      margin-left: -$content__indent-x_lg;
+      margin-right: -$content__indent-x_lg;
+    }
+  }
+}
+
+.web-images {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  &__item {
+    max-width: 100%;
+
+    @include screen('sm') {
+      width: 100%;
+    }
+    @include screen('md-up') {
+      width: 65.2vw;
+    }
+
+    & + * {
+      margin-top: 2.1vw;
+    }
+  }
+
+  &__img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+}

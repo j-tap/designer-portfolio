@@ -12,8 +12,8 @@ const example = {
   title: null,
   preview: null,
   images: [
-    { src },
-    { src },
+    { src: 'https://via.placeholder.com/900x900?text=Image' },
+    { src: 'https://via.placeholder.com/900x900?text=Image' },
   ],
   time: {
     start: '08/12/2022',

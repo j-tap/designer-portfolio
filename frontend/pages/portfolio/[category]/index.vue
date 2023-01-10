@@ -9,7 +9,7 @@
           v-for="project in projectsList"
           :key="project.name"
           :id="`project-${project.id}`"
-          :style="projectStyles[project.id]"
+          :ref="setProjectElems"
           class="projects-list__item"
         >
           <ProjectPreview
@@ -33,6 +33,7 @@ import { ContentWrap } from '~/components/structure'
 import { ProjectPreview } from '~/components/sections'
 import categories from '~/mocks/categories.js'
 import projects from '~/mocks/projects.js'
+import { getElementViewportInfo } from '~/utils/check'
 
 const route = useRoute()
 const categoryName = computed(() => route.params.category)
@@ -44,11 +45,8 @@ const projectsList = computed(() => projects.map(o => ({
   preview: o.preview,
   title: o.title,
 })))
-const projectStyles = ref({})
-
-watch(projectsList, (list) => {
-  updateProjectsPrlx(list)
-}, { immediate: true })
+const projectElems = ref([])
+const projectElesScrlStarts = ref([])
 
 if (process.client) {
   window.addEventListener('scroll', () => {
@@ -56,35 +54,46 @@ if (process.client) {
   })
 }
 
+function setProjectElems (el) {
+  if (el) {
+    // TODO: Need clean after updated
+    projectElems.value.push(el)
+  }
+}
+
 function updateProjectsPrlx (list, scrl = 0) {
-  list.forEach((o, ind) => {
-    const speed = 20
-    let prlx = 1
+  if (process.client) {
+    list.forEach((o, ind) => {
+      const el = projectElems.value[ind]
+      const { isInViewport } = getElementViewportInfo(el)
 
-    if (ind === 0 || ind % 7 === 0) {
-      prlx = 2
-    } else if (ind === 1 || ind % 8 === 0) {
-      prlx = 4
-    } else if (ind === 2 || ind % 9 === 0) {
-      prlx = 3
-    } else if (ind === 3 || ind % 10 === 0) {
-      prlx = 6
-    } else if (ind === 4 || ind % 11 === 0) {
-      prlx = 3
-    } else if (ind === 5 || ind % 12 === 0) {
-      prlx = 2
-    } else if (ind === 6 || ind % 13 === 0) {
-      prlx = 5
-    } else if (ind === 7 || ind % 14 === 0) {
-      prlx = 2
-    }
+      if (isInViewport) {
+        if (!projectElesScrlStarts.value[ind]) {
+          projectElesScrlStarts.value[ind] = scrl
+        }
 
-    const val = scrl / speed * prlx * -1
+        let k = 0
 
-    projectStyles.value[o.id] = {
-      transform: `translateY(${val}px)`,
-    }
-  })
+        if (ind > 0) {
+          if (ind === 2 || ind % 9 === 0) {
+            k = 9
+          } else if (ind === 4 || ind % 11 === 0) {
+            k = 11
+          } else if (ind === 5 || ind % 12 === 0) {
+            k = 7
+          } else if (ind === 6 || ind % 13 === 0) {
+            k = 9
+          }
+        }
+
+        if (k) {
+          const scrlStart = projectElesScrlStarts.value[ind]
+          const y = (scrl - scrlStart) / k
+          el.style.transform = `translateY(${y}px)`
+        }
+      }
+    })
+  }
 }
 
 definePageMeta({

@@ -31,10 +31,12 @@
 import { TitleOutline } from '~/components/common'
 import { ContentWrap } from '~/components/structure'
 import { ProjectPreview } from '~/components/sections'
+import { getElementViewportInfo } from '~/utils/check'
+import { setMeta } from '~/composables/useMeta'
 import categories from '~/mocks/categories.js'
 import projects from '~/mocks/projects.js'
-import { getElementViewportInfo } from '~/utils/check'
 
+const { t } = useI18n()
 const route = useRoute()
 const categoryName = computed(() => route.params.category)
 const isCategoryIdentity = computed(() => categoryName.value === 'identity')
@@ -95,6 +97,10 @@ function updateProjectsPrlx (list, scrl = 0) {
     })
   }
 }
+
+setMeta({
+  title: category.value.title,
+})
 
 definePageMeta({
   key: route => route.fullPath

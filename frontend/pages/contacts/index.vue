@@ -1,9 +1,9 @@
 <template>
   <div class="page-contacts">
     <h1 class="page-contacts__title page-title">
-      <TitleOutline class="page-title__item" tag="span">Контакты</TitleOutline>
+      <TitleOutline class="page-title__item" tag="span">{{ $t('menu.contacts') }}</TitleOutline>
       <ClientOnly>
-        &nbsp;<TitleOutline class="page-title__item" tag="span">Контакты</TitleOutline>
+        &nbsp;<TitleOutline class="page-title__item" tag="span">{{ $t('menu.contacts') }}</TitleOutline>
       </ClientOnly>
     </h1>
     <ul class="page-contacts__lis contacts-list">
@@ -29,12 +29,19 @@
 
 <script setup>
 import { TitleOutline } from '~/components/common'
+import { setMeta } from '~/composables/useMeta'
 
 const contacts = [
   { name: 'telegram', link: 'https://t.me/DianaKonoyko' },
   { name: 'behance', link: 'https://www.behance.net/diana_konoyko' },
   { name: 'email', link: 'mailto:dianakonoyko@gmail.com' },
 ]
+
+const { t } = useI18n()
+
+setMeta({
+  title: t('menu.contacts'),
+})
 </script>
 
 <style lang="scss" scoped src="./style.scss"/>

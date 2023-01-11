@@ -50,7 +50,7 @@ import {
   ProjectTypeIdentity,
   ProjectMore,
 } from '~/components/sections'
-
+import { setMeta } from '~/composables/useMeta'
 import projects from '~/mocks/projects.js'
 
 const categoryToComponent = {
@@ -75,6 +75,10 @@ const moreProjectsList = computed(() => projects
 
 onMounted(() => {
   projectComponentName.value = categoryToComponent[categoryName.value]
+})
+
+setMeta({
+  title: `${project.value.title} / ${categoryName.value}`,
 })
 </script>
 

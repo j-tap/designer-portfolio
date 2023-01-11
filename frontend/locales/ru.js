@@ -1,4 +1,6 @@
 export default {
+  'app.name': 'UI/UX designer Конойко Диана',
+
   'menu.main': 'Главная',
   'menu.portfolio': 'Портфолио',
   'menu.contacts': 'Контакты',
@@ -18,4 +20,5 @@ export default {
   'carousel.pull_to_side_to_see_more': 'потяните вбок поле с окнами, чтобы посмотреть больше',
 
   'common.hours': 'Часов',
+  'common.error_{code}': 'Ошибка {code}',
 }

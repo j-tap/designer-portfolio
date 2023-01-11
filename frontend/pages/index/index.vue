@@ -9,9 +9,9 @@
       <h1 class="page-main__title">
         <div class="title-section__row title-section__row_2 row-title-2">
           <MarqueeBlock class="row-title-2__sub-large_sm" reverse>
-            <TitleOutline tag="div">Портфолио</TitleOutline>&nbsp;
+            <TitleOutline tag="div">{{ $t('menu.portfolio') }}</TitleOutline>&nbsp;
           </MarqueeBlock>
-          <TitleOutline class="row-title-2__sub-large_md-up" tag="div">Портфолио</TitleOutline>
+          <TitleOutline class="row-title-2__sub-large_md-up" tag="div">{{ $t('menu.portfolio') }}</TitleOutline>
           <div class="row-title-2__sub-small">ui/ux designer</div>
         </div>
         <div class="title-section__row title-section__row_3 row-title-3">
@@ -82,11 +82,6 @@
 import { TitleOutline, MarqueeBlock } from '~/components/common'
 import { PortfolioCategories } from '~/components/sections'
 import categories from '~/mocks/categories'
-
-definePageMeta({
-  title: 'Портфолио',
-  description: 'Портфолио ui/ux дизайнера',
-})
 </script>
 
 <style lang="scss" scoped src="./style.scss"/>

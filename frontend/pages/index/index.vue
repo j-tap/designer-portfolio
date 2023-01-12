@@ -1,6 +1,6 @@
 <template>
-  <div v-if="home" class="page-main">
-    <section class="page-main__section-head title-section">
+  <div class="page-main">
+    <section v-if="home" class="page-main__section-head title-section">
       <ClientOnly>
         <MarqueeBlock class="title-section__row title-section__row_1">
           <TitleOutline tag="span">ui/ux designer</TitleOutline>&nbsp;
@@ -30,22 +30,22 @@
       </h2>
     </section>
 
-    <section class="page-main__section-info info-section">
+    <section v-if="home" class="page-main__section-info info-section">
       <h3 class="info-section__title">
-        {{ home.experience.title }}
+        {{ home.experience?.title }}
       </h3>
-      <HtmlMarked :text="home.experience.text" class="info-section__description" />
+      <HtmlMarked :text="home.experience?.text" class="info-section__description" />
 
       <div class="info-section__details info-details">
         <div class="info-details__one">
           <TitleOutline class="info-details__title" tag="h3">
-            {{ home.tools.title }}
+            {{ home.tools?.title }}
           </TitleOutline>
-          <HtmlMarked :text="home.tools.text" class="info-details__list-column" />
+          <HtmlMarked :text="home.tools?.text" class="info-details__list-column" />
         </div>
         <div class="info-details__two">
-          <TitleOutline class="info-details__title" tag="h3">{{ home.skills.title }}</TitleOutline>
-          <HtmlMarked :text="home.skills.text" />
+          <TitleOutline class="info-details__title" tag="h3">{{ home.skills?.title }}</TitleOutline>
+          <HtmlMarked :text="home.skills?.text" />
         </div>
       </div>
 
@@ -55,9 +55,9 @@
           tag="h3"
           inverse
         >
-          {{ home.important.title }}
+          {{ home.important?.title }}
         </TitleOutline>
-        <HtmlMarked :text="home.important.text" class="info-important__text" />
+        <HtmlMarked :text="home.important?.text" class="info-important__text" />
       </div>
 
       <PortfolioCategories class="info-section__portfolio" :items="categories" />
@@ -70,8 +70,8 @@ import { TitleOutline, MarqueeBlock, HtmlMarked } from '~/components/common'
 import { PortfolioCategories } from '~/components/sections'
 import { find } from '~/composables/useApi';
 
-const dataHome = await find('home')
-const dataCategories = await find('category-projects')
+const { data: dataHome } = await find('home')
+const { data: dataCategories } = await find('category-projects')
 
 const categories = computed(() => dataCategories || [])
 const home = computed(() => dataHome)

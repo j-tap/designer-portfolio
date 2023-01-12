@@ -1,27 +1,41 @@
 import { useLoadingStore } from '~/stores/loadingStore'
 
 export async function find (name) {
-  // const { locale } = useI18n()
-  //   ?populate=*&locale=${locale.value}
-  const query = `${name}?populate=*`
-  const loadingStore = useLoadingStore()
-  loadingStore.updateLoading(true)
-
+  let result = {
+    data: null,
+    meta: null,
+    status: false,
+  }
+  const { locale } = useI18n()
+  const query = `${name}?locale=${locale.value}&populate=*`
   const { find } = useStrapi()
 
-  const {data, error} = await useAsyncData(
-    query,
-    () => find(query),
-  )
+  try {
+    requestStart()
+    const { data, meta } = await find(query)
+    requestFinally()
 
+    if (data) {
+      result.data = formatApiResponse(data)
+      result.meta = meta
+      result.status = true
+    }
+  } catch (error) {
+    requestFinally()
+    console.error('Error api asyncData:', error)
+    // throw showError({ statusCode: error.code, statusMessage: error.message })
+  }
+
+  return result
+}
+
+function requestStart () {
+  const loadingStore = useLoadingStore()
+  loadingStore.updateLoading(true)
+}
+function requestFinally () {
+  const loadingStore = useLoadingStore()
   loadingStore.updateLoading(false)
-
-  if (error?.value) {
-    console.error('Error api asyncData:', error.value)
-  }
-  if (data?.value) {
-    return formatApiResponse(data.value.data)
-  }
 }
 
 function formatApiResponse (data) {

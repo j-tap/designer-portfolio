@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_project_colors",
+  "info": {
+    "displayName": "Color"
+  },
+  "options": {},
+  "attributes": {
+    "color": {
+      "type": "string",
+      "minLength": 4,
+      "required": true,
+      "regex": "#([a-fA-F0-9]{3}){1,2}\\b"
+    }
+  }
+}

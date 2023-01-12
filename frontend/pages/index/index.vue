@@ -1,5 +1,5 @@
 <template>
-  <div class="page-main">
+  <div v-if="home" class="page-main">
     <section class="page-main__section-head title-section">
       <ClientOnly>
         <MarqueeBlock class="title-section__row title-section__row_1">
@@ -25,38 +25,27 @@
         </div>
       </h1>
       <h2 class="title-section__row title-section__row_4">
-        <span class="title-section__row_4__sub-small">тут я собрала все свои последние клевые проекты</span>
+        <div class="title-section__row_4__sub-small" v-html="home.small_description" />
         <TitleOutline class="title-section__row_4__sub-large" tag="div">ui/ux designer</TitleOutline>
       </h2>
     </section>
 
     <section class="page-main__section-info info-section">
-      <h3 class="info-section__title">О моем опыте</h3>
-      <p class="info-section__description">В сфере дизайна я более 3х лет. За это время мне удалось поработать с разносторонними проектами, как мелкие стартапы, так и масштабные.</p>
+      <h3 class="info-section__title">
+        {{ home.experience.title }}
+      </h3>
+      <HtmlMarked :text="home.experience.text" class="info-section__description" />
 
       <div class="info-section__details info-details">
         <div class="info-details__one">
-          <TitleOutline class="info-details__title" tag="h3">инструменты</TitleOutline>
-          <div class="info-details__list-column html-text">
-            <ul>
-              <li>Figma;</li>
-              <li>Adobe пакет;</li>
-              <li>Axure;</li>
-              <li>Blender;</li>
-              <li>И многие другие.</li>
-            </ul>
-          </div>
+          <TitleOutline class="info-details__title" tag="h3">
+            {{ home.tools.title }}
+          </TitleOutline>
+          <HtmlMarked :text="home.tools.text" class="info-details__list-column" />
         </div>
         <div class="info-details__two">
-          <TitleOutline class="info-details__title" tag="h3">Навыки</TitleOutline>
-          <div class="html-text">
-            <ul>
-              <li>Имеются знание и опыт принципов и методологий проектирования сложных систем и интерфейсов, atomic design.</li>
-              <li>Опыт работы в качестве UX\UI дизайнера.</li>
-              <li>Навык проектирования, прототипирования и реализации интерфейсов взаимодействия с пользователями в вебе и на мобильных устройствах.</li>
-              <li>Навык анимации и 3D проектирования.</li>
-            </ul>
-          </div>
+          <TitleOutline class="info-details__title" tag="h3">{{ home.skills.title }}</TitleOutline>
+          <HtmlMarked :text="home.skills.text" />
         </div>
       </div>
 
@@ -66,11 +55,9 @@
           tag="h3"
           inverse
         >
-          тоже важное
+          {{ home.important.title }}
         </TitleOutline>
-        <div class="info-important__text">
-          Есть базовые знания html/css и большой опыт взаимодействия с разработчиками, что упрощает процесс работы.
-        </div>
+        <HtmlMarked :text="home.important.text" class="info-important__text" />
       </div>
 
       <PortfolioCategories class="info-section__portfolio" :items="categories" />
@@ -79,9 +66,15 @@
 </template>
 
 <script setup>
-import { TitleOutline, MarqueeBlock } from '~/components/common'
+import { TitleOutline, MarqueeBlock, HtmlMarked } from '~/components/common'
 import { PortfolioCategories } from '~/components/sections'
-import categories from '~/mocks/categories'
+import { find } from '~/composables/useApi';
+
+const dataHome = await find('home')
+const dataCategories = await find('category-projects')
+
+const categories = computed(() => dataCategories || [])
+const home = computed(() => dataHome)
 </script>
 
 <style lang="scss" scoped src="./style.scss"/>

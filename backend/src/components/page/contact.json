@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_page_contacts",
+  "info": {
+    "displayName": "Contact",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "minLength": 2,
+      "unique": false,
+      "required": true
+    },
+    "link": {
+      "type": "string",
+      "required": true,
+      "minLength": 2,
+      "regex": "(^(https?):\\/\\/[^\\s$.?#].[^\\s]*$)|(\\S+@\\S+\\.\\S+)"
+    }
+  }
+}

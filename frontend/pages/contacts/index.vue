@@ -7,9 +7,9 @@
       </ClientOnly>
     </h1>
     <ul class="page-contacts__lis contacts-list">
-      <li class="contacts-list__item" v-for="item in contacts" :key="item.name">
+      <li class="contacts-list__item" v-for="item in contacts" :key="item.title">
         <ClientOnly>
-          <TitleOutline tag="span">{{ item.name }}</TitleOutline>
+          <TitleOutline tag="span">{{ item.title }}</TitleOutline>
         </ClientOnly>
         <NuxtLink
           class="contacts-list__link"
@@ -17,10 +17,10 @@
           target="_blank"
           external
         >
-          {{ item.name }}
+          {{ item.title }}
         </NuxtLink>
         <ClientOnly>
-          <TitleOutline tag="span">{{ item.name }}</TitleOutline>
+          <TitleOutline tag="span">{{ item.title }}</TitleOutline>
         </ClientOnly>
       </li>
     </ul>
@@ -30,14 +30,12 @@
 <script setup>
 import { TitleOutline } from '~/components/common'
 import { setMeta } from '~/composables/useMeta'
-
-const contacts = [
-  { name: 'telegram', link: 'https://t.me/DianaKonoyko' },
-  { name: 'behance', link: 'https://www.behance.net/diana_konoyko' },
-  { name: 'email', link: 'mailto:dianakonoyko@gmail.com' },
-]
+import { find } from '~/composables/useApi'
 
 const { t } = useI18n()
+
+const { contact: data } = await find('contact')
+const contacts = computed(() => data || [])
 
 setMeta({
   title: t('menu.contacts'),

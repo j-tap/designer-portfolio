@@ -1,0 +1,16 @@
+.loading-indicator {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0;
+  pointer-events: none;
+  height: 4px;
+  background: $color__blue;
+  z-index: 999;
+  display: none;
+  transition: width .2s linear;
+
+  &_active {
+    display: block;
+  }
+}

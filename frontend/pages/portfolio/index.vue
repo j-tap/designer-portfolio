@@ -11,9 +11,12 @@
 import { PortfolioCategories } from '~/components/sections'
 import { ContentWrap } from '~/components/structure'
 import { setMeta } from '~/composables/useMeta'
-import categories from '~/mocks/categories'
+import { find } from '~/composables/useApi'
 
 const { t } = useI18n()
+
+const data = await find('category-projects')
+const categories = computed(() => data || [])
 
 setMeta({
   title: t('menu.portfolio'),

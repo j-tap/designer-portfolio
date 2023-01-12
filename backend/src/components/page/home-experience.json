@@ -1,0 +1,16 @@
+{
+  "collectionName": "components_page_home_experiences",
+  "info": {
+    "displayName": "Home experience",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "text": {
+      "type": "richtext"
+    }
+  }
+}

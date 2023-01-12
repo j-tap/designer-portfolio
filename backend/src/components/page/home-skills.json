@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_page_home_skills",
+  "info": {
+    "displayName": "Home skills"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "text": {
+      "type": "richtext"
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "collectionName": "components_project_fonts",
+  "info": {
+    "displayName": "Fonts"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "minLength": 2,
+      "required": true
+    }
+  }
+}

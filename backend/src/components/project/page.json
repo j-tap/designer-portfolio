@@ -1,0 +1,36 @@
+{
+  "collectionName": "components_project_pages",
+  "info": {
+    "displayName": "Page"
+  },
+  "options": {},
+  "attributes": {
+    "type": {
+      "type": "enumeration",
+      "enum": [
+        "default",
+        "other",
+        "mobile"
+      ],
+      "required": true,
+      "default": "default"
+    },
+    "title": {
+      "type": "string",
+      "required": true,
+      "minLength": 1
+    },
+    "subtitle": {
+      "type": "string",
+      "minLength": 3
+    },
+    "images": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": true,
+      "required": true
+    }
+  }
+}

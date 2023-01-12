@@ -11,6 +11,7 @@ const example = {
   name: null,
   title: null,
   preview: null,
+  preview_social: null,
   images: [
     { src: 'https://via.placeholder.com/900x900?text=Image' },
     { src: 'https://via.placeholder.com/900x900?text=Image' },

@@ -1,0 +1,16 @@
+{
+  "collectionName": "components_page_home_tools",
+  "info": {
+    "displayName": "Home tools",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "text": {
+      "type": "richtext"
+    }
+  }
+}

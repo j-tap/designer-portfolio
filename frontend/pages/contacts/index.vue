@@ -34,8 +34,8 @@ import { find } from '~/composables/useApi'
 
 const { t } = useI18n()
 
-const { contact: data } = await find('contact')
-const contacts = computed(() => data || [])
+const { data } = await find('contact')
+const contacts = computed(() => data?.contact || [])
 
 setMeta({
   title: t('menu.contacts'),

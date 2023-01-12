@@ -9,7 +9,7 @@ const props = defineProps({
   text: String,
 })
 
-const markdownToHtml = computed(() => marked.parse(props.text))
+const markdownToHtml = computed(() => marked.parse(props.text || ''))
 </script>
 
 <style lang="scss" src="./style.scss" scoped />

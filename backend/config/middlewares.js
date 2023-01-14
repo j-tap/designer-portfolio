@@ -5,9 +5,8 @@ module.exports = ({ env }) => [
   {
     name: 'strapi::cors',
     config: {
-      enabled: true,
-      header: '*',
-      origin: [env('FRONTEND_URL')]
+      headers: '*',
+      origin: env('FRONTEND_URL').split(',') || [],
     }
   },
   'strapi::logger',

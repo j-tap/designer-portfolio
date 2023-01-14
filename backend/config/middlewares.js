@@ -1,7 +1,14 @@
-module.exports = [
+module.exports = ({ env }) => [
   'strapi::errors',
   'strapi::security',
-  'strapi::cors',
+  {
+    name: 'strapi::cors',
+    config: {
+      enabled: true,
+      header: '*',
+      origin: [env('FRONTEND_URL')]
+    }
+  },
   'strapi::poweredBy',
   'strapi::logger',
   'strapi::query',

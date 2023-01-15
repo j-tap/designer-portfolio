@@ -1,6 +1,5 @@
 module.exports = ({ env }) => {
-  console.log('CORS', env('CORS_ORIGIN'))
-  const corsOrigin = env('CORS_ORIGIN')?.split(',') || []
+  const corsOrigin = env.array('CORS_ORIGIN') || []
   return [
     'strapi::errors',
     'strapi::security',

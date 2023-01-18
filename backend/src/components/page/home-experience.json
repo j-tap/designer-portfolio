@@ -1,16 +1,18 @@
 {
   "collectionName": "components_page_home_experiences",
   "info": {
-    "displayName": "Home experience",
+    "displayName": "Главная - Опыт",
     "description": ""
   },
   "options": {},
   "attributes": {
     "title": {
-      "type": "string"
+      "type": "string",
+      "default": "О моем опыте"
     },
     "text": {
-      "type": "richtext"
+      "type": "richtext",
+      "default": "В сфере дизайна я более 3х лет. За это время мне удалось поработать с разносторонними проектами, как мелкие стартапы, так и масштабные."
     }
   }
 }

@@ -1,15 +1,16 @@
 {
   "collectionName": "components_project_colors",
   "info": {
-    "displayName": "Color"
+    "displayName": "Цвета",
+    "description": ""
   },
   "options": {},
   "attributes": {
     "color": {
-      "type": "string",
-      "minLength": 4,
+      "type": "customField",
+      "regex": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$",
       "required": true,
-      "regex": "#([a-fA-F0-9]{3}){1,2}\\b"
+      "customField": "plugin::color-picker.color"
     }
   }
 }

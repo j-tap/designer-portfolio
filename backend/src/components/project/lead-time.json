@@ -1,7 +1,8 @@
 {
   "collectionName": "components_project_lead_times",
   "info": {
-    "displayName": "Lead time"
+    "displayName": "Время разработки",
+    "description": ""
   },
   "options": {},
   "attributes": {

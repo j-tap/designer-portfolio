@@ -1,12 +1,14 @@
 {
   "collectionName": "components_page_home_importants",
   "info": {
-    "displayName": "Home Important"
+    "displayName": "Главная - Важное",
+    "description": ""
   },
   "options": {},
   "attributes": {
     "title": {
-      "type": "string"
+      "type": "string",
+      "default": "Тоже важное"
     },
     "text": {
       "type": "richtext"

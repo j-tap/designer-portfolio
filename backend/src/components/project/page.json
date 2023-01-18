@@ -1,7 +1,8 @@
 {
   "collectionName": "components_project_pages",
   "info": {
-    "displayName": "Page"
+    "displayName": "Страница",
+    "description": ""
   },
   "options": {},
   "attributes": {
@@ -25,12 +26,12 @@
       "minLength": 3
     },
     "images": {
-      "allowedTypes": [
-        "images"
-      ],
       "type": "media",
       "multiple": true,
-      "required": true
+      "required": true,
+      "allowedTypes": [
+        "images"
+      ]
     }
   }
 }

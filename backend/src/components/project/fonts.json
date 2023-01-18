@@ -1,7 +1,8 @@
 {
   "collectionName": "components_project_fonts",
   "info": {
-    "displayName": "Fonts"
+    "displayName": "Шрифты",
+    "description": ""
   },
   "options": {},
   "attributes": {

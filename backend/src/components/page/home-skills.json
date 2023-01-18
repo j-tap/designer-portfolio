@@ -1,12 +1,14 @@
 {
   "collectionName": "components_page_home_skills",
   "info": {
-    "displayName": "Home skills"
+    "displayName": "Главная - Навыки",
+    "description": ""
   },
   "options": {},
   "attributes": {
     "title": {
-      "type": "string"
+      "type": "string",
+      "default": "Навыки"
     },
     "text": {
       "type": "richtext"

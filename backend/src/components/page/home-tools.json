@@ -1,13 +1,14 @@
 {
   "collectionName": "components_page_home_tools",
   "info": {
-    "displayName": "Home tools",
+    "displayName": "Главная - Инструменты",
     "description": ""
   },
   "options": {},
   "attributes": {
     "title": {
-      "type": "string"
+      "type": "string",
+      "default": "Инструменты"
     },
     "text": {
       "type": "richtext"

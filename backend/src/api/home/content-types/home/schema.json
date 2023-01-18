@@ -4,7 +4,7 @@
   "info": {
     "singularName": "home",
     "pluralName": "homes",
-    "displayName": "Home",
+    "displayName": "Главная страница",
     "description": ""
   },
   "options": {
@@ -22,7 +22,8 @@
           "localized": true
         }
       },
-      "type": "string"
+      "type": "string",
+      "default": "Тут я собрала все свои последние клевые проекты"
     },
     "experience": {
       "type": "component",

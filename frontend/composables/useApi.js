@@ -1,6 +1,23 @@
 import qs from 'qs'
 import { useLoadingStore } from '~/stores/loadingStore'
 
+export function urlFile (urlFile) {
+  const config = useRuntimeConfig()
+  const urlApi = config.public.strapi.url
+  return `${urlApi}${urlFile}`
+}
+
+export function getFormatImages (item) {
+  return {
+    blurhash: item.blurhash,
+    url: item.formats.large.url,
+    id: item.id,
+    title: item.name,
+    width: item.width,
+    height: item.height,
+  }
+}
+
 export async function find (name, params = {}) {
   return sendRequest({ name, params }, async (query) => {
     const { find } = useStrapi()
@@ -39,7 +56,7 @@ async function sendRequest ({ name, params }, cb) {
   const { locale } = useI18n()
   const query = qs.stringify({
     locale: locale.value,
-    populate: '*',
+    populate: 'deep',
     ...params,
   }, { encodeValuesOnly: true })
 

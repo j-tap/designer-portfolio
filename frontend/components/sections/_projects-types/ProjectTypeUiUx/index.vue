@@ -11,12 +11,12 @@
         <ul v-if="page.images.length" class="uiux-page__images">
           <li
             v-for="img in page.images"
-            :key="strToNumHash(img.src)"
+            :key="img.id"
             class="uiux-page__images-item"
           >
             <figure class="uiux-page__images-img">
               <img
-                :src="img.src"
+                :src="urlFile(img.formats.large.url)"
                 :alt="page.subtitle"
               >
             </figure>

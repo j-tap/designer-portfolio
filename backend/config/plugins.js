@@ -33,6 +33,18 @@ module.exports = {
     }
   },
 
+  'strapi-plugin-populate-deep': {
+    enabled: true,
+  },
+
+  'multi-select': {
+    enabled: true,
+  },
+
+  'strapi-blurhash': {
+    enabled: true,
+  },
+
   'relations-select': {
     enabled: true,
     resolve: './src/plugins/relations-select',

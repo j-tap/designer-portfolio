@@ -6,7 +6,7 @@
     <figure class="project-preview__inner">
       <img
         v-if="data.preview"
-        :src="data.preview.formats.medium.url"
+        :src="urlFile(data.preview.formats.medium.url)"
         :alt="data.slug"
         class="project-preview__img"
       >

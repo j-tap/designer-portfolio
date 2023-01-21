@@ -1,7 +1,7 @@
 <template>
   <div class="page-project">
     <ContentWrap>
-      <ul v-if="project.links" class="page-project__links links-project">
+      <ul v-if="project.links?.length" class="page-project__links links-project">
         <li
           v-for="item in project.links"
           :key="item.id"
@@ -19,6 +19,7 @@
       </ul>
 
       <h1 class="page-project__title">{{ project.title }}</h1>
+      <div v-if="project.subtitle" class="page-project__subtitle">{{ project.subtitle }}</div>
 
       <ProjectTimes
         v-if="project.time?.start"
@@ -49,7 +50,7 @@
       </div>
 
       <ProjectMore
-        v-if="moreProjectsList.length"
+        v-if="moreProjectsList?.length"
         :items="moreProjectsList"
         class="page-project__more-projects"
       />
@@ -81,13 +82,19 @@ const route = useRoute()
 
 const projectComponentName = shallowRef('')
 const categoryName = computed(() => route.params.category)
-const { data: project } = await findBySlug(`projects`, route.params.project)
-const { data: moreProjectsList } = await find('projects', {
-  filters: {
-    categories: { id: { $in: project.categories.map((o) => o.id) } },
-    id: { $ne: project.id },
-  },
-})
+const { data: project } = await findBySlug(
+  'projects',
+  route.params.project,
+)
+const { data: moreProjectsList } = await find(
+  'projects',
+  {
+    filters: {
+      categories: 0, // { id: { $in: project.categories.map((o) => o.id) } },
+      id: { $ne: project.id },
+    },
+  }
+)
 
 onMounted(() => {
   projectComponentName.value = categoryToComponent[categoryName.value]

@@ -2,12 +2,12 @@
   <ul class="portfolio-categories">
     <li
       v-for="item in props.items"
-      :key="item.name"
+      :key="item.slug"
       class="portfolio-categories__item"
     >
       <NuxtLink
         class="portfolio-categories__title"
-        :to="{ name: 'portfolio-category', params: { category: item.name } }"
+        :to="{ name: 'portfolio-category', params: { category: item.slug } }"
       >
         <TitleOutline
           class="portfolio-categories__title-text"

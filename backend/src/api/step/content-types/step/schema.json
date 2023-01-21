@@ -25,6 +25,14 @@
       "type": "string",
       "minLength": 2,
       "required": true
+    },
+    "rank": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": false
+        }
+      },
+      "type": "string"
     }
   }
 }

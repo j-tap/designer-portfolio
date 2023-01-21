@@ -1,22 +1,55 @@
+import qs from 'qs'
 import { useLoadingStore } from '~/stores/loadingStore'
 
-export async function find (name) {
+export async function find (name, params = {}) {
+  return sendRequest({ name, params }, async (query) => {
+    const { find } = useStrapi()
+    return await find(query)
+  })
+}
+
+export async function findBySlug (name, slug, params = {}) {
+  const modParams = {
+    ...params,
+    filters: {
+      ...params.filters,
+      slug: { $eq: slug },
+    },
+  }
+  return sendRequest({ name, params: modParams }, async (query) => {
+    const { find } = useStrapi()
+    const result = await find(query)
+    return { ...result, data: result.data[0] }
+  })
+}
+
+export async function findOne (name, params = {}) {
+  return sendRequest({ name, params }, async (query, params) => {
+    const { findOne } = useStrapi()
+    return await findOne(query)
+  })
+}
+
+async function sendRequest ({ name, params }, cb) {
   let result = {
     data: null,
     meta: null,
     status: false,
   }
   const { locale } = useI18n()
-  const query = `${name}?locale=${locale.value}&populate=*`
-  const { find } = useStrapi()
+  const query = qs.stringify({
+    locale: locale.value,
+    populate: '*',
+    ...params,
+  }, { encodeValuesOnly: true })
 
   try {
     requestStart()
-    const { data, meta } = await find(query)
+    const { data, meta } = await cb(`${name}?${query}`)
     requestFinally()
 
     if (data) {
-      result.data = formatApiResponse(data)
+      result.data = data
       result.meta = meta
       result.status = true
     }
@@ -36,27 +69,4 @@ function requestStart () {
 function requestFinally () {
   const loadingStore = useLoadingStore()
   loadingStore.updateLoading(false)
-}
-
-function formatApiResponse (data) {
-  if (!data) {
-    return undefined
-  }
-  if (Array.isArray(data)) {
-    return data.reduce(
-      (acc, curr) => {
-        const item = {
-          id: curr.id,
-          ...curr.attributes,
-        }
-        acc.push(item)
-        return acc
-      },
-      [],
-    )
-  }
-  return {
-    id: data.id,
-    ...data.attributes,
-  }
 }

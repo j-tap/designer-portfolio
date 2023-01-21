@@ -1,6 +1,6 @@
 <template>
   <div class="project-web">
-    <img class="project-web__img-top" :src="imageTop.src" alt=" ">
+    <img v-if="imageTop" class="project-web__img-top" :src="imageTop.src" alt=" ">
     <ProjectFonts
       :items="props.data.fonts"
       class="project-web__fonts"
@@ -11,14 +11,14 @@
     />
     <ul v-if="imagesList.length" class="project-web__images web-images">
       <li
-        v-for="img in imagesList"
-        :key="strToNumHash(img.src)"
+        v-for="item in imagesList"
+        :key="strToNumHash(item.src)"
         class="web-images__item"
       >
-        <img class="web-images__img" :src="img.src" alt=" ">
+        <img class="web-images__img" :src="item.src" alt=" ">
       </li>
     </ul>
-    <img class="project-web__img-bottom" :src="imageBottom.src" alt=" ">
+    <img v-if="imageBottom" class="project-web__img-bottom" :src="imageBottom.src" alt=" ">
   </div>
 </template>
 
@@ -28,10 +28,21 @@ import { ProjectColors, ProjectFonts } from '~/components/sections'
 const props = defineProps({
   data: Object,
 })
-const imageTop = computed(() => props.data.images[0])
-const imageBottom = computed(() => props.data.images[props.data.images.length - 1])
-const page = computed(() => props.data.pages[0] || {})
-const imagesList = computed(() => page.value.images || [])
+const imgs = computed(() => props.data.images)
+const imageTop = computed(() => imgs.value ? imgs.value[0] : null)
+const imageBottom = computed(() => imgs.value ? imgs.value[imgs.value.length - 1] : null)
+const imagesList = computed(() => {
+  if (props.data.pages) {
+    const imgs = []
+    props.data.pages.forEach(o => {
+      if (o.images) {
+        imgs.push(...o.images)
+      }
+    })
+    return imgs
+  }
+  return []
+})
 </script>
 
 <style lang="scss" src="./style.scss" scoped/>

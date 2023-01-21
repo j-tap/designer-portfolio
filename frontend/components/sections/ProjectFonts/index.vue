@@ -3,11 +3,11 @@
     <h2 class="project-fonts__title">{{ $t('project.fonts') }}</h2>
     <ul class="project-fonts__list">
       <li
-          v-for="font in props.items"
-          :key="strToNumHash(font)"
-          class="project-fonts__item"
+        v-for="item in props.items"
+        :key="strToNumHash(item.id)"
+        class="project-fonts__item"
       >
-        <TitleOutline>{{ font }}</TitleOutline>
+        <TitleOutline>{{ item.title }}</TitleOutline>
       </li>
     </ul>
   </div>

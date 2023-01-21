@@ -1,0 +1,24 @@
+{
+  "collectionName": "components_project_csylki",
+  "info": {
+    "displayName": "Cсылки",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "minLength": 2,
+      "required": true
+    },
+    "link": {
+      "type": "string",
+      "required": true,
+      "minLength": 4,
+      "regex": "^(https?):\\/\\/[^\\s$.?#].[^\\s]*$"
+    },
+    "ranc": {
+      "type": "string"
+    }
+  }
+}

@@ -8,14 +8,14 @@
     </p>
     <div class="images-items__wrap-list">
       <ScrollBlock>
-        <ul class="images-items__list">
+        <ul v-if="props.images.length" class="images-items__list">
           <li
-            v-for="img in props.images"
-            :key="strToNumHash(img.src)"
+            v-for="item in props.images"
+            :key="strToNumHash(item.src)"
             class="images-items__item"
           >
             <ScrollBlock>
-              <img :src="img.src" alt=" ">
+              <img :src="item.src" alt=" ">
             </ScrollBlock>
           </li>
         </ul>

@@ -12,7 +12,7 @@
             :data="project"
             :to="{
               name: 'portfolio-category-project',
-              params: { category: categoryName, project: project.name }
+              params: { category: categoryName, project: project.slug }
             }"
             class="more-projects__item-preview"
           />

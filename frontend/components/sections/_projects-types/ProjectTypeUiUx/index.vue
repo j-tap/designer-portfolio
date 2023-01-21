@@ -1,6 +1,6 @@
 <template>
   <div class="project-uiux">
-    <ul class="project-uiux__pages uiux-pages">
+    <ul v-if="pagesDefault.length" class="project-uiux__pages uiux-pages">
       <li
         v-for="page in pagesDefault"
         :key="strToNumHash(page.title)"

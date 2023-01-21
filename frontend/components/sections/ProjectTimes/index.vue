@@ -12,7 +12,7 @@
     <div class="project-time__prices">
       <h2 class="project-time__title">{{ $t('project.price') }}</h2>
       <TitleOutline class="project-time__value" tag="div">
-        {{ timeHours }} {{ $t('common.hours') }}
+        {{ timeHours }} {{ $t('common.hour', timeHours) }}
       </TitleOutline>
       <TitleOutline class="project-time__value" tag="div">
         {{ priceFormat(timePrice) }}

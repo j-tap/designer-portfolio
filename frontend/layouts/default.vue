@@ -11,7 +11,7 @@
 
 <script setup>
 import TheHeader from '~/components/TheHeader/index.vue'
-import {useCommonStore} from '~/stores/commonStore'
+import { useCommonStore } from '~/stores/commonStore'
 
 const route = useRoute()
 const commonStore = useCommonStore()

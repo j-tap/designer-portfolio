@@ -1,12 +1,14 @@
 <template>
-  <div :class="classes">
+  <picture :class="classes">
     <img
       class="img-block__img"
-      :src="props.src"
+      :src="src"
       :alt="props.alt"
       :width="size.width"
       :height="size.height"
+      loading="lazy"
       @load="onLoadImg"
+      @error="onError"
     >
     <BlurHash
       v-if="props.blurhash"
@@ -15,7 +17,7 @@
       :width="size.width"
       :height="size.height"
     />
-  </div>
+  </picture>
 </template>
 
 <script setup>
@@ -42,6 +44,11 @@ const props = defineProps({
 })
 
 const isLoaded = ref(false)
+const src = ref(null)
+
+onMounted(() => {
+  src.value = props.src
+})
 
 const classes = computed(() => [
   'img-block',
@@ -50,6 +57,10 @@ const classes = computed(() => [
 const size = computed(() => getSizeFromProps(props))
 
 function onLoadImg () {
+  isLoaded.value = true
+}
+
+function onError () {
   isLoaded.value = true
 }
 </script>

@@ -2,12 +2,12 @@
   <div class="project-colors">
     <ul class="project-colors__list">
       <li
-        v-for="color in props.items"
-        :key="strToNumHash(color)"
+        v-for="item in props.items"
+        :key="item.id"
         class="project-colors__item"
       >
-        <div class="project-colors__item-color" :style="`background-color: ${color}`"/>
-        <div class="project-colors__item-title">{{ color }}</div>
+        <div class="project-colors__item-color" :style="`background-color: ${item.color}`"/>
+        <div class="project-colors__item-title">{{ item.color }}</div>
       </li>
     </ul>
   </div>

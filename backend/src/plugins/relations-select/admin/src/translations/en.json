@@ -1,0 +1,6 @@
+{
+  "relations-select.label": "Sub relations select",
+  "relations-select.description": "Select multiple options from a list",
+  "relations-select.name-parent.label": "Name parent relations",
+  "relations-select.name-parent.description": "Enter name of parent relations"
+}

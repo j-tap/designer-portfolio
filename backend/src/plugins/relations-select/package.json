@@ -1,0 +1,25 @@
+{
+  "name": "relations-select",
+  "version": "0.0.0",
+  "description": "This is the description of the plugin.",
+  "strapi": {
+    "name": "relations-select",
+    "description": "Relations Select plugin",
+    "kind": "plugin",
+    "displayName": "Relations Select"
+  },
+  "dependencies": {},
+  "author": {
+    "name": "j-tap"
+  },
+  "maintainers": [
+    {
+      "name": "j-tap"
+    }
+  ],
+  "engines": {
+    "node": ">=14.19.1 <=18.x.x",
+    "npm": ">=6.0.0"
+  },
+  "license": "MIT"
+}

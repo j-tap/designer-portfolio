@@ -3,11 +3,11 @@
     <h2 class="project-steps__title">{{ $t('project.steps') }}</h2>
     <ol class="project-steps__list">
       <li
-          v-for="step in props.steps"
-          :key="step.id"
+          v-for="item in props.steps"
+          :key="item.id"
           class="project-steps__list-item"
       >
-        {{ step.title }}
+        {{ item.title }}
       </li>
     </ol>
   </div>

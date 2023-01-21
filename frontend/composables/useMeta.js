@@ -1,8 +1,9 @@
-export function setMeta ({ title, description }) {
+export function setMeta ({ title, description, image }) {
   const { meta } = useRoute()
 
   meta.title = title
   meta.description = description
+  meta.image = image
 }
 
 export function setHead () {
@@ -22,12 +23,17 @@ export function setHead () {
     return result
   })
   const description = computed(() => route.meta.description)
+  const image = computed(() => route.meta.image || '/og-image.png')
 
   useHead({
     title,
+    link: [
+      { rel: 'image_src', href: image },
+    ],
     meta: [
       { name: 'description', content: description },
       { property: 'og:title', content: title },
+      { property: 'og:image', content: image },
     ],
     bodyAttrs: {
       class: '',

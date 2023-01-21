@@ -1,0 +1,20 @@
+{
+  "collectionName": "components_project_kategorii",
+  "info": {
+    "displayName": "Категории",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "categories": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::category-project.category-project"
+    },
+    "subcategories": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::subcategory-project.subcategory-project"
+    }
+  }
+}

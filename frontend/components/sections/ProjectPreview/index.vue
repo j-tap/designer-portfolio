@@ -4,7 +4,12 @@
     :class="classes"
   >
     <figure class="project-preview__inner">
-      <img class="project-preview__img" :src="data.preview" :alt="data.name">
+      <img
+        v-if="data.preview"
+        :src="data.preview.formats.medium.url"
+        :alt="data.slug"
+        class="project-preview__img"
+      >
       <Component :is="titleTag" class="project-preview__title">
         {{ data.title }}
       </Component>

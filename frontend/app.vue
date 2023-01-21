@@ -15,4 +15,4 @@ initLocale()
 setHead()
 </script>
 
-<style lang="scss" src="~/assets/style/app.scss"/>
+<style lang="scss" src="~/assets/style/app.scss" />

@@ -1,16 +1,33 @@
 <template>
   <div class="page-project">
     <ContentWrap>
+      <ul v-if="project.links" class="page-project__links links-project">
+        <li
+          v-for="item in project.links"
+          :key="item.id"
+          class="links-project__item"
+        >
+          <NuxtLink
+            :to="item.link"
+            class="links-project__link"
+            target="_blank"
+            external
+          >
+            {{ item.title }}
+          </NuxtLink>
+        </li>
+      </ul>
+
       <h1 class="page-project__title">{{ project.title }}</h1>
 
       <ProjectTimes
-        v-if="project.time.start"
+        v-if="project.time?.start"
         :time="project.time"
         class="page-project__time"
       />
 
       <ProjectSteps
-        v-if="project.steps.length"
+        v-if="project.steps?.length"
         :steps="project.steps"
         class="page-project__steps"
       />
@@ -32,6 +49,7 @@
       </div>
 
       <ProjectMore
+        v-if="moreProjectsList.length"
         :items="moreProjectsList"
         class="page-project__more-projects"
       />
@@ -51,7 +69,7 @@ import {
   ProjectMore,
 } from '~/components/sections'
 import { setMeta } from '~/composables/useMeta'
-import projects from '~/mocks/projects.js'
+import {find, findBySlug} from "~/composables/useApi";
 
 const categoryToComponent = {
   'mobile-development': ProjectTypeMobile,
@@ -60,25 +78,23 @@ const categoryToComponent = {
   'identity': ProjectTypeIdentity,
 }
 const route = useRoute()
-const categoryName = computed(() => route.params.category)
-const project = computed(() => projects.filter(o => o.name === route.params.project).pop() || {})
+
 const projectComponentName = shallowRef('')
-const moreProjectsList = computed(() => projects
-    .map(o => ({
-      id: o.id,
-      name: o.name,
-      preview: o.preview,
-      title: o.title,
-    }))
-    .filter(o => o.id !== project.value.id)
-)
+const categoryName = computed(() => route.params.category)
+const { data: project } = await findBySlug(`projects`, route.params.project)
+const { data: moreProjectsList } = await find('projects', {
+  filters: {
+    categories: { id: { $in: project.categories.map((o) => o.id) } },
+    id: { $ne: project.id },
+  },
+})
 
 onMounted(() => {
   projectComponentName.value = categoryToComponent[categoryName.value]
 })
 
 setMeta({
-  title: `${project.value.title} / ${categoryName.value}`,
+  title: `${project.value?.title} / ${categoryName.value}`,
 })
 </script>
 

@@ -4,12 +4,14 @@
     :class="classes"
   >
     <figure class="project-preview__inner">
-      <img
-        v-if="data.preview"
-        :src="urlFile(data.preview.formats.medium.url)"
-        :alt="data.slug"
+      <ImgBlock
         class="project-preview__img"
-      >
+        :src="urlFile(data.preview.formats.medium.url)"
+        :blurhash="data.preview.blurhash"
+        :width="data.preview.width"
+        :height="data.preview.height"
+        :alt="data.slug"
+      />
       <Component :is="titleTag" class="project-preview__title">
         {{ data.title }}
       </Component>
@@ -18,6 +20,8 @@
 </template>
 
 <script setup>
+import { ImgBlock } from '~/components/common'
+
 const props = defineProps({
   data: Object,
   to: Object,

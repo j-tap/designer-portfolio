@@ -14,12 +14,14 @@
             :key="img.id"
             class="uiux-page__images-item"
           >
-            <figure class="uiux-page__images-img">
-              <img
-                :src="urlFile(img.formats.large.url)"
-                :alt="page.subtitle"
-              >
-            </figure>
+            <ImgBlock
+              class="uiux-page__images-img"
+              :src="urlFile(img.formats.large.url)"
+              :blurhash="img.blurhash"
+              :width="img.width"
+              :height="img.height"
+              :alt="page.subtitle"
+            />
           </li>
         </ul>
       </li>
@@ -47,6 +49,7 @@
 </template>
 
 <script setup>
+import { ImgBlock } from '~/components/common'
 import { ProjectViewsItem, ProjectColors, ProjectFonts } from '~/components/sections'
 import { pageTypes, getPagesByType } from '~/composables/useProject'
 

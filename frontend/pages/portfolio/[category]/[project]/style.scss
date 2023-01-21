@@ -17,6 +17,10 @@
     }
   }
 
+  &__head {
+    margin-bottom: clamp(30px, 6vw, 80px);
+  }
+
   &__title {
     font-size: clamp(36px, 6vw, 100px);
     text-transform: uppercase;
@@ -30,11 +34,11 @@
     font-size: clamp(18px, 2vw, 26px);
     letter-spacing: -0.24px;
     font-weight: 700;
-    margin: 1vw 0 7.6vw;
+    margin: 1vw 0 0;
   }
 
   &__time {
-
+    margin-top: clamp(30px, 6vw, 50px);
   }
 
   &__steps {
@@ -42,7 +46,7 @@
   }
 
   &__back {
-    margin-top: clamp(30px, 6vw, 6vw);
+    margin-top: clamp(30px, 6vw, 80px);
     font-size: clamp(14px, 2vw, 25px);
     text-transform: uppercase;
 

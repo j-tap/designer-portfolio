@@ -10,7 +10,7 @@ export function urlFile (urlFile) {
 export function getFormatImages (item) {
   return {
     blurhash: item.blurhash,
-    url: item.formats.large.url,
+    url: urlFile(item.formats.large.url),
     id: item.id,
     title: item.name,
     width: item.width,
@@ -41,7 +41,7 @@ export async function findBySlug (name, slug, params = {}) {
 }
 
 export async function findOne (name, params = {}) {
-  return sendRequest({ name, params }, async (query, params) => {
+  return sendRequest({ name, params }, async (query) => {
     const { findOne } = useStrapi()
     return await findOne(query)
   })

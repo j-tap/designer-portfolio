@@ -1,8 +1,8 @@
 <template>
-  <figure :class="classes">
+  <div :class="classes">
     <img
       class="img-block__img"
-      :src="urlFile(props.src)"
+      :src="props.src"
       :alt="props.alt"
       :width="size.width"
       :height="size.height"
@@ -15,7 +15,7 @@
       :width="size.width"
       :height="size.height"
     />
-  </figure>
+  </div>
 </template>
 
 <script setup>

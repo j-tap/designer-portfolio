@@ -18,8 +18,10 @@
         </li>
       </ul>
 
-      <h1 class="page-project__title">{{ project.title }}</h1>
-      <div v-if="project.subtitle" class="page-project__subtitle">{{ project.subtitle }}</div>
+      <header class="page-project__head">
+        <h1 class="page-project__title">{{ project.title }}</h1>
+        <div v-if="project.subtitle" class="page-project__subtitle">{{ project.subtitle }}</div>
+      </header>
 
       <ProjectTimes
         v-if="project.time?.start"

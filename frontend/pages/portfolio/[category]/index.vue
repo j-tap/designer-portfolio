@@ -51,7 +51,7 @@ const { data: category } = await findBySlug('category-projects', categoryName.va
 const { data: projectsList } = await find('projects', {
   filters: {
     categories: {
-      id: { $in: category.value?.id },
+      id: { $in: category?.id },
     },
   },
 })

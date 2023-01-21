@@ -9,6 +9,7 @@ export function setMeta ({ title, description, image }) {
 export function setHead () {
   const { t } = useI18n()
   const route = useRoute()
+  const config = useRuntimeConfig()
 
   const title = computed(() => {
     const isTitle = route.meta.title
@@ -23,8 +24,8 @@ export function setHead () {
     return result
   })
   const description = computed(() => route.meta.description)
-  const image = computed(() => route.meta.image || '/og-image.png')
-
+  const image = computed(() => route.meta.image || `${config.public.baseURL}/_nuxt/og-image.png`)
+  // console.log(image.value)
   useHead({
     title,
     link: [

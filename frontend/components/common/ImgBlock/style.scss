@@ -1,0 +1,32 @@
+.img-block {
+  position: relative;
+  background-color: $color__dark;
+  margin: 0;
+  padding: 0;
+
+  &_loaded & {
+    &__blurhash {
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+
+  &__img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  &__blurhash {
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 1;
+    filter: blur(30px);
+    visibility: visible;
+    transition: visibility .2s ease-in, opacity .2s ease-in;
+  }
+}

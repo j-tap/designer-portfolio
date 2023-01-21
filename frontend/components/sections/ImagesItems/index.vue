@@ -11,11 +11,11 @@
         <ul v-if="props.images.length" class="images-items__list">
           <li
             v-for="item in props.images"
-            :key="strToNumHash(item.src)"
+            :key="item.id"
             class="images-items__item"
           >
             <ScrollBlock>
-              <img :src="item.src" alt=" ">
+              <img :src="urlFile(item.src)" alt=" ">
             </ScrollBlock>
           </li>
         </ul>

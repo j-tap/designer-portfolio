@@ -148,6 +148,14 @@
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::subcategory-project.subcategory-project"
+    },
+    "subtitle": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "string"
     }
   }
 }

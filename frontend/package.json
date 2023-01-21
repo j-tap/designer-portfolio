@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@pinia/nuxt": "^0.4.6",
+    "blurhash": "^2.0.4",
     "marked": "^4.2.5",
     "pinia": "^2.0.28",
     "qs": "^6.11.0",

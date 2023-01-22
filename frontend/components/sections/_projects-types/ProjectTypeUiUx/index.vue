@@ -38,7 +38,7 @@
     <ProjectViewsItem
       v-if="displayOthers"
       :data="viewOther"
-      :display-hint="displayAdaptive"
+      :display-hint="displayOthers"
       images-size="large"
       class="project-uiux__other-pages"
     />

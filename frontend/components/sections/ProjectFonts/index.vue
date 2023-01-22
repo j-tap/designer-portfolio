@@ -1,5 +1,5 @@
 <template>
-  <div class="project-fonts">
+  <div class="project-fonts" v-if="props.items.length">
     <h2 class="project-fonts__title">{{ $t('project.fonts') }}</h2>
     <ul class="project-fonts__list">
       <li

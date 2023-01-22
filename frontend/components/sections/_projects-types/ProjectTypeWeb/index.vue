@@ -3,7 +3,7 @@
     <img
       v-if="imageTop"
       class="project-web__img-top"
-      :src="urlFile(imageTop.formats.large.url)"
+      :src="urlFile(imageTop.url)"
       alt=" "
     >
     <ProjectFonts
@@ -33,7 +33,7 @@
     <img
       v-if="imageBottom"
       class="project-web__img-bottom"
-      :src="urlFile(imageBottom.formats.large.url)"
+      :src="urlFile(imageBottom.url)"
       alt=" "
     >
   </div>

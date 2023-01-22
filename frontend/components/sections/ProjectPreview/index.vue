@@ -6,7 +6,7 @@
     <figure class="project-preview__inner">
       <ImgBlock
         class="project-preview__img"
-        :src="urlFile(data.preview.formats.medium?.url || data.preview.formats.small?.url)"
+        :src="urlFile(data.preview.url)"
         :blurhash="data.preview.blurhash"
         :width="data.preview.width"
         :height="data.preview.height"

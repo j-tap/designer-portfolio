@@ -15,7 +15,7 @@
             class="images-items__item"
           >
             <ScrollBlock>
-              <img :src="getUrl(item)" alt=" ">
+              <img :src="urlFile(item.url)" alt=" ">
             </ScrollBlock>
           </li>
         </ul>
@@ -48,10 +48,6 @@ const classes = computed(() => {
   const cls = 'images-items'
   return [cls, `${cls}_size-${props.imagesSize}`]
 })
-
-function getUrl (item) {
-  return urlFile(item.formats?.large?.url || item.formats?.medium.url || item.url)
-}
 
 async function onWidthResize () {
   widthScreen.value = window.innerWidth

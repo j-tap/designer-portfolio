@@ -20,3 +20,11 @@ export function toWithSpaces (val) {
 export function priceFormat (val) {
   return `${toWithSpaces(val)}\xa0₽`
 }
+
+export function kebabToCamelCase (str = '') {
+  return str.replace(/-./g, x => x[1].toUpperCase())
+}
+
+export function kebabToPascalCase (str = '') {
+  return str.replace(/(^\w|-\w)/g, x => x[1].toUpperCase());
+}

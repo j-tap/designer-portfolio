@@ -10,7 +10,7 @@ export function urlFile (urlFile) {
 export function getFormatImages (item) {
   return {
     blurhash: item.blurhash,
-    url: urlFile(item.formats.large.url),
+    url: urlFile(item.url),
     id: item.id,
     title: item.name,
     width: item.width,

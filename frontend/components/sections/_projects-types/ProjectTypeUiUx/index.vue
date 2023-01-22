@@ -16,7 +16,7 @@
           >
             <ImgBlock
               class="uiux-page__images-img"
-              :src="urlFile(img.formats.large.url)"
+              :src="urlFile(img.url)"
               :blurhash="img.blurhash"
               :width="img.width"
               :height="img.height"
@@ -36,12 +36,16 @@
       class="project-uiux__colors"
     />
     <ProjectViewsItem
+      v-if="displayOthers"
       :data="viewOther"
+      :display-hint="displayAdaptive"
       images-size="large"
       class="project-uiux__other-pages"
     />
     <ProjectViewsItem
+      v-if="displayAdaptive"
       :data="viewAdaptive"
+      :display-hint="!displayOthers"
       images-size="small"
       class="project-uiux__mobile-pages"
     />
@@ -71,6 +75,8 @@ const viewAdaptive = computed(() => ({
   subtitle: t('project.adaptive_version_subtitle'),
   images: pagesMobile.value.map(o => o.images).flat(),
 }))
+const displayOthers = computed(() => !!viewOther.value?.images.length)
+const displayAdaptive = computed(() => !!viewAdaptive.value?.images.length)
 </script>
 
 <style lang="scss" src="./style.scss" scoped/>

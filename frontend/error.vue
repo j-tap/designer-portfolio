@@ -10,7 +10,7 @@
 <script setup>
 import { ContentWrap } from '~/components/structure'
 import { TitleOutline } from '~/components/common'
-import { setMeta } from  '~/composables/useMeta'
+import { metaInfo } from '~/composables/useMeta'
 
 const props = defineProps({
   error: Object
@@ -18,9 +18,9 @@ const props = defineProps({
 
 const handleError = () => clearError({ redirect: '/' })
 
-setMeta({
-  title: 'Error',
-})
+useHead(metaInfo({
+  title: 'Error. Sorry, unknown error',
+}))
 </script>
 
 <style lang="scss">

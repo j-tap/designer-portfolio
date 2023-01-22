@@ -35,7 +35,7 @@
 import { TitleOutline } from '~/components/common'
 import { ContentWrap } from '~/components/structure'
 import { ProjectPreview } from '~/components/sections'
-import { setMeta } from '~/composables/useMeta'
+import { metaInfo } from '~/composables/useMeta'
 import { find, findBySlug } from '~/composables/useApi';
 import {
   updateProjectsPrlx,
@@ -47,14 +47,21 @@ const route = useRoute()
 const categoryName = computed(() => route.params.category)
 const isCategoryIdentity = computed(() => categoryName.value === 'identity')
 
-const { data: category } = await findBySlug('category-projects', categoryName.value)
-const { data: projectsList } = await find('projects', {
+definePageMeta({
+  key: route => route.fullPath
+})
+
+const categoryResp = await findBySlug('category-projects', categoryName.value)
+const category = computed(() => categoryResp.data)
+
+const projectsResp = await find('projects', {
   filters: {
     categories: {
-      id: { $in: category?.id },
+      id: { $in: category.value?.id },
     },
   },
 })
+const projectsList = computed(() => projectsResp.data)
 
 if (process.client && elems.value.length > 5) {
   window.addEventListener('scroll', () => {
@@ -69,13 +76,9 @@ function setProjectElems (el) {
   }
 }
 
-setMeta({
+useHead(metaInfo({
   title: category.value?.title,
-})
-
-definePageMeta({
-  key: route => route.fullPath
-})
+}))
 </script>
 
 <style lang="scss" src="./style.scss" scoped/>

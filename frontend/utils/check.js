@@ -64,3 +64,15 @@ export function getElementViewportInfo (el) {
 
   return result;
 }
+
+/**
+ * @param value Any
+ * @return {Boolean}
+ */
+export function isObject (value) {
+  return (
+    typeof value === 'object'
+    && value !== null
+    && !Array.isArray(value)
+  )
+}

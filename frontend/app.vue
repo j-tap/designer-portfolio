@@ -9,10 +9,12 @@
 
 <script setup>
 import { initLocale } from '~/composables/useInitLocale'
-import { setHead } from '~/composables/useMeta'
+import { useMetaStore } from '~/stores/metaStore'
+
+const metaStore = useMetaStore()
+metaStore.fetchMetaInfo()
 
 initLocale()
-setHead()
 </script>
 
 <style lang="scss" src="~/assets/style/app.scss" />

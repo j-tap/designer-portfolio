@@ -71,8 +71,8 @@ import {
   ProjectTypeIdentity,
   ProjectMore,
 } from '~/components/sections'
-import { setMeta } from '~/composables/useMeta'
-import {find, findBySlug} from "~/composables/useApi";
+import { metaInfo } from '~/composables/useMeta'
+import { find, findBySlug } from "~/composables/useApi";
 
 const categoryToComponent = {
   'mobile-development': ProjectTypeMobile,
@@ -84,11 +84,19 @@ const route = useRoute()
 
 const projectComponentName = shallowRef('')
 const categoryName = computed(() => route.params.category)
-const { data: project } = await findBySlug(
+const projectsResp = await findBySlug(
   'projects',
   route.params.project,
 )
-const { data: moreProjectsList } = await find(
+const project = computed(() => projectsResp.data)
+
+useHead(metaInfo({
+  title: `${project.value?.title} / ${categoryName.value}`,
+  description: project.value?.subtitle,
+  image: project.value?.preview_social?.url || project.value?.preview.formats.medium.url,
+}))
+
+const moreProjectsResp = await find(
   'projects',
   {
     filters: {
@@ -97,13 +105,10 @@ const { data: moreProjectsList } = await find(
     },
   }
 )
+const moreProjectsList = computed(() => moreProjectsResp.data)
 
 onMounted(() => {
   projectComponentName.value = categoryToComponent[categoryName.value]
-})
-
-setMeta({
-  title: `${project.value?.title} / ${categoryName.value}`,
 })
 </script>
 

@@ -29,7 +29,7 @@
 
 <script setup>
 import { TitleOutline } from '~/components/common'
-import { setMeta } from '~/composables/useMeta'
+import { metaInfo } from '~/composables/useMeta'
 import { find } from '~/composables/useApi'
 
 const { t } = useI18n()
@@ -37,9 +37,9 @@ const { t } = useI18n()
 const { data } = await find('contact')
 const contacts = computed(() => data?.contact || [])
 
-setMeta({
+useHead(metaInfo({
   title: t('menu.contacts'),
-})
+}))
 </script>
 
 <style lang="scss" scoped src="./style.scss"/>

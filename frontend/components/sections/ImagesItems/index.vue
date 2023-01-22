@@ -60,6 +60,7 @@ async function onWidthResize () {
 
 onMounted(() => {
   window.addEventListener('resize', onWidthResize)
+  onWidthResize()
 })
 
 onUnmounted(() => {

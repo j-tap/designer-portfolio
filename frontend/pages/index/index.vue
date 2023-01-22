@@ -69,12 +69,15 @@
 import { TitleOutline, MarqueeBlock, HtmlMarked } from '~/components/common'
 import { PortfolioCategories } from '~/components/sections'
 import { find } from '~/composables/useApi';
+import {metaInfo} from "~/composables/useMeta";
 
 const { data: dataHome } = await find('home')
 const { data: dataCategories } = await find('category-projects')
 
 const categories = computed(() => dataCategories || [])
 const home = computed(() => dataHome)
+
+useHead(metaInfo())
 </script>
 
 <style lang="scss" scoped src="./style.scss"/>

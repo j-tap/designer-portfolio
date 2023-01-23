@@ -12,15 +12,20 @@ const props = defineProps({
     type: String,
     default: 'unknown'
   },
+  size: {
+    type: String,
+    default: 'md',
+  },
 })
 
-const icon = computed(() => `Icon${kebabToPascalCase(props.name)}`)
+const icon = computed(() => `${kebabToPascalCase(props.name)}`)
 const iconComponent = computed(() =>
-    defineAsyncComponent(() => import(`./icons/${icon.value}.vue`)))
+    defineAsyncComponent(() => import(`./icons/Icon${icon.value}.vue`)))
 
 const classes = computed(() => [
   'icon',
-  `icon_${name}`
+  `icon_${props.name}`,
+  `icon_size-${props.size}`,
 ])
 </script>
 

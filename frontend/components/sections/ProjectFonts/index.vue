@@ -7,7 +7,7 @@
         :key="strToNumHash(item.id)"
         class="project-fonts__item"
       >
-        <TitleOutline>{{ item.title }}</TitleOutline>
+        <TitleOutline :style="{ fontFamily: item.title }">{{ item.title }}</TitleOutline>
       </li>
     </ul>
   </div>
@@ -16,8 +16,24 @@
 <script setup>
 import { TitleOutline } from '~/components/common'
 
+const config = useRuntimeConfig()
 const props = defineProps({
   items: Array,
+})
+
+const fontStyles = ref([])
+props.items.map(o => {
+  const name = o.title
+  const url = `${config.public.strapi.url}${o.file.url}`
+  fontStyles.value = {
+    id: `style-${name}`,
+    type: 'text/css',
+    children: `@font-face { font-family: ${name}; src: url(${url}) format('woff'); }`,
+  }
+})
+
+useHead({
+  style: fontStyles,
 })
 </script>
 

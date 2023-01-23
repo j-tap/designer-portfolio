@@ -35,21 +35,21 @@
         class="page-project__steps"
       />
 
-      <div class="page-project__back">
-        <NuxtLink
-          :to="{
-            name: 'portfolio-category',
-            params: { category: categoryName },
-            hash: `#project-${project.id}`,
-          }"
-        >
-          &larr; {{ $t('portfolio.back_to_portfolio') }}
-        </NuxtLink>
-      </div>
+      <ProjectBack
+        class="page-project__back"
+        :category-name="categoryName"
+        :project-id="project.id"
+      />
 
       <div class="page-project__content">
         <Component :is="projectComponentName" :data="project" />
       </div>
+
+      <ProjectBack
+        class="page-project__back"
+        :category-name="categoryName"
+        :project-id="project.id"
+      />
 
       <ProjectMore
         v-if="moreProjectsList?.length"
@@ -70,6 +70,7 @@ import {
   ProjectTypeWeb,
   ProjectTypeIdentity,
   ProjectMore,
+  ProjectBack,
 } from '~/components/sections'
 import { metaInfo } from '~/composables/useMeta'
 import { find, findBySlug } from "~/composables/useApi";

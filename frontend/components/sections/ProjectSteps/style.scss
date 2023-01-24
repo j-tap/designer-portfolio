@@ -22,12 +22,15 @@
     font-size: clamp(14px, 2vw, 20px);
     color: $color__gray;
 
-    &::marker {
+    &::before {
       content: counter(list-item) ' ';
       font-size: clamp(16px, 4vw, 40px);
       font-family: $font__decor;
       font-weight: 700;
       color: $color__white;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: clamp(10px, 1.5vw, 20px);
     }
   }
 }

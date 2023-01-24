@@ -60,6 +60,8 @@ const projectsResp = await find('projects', {
       id: { $in: category.value?.id },
     },
   },
+  sort: ['rank'],
+  pagination: { pageSize: 99 },
 })
 const projectsList = computed(() => projectsResp.data)
 

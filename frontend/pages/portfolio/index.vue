@@ -15,7 +15,9 @@ import { find } from '~/composables/useApi'
 
 const { t } = useI18n()
 
-const { data } = await find('category-projects')
+const { data } = await find('category-projects', {
+  sort: ['rank'],
+})
 const categories = computed(() => data || [])
 
 useHead(metaInfo({

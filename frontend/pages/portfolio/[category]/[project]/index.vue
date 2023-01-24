@@ -101,12 +101,14 @@ const moreProjectsResp = await find(
   'projects',
   {
     filters: {
-      categories: 0, // { id: { $in: project.categories.map((o) => o.id) } },
-      id: { $ne: project.id },
+      id: { $ne: project.value?.id },
+      categories: { id: { $in: project.value?.categories.map((o) => o.id) } },
     },
+    pagination: { pageSize: 15 },
   }
 )
-const moreProjectsList = computed(() => moreProjectsResp.data)
+const moreProjectsList = computed(() => moreProjectsResp?.data.length ?
+    moreProjectsResp.data.sort(() => 0.5 - Math.random()) : [])
 
 onMounted(() => {
   projectComponentName.value = categoryToComponent[categoryName.value]

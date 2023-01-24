@@ -2,6 +2,8 @@
   &__img-top {
     display: block;
     height: auto;
+    pointer-events: none;
+    user-select: none;
 
     @include screen('sm') {
       width: calc(100% + $content__indent-x_sm * 2);
@@ -36,6 +38,8 @@
     display: block;
     height: auto;
     margin-top: 4.7vw;
+    pointer-events: none;
+    user-select: none;
 
     @include screen('sm') {
       width: calc(100% + $content__indent-x_sm * 2);

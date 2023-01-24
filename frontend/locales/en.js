@@ -19,6 +19,6 @@ export default {
 
   'carousel.pull_to_side_to_see_more': 'pull the window box to the side to see more',
 
-  'common.hour': 'Hours',
+  'common.hour': 'Hours | Hour | Hours | Hours',
   'common.error_{code}': 'Error {code}',
 }

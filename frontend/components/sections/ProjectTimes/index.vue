@@ -24,13 +24,15 @@
 <script setup>
 import { TitleOutline } from '~/components/common'
 import { priceFormat } from '~/utils/formatData'
-import {dateFormat, datesDiff, getWeekendsDays} from '~/utils/formatDate'
+import { dateFormat, datesDiff, getWeekendsDays } from '~/utils/formatDate'
+import { useMetaStore } from '~/stores/metaStore'
 
+const metaStore = useMetaStore()
 const props = defineProps({
   time: Object,
 })
 
-const RATE = 1200
+const RATE = metaStore.pay_rate
 const HOURS_DAY = 8
 
 const timeHours = computed(() => {

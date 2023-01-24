@@ -38,6 +38,12 @@ a {
   color: inherit;
 }
 
+.app-container {
+  &_loading {
+    cursor: progress;
+  }
+}
+
 .page-enter-active,
 .page-leave-active {
   transition: all 0.3s;

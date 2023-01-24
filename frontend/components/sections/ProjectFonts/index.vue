@@ -7,7 +7,7 @@
         :key="strToNumHash(item.id)"
         class="project-fonts__item"
       >
-        <TitleOutline :style="{ fontFamily: item.title }">{{ item.title }}</TitleOutline>
+        <span :style="{ fontFamily: item.title }">{{ item.title }}</span>
       </li>
     </ul>
   </div>

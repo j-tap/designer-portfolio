@@ -1,5 +1,12 @@
 <template>
   <picture :class="classes">
+    <BlurHash
+      v-if="props.blurhash"
+      class="img-block__blurhash"
+      :hash="props.blurhash"
+      :width="size.width"
+      :height="size.height"
+    />
     <img
       class="img-block__img"
       :src="src"
@@ -10,13 +17,6 @@
       @load="onLoadImg"
       @error="onError"
     >
-    <BlurHash
-      v-if="props.blurhash"
-      class="img-block__blurhash"
-      :hash="props.blurhash"
-      :width="size.width"
-      :height="size.height"
-    />
   </picture>
 </template>
 

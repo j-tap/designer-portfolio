@@ -1,5 +1,6 @@
-export default defineNuxtPlugin((nuxtApp) => {
-  nuxtApp.vueApp.config.errorHandler = (error, context) => {
-    console.log('Nuxt Plugin errorHandler', error, context)
+export default defineNuxtPlugin(({ vueApp }) => {
+  vueApp.config.errorHandler = (error, context) => {
+    console.warn('Custom handler errors:', error, context)
+    // if (error.statusCode === 404) {}
   }
 })

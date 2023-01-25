@@ -1,5 +1,5 @@
 <template>
-  <div class="page-project">
+  <div v-if="isExist" class="page-project">
     <ContentWrap>
       <ul v-if="project.links?.length" class="page-project__links links-project">
         <li
@@ -73,7 +73,8 @@ import {
   ProjectBack,
 } from '~/components/sections'
 import { metaInfo } from '~/composables/useMeta'
-import { find, findBySlug } from "~/composables/useApi";
+import { find, findBySlug } from '~/composables/useApi'
+import { display404 } from '~/composables/useErrorContent'
 
 const categoryToComponent = {
   'mobile-development': ProjectTypeMobile,
@@ -82,33 +83,41 @@ const categoryToComponent = {
   'identity': ProjectTypeIdentity,
 }
 const route = useRoute()
+const router = useRouter()
 
 const projectComponentName = shallowRef('')
+const moreProjectsResp = ref(null)
+const moreProjectsList = computed(() => moreProjectsResp.value?.data.length ?
+    moreProjectsResp.value.data.sort(() => 0.5 - Math.random()) : [])
 const categoryName = computed(() => route.params.category)
-const projectsResp = await findBySlug(
+const projectResp = await findBySlug(
   'projects',
   route.params.project,
 )
-const project = computed(() => projectsResp.data)
+const isExist = !!projectResp.data
+
+display404(!isExist)
+
+const project = computed(() => projectResp.data)
+
+if (isExist) {
+  moreProjectsResp.value = await find(
+    'projects',
+    {
+      filters: {
+        id: { $ne: project.value?.id },
+        categories: { id: { $in: project.value?.categories.map((o) => o.id) } },
+      },
+      pagination: { pageSize: 15 },
+    }
+  )
+}
 
 useHead(metaInfo({
   title: `${project.value?.title} / ${categoryName.value}`,
   description: project.value?.subtitle,
-  image: project.value?.preview_social?.url || project.value?.preview.formats.medium.url,
+  image: project.value?.preview_social ? project.value.preview_social?.url || project.value.preview?.formats.medium.url : null,
 }))
-
-const moreProjectsResp = await find(
-  'projects',
-  {
-    filters: {
-      id: { $ne: project.value?.id },
-      categories: { id: { $in: project.value?.categories.map((o) => o.id) } },
-    },
-    pagination: { pageSize: 15 },
-  }
-)
-const moreProjectsList = computed(() => moreProjectsResp?.data.length ?
-    moreProjectsResp.data.sort(() => 0.5 - Math.random()) : [])
 
 onMounted(() => {
   projectComponentName.value = categoryToComponent[categoryName.value]

@@ -14,8 +14,6 @@
 </template>
 
 <script setup>
-import { TitleOutline } from '~/components/common'
-
 const config = useRuntimeConfig()
 const props = defineProps({
   items: Array,

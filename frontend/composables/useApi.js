@@ -80,10 +80,14 @@ async function sendRequest ({ name, params }, cb) {
 }
 
 function requestStart () {
-  const loadingStore = useLoadingStore()
-  loadingStore.updateLoading(true)
+  if (process.client) {
+    const loadingStore = useLoadingStore()
+    loadingStore.updateLoading(true)
+  }
 }
 function requestFinally () {
-  const loadingStore = useLoadingStore()
-  loadingStore.updateLoading(false)
+  if (process.client) {
+    const loadingStore = useLoadingStore()
+    loadingStore.updateLoading(false)
+  }
 }

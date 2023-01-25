@@ -39,10 +39,14 @@ const timeHours = computed(() => {
   const { time } = props
 
   if (time) {
-    const weekends = getWeekendsDays(time.start, time.end)
-    const days = datesDiff(time.start, time.end, 'd')
+    if (time.hours) {
+      return time.hours
+    } else {
+      const weekends = getWeekendsDays(time.start, time.end)
+      const days = datesDiff(time.start, time.end, 'd')
 
-    return (days - weekends.length) * HOURS_DAY
+      return (days - weekends.length) * HOURS_DAY
+    }
   }
 
   return 0

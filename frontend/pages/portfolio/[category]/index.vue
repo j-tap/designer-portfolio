@@ -1,5 +1,5 @@
 <template>
-  <div class="page-category">
+  <div v-if="isExist" class="page-category">
     <ContentWrap>
       <TitleOutline v-if="category" class="page-category__title" tag="h1">
         {{ category.title }}
@@ -36,11 +36,12 @@ import { TitleOutline } from '~/components/common'
 import { ContentWrap } from '~/components/structure'
 import { ProjectPreview } from '~/components/sections'
 import { metaInfo } from '~/composables/useMeta'
-import { find, findBySlug } from '~/composables/useApi';
+import { find, findBySlug } from '~/composables/useApi'
 import {
   updateProjectsPrlx,
   elems as projectElems, elems,
 } from '~/composables/useElemsParalax'
+import { display404 } from '~/composables/useErrorContent'
 
 const { t } = useI18n()
 const route = useRoute()
@@ -51,24 +52,33 @@ definePageMeta({
   key: route => route.fullPath
 })
 
+const projectsResp = ref(null)
+const projectsList = computed(() => projectsResp.value?.data || [])
 const categoryResp = await findBySlug('category-projects', categoryName.value)
+const isExist = !!categoryResp.data
+display404(!isExist)
+
 const category = computed(() => categoryResp.data)
 
-const projectsResp = await find('projects', {
-  filters: {
-    categories: {
-      id: { $in: category.value?.id },
+if (isExist) {
+  projectsResp.value = await find('projects', {
+    filters: {
+      categories: {
+        id: { $in: category.value?.id },
+      },
     },
-  },
-  sort: ['rank'],
-  pagination: { pageSize: 99 },
-})
-const projectsList = computed(() => projectsResp.data)
-
-if (process.client && elems.value.length > 5) {
-  window.addEventListener('scroll', () => {
-    updateProjectsPrlx(projectsList.value, window.scrollY)
+    sort: [
+      { time: { start: 'desc', end: 'desc' } },
+      { rank: 'asc' },
+    ],
+    pagination: { pageSize: 99 },
   })
+
+  if (process.client && elems.value.length > 5) {
+    window.addEventListener('scroll', () => {
+      updateProjectsPrlx(projectsList.value, window.scrollY)
+    })
+  }
 }
 
 function setProjectElems (el) {

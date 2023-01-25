@@ -16,17 +16,23 @@ export function metaInfo (info = {
   const type = 'website'
   const twcard = 'summary_large_image'
 
+  const url = config.public.baseURL || defMeta.image
+  const description = info.description || defMeta.description
+  const keywords = info.keywords || defMeta.keywords
+  const author = defMeta.author
+  const lang = locale.value
+
   let title = info.title || defMeta.title || t('app.name')
   if (route.name !== 'index') {
     title = `${title} | ${t('app.name')}`
   }
 
-  const url = config.public.baseURL || defMeta.image
-  const description = info.description || defMeta.description
-  const keywords = info.keywords || defMeta.keywords
-  const author = defMeta.author
-  const image = `${apiUrl}${info.image}` || `${url}${defMeta.image}` || `${url}/_nuxt/og-image.png`
-  const lang = locale.value
+  let image = `${url}/_nuxt/og-image.png`
+  if (info.image) {
+    image = `${apiUrl}${info.image}`
+  } else if (defMeta.image) {
+    image = `${url}${defMeta.image}`
+  }
 
   return {
     title: title,

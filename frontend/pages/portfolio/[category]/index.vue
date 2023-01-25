@@ -74,7 +74,7 @@ if (isExist) {
     pagination: { pageSize: 99 },
   })
 
-  if (process.client && projectsList.value.length > 5) {
+  if (process.client && projectsList.value?.length > 5) {
     window.addEventListener('scroll', () => {
       updateProjectsPrlx(projectsList.value, window.scrollY)
     })

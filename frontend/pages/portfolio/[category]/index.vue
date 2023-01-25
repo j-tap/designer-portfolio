@@ -39,7 +39,7 @@ import { metaInfo } from '~/composables/useMeta'
 import { find, findBySlug } from '~/composables/useApi'
 import {
   updateProjectsPrlx,
-  elems as projectElems, elems,
+  elems as projectElems,
 } from '~/composables/useElemsParalax'
 import { display404 } from '~/composables/useErrorContent'
 
@@ -74,7 +74,7 @@ if (isExist) {
     pagination: { pageSize: 99 },
   })
 
-  if (process.client && elems.value.length > 5) {
+  if (process.client && projectsList.value.length > 5) {
     window.addEventListener('scroll', () => {
       updateProjectsPrlx(projectsList.value, window.scrollY)
     })

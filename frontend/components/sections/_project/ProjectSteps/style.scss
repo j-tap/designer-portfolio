@@ -31,6 +31,7 @@
       display: inline-block;
       vertical-align: middle;
       margin-right: clamp(10px, 1.5vw, 20px);
+      min-width: clamp(16px, 4vw, 40px);
     }
   }
 }

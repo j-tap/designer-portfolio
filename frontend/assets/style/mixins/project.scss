@@ -1,0 +1,27 @@
+@mixin colors-block-indent() {
+  @include screen('sm') {
+    margin-left: -$content__indent-x_sm;
+    margin-right: -$content__indent-x_sm;
+
+    &:deep(.scroll-block) {
+      padding-left: $content__indent-x_sm;
+      padding-right: $content__indent-x_sm;
+    }
+  }
+  @include screen('md') {
+    margin-left: -$content__indent-x_md;
+    margin-right: -$content__indent-x_sm;
+    &:deep(.scroll-block) {
+      padding-left: $content__indent-x_md;
+      padding-right: $content__indent-x_md;
+    }
+  }
+  @include screen('lg') {
+    margin-left: -$content__indent-x_lg;
+    margin-right: -$content__indent-x_lg;
+    &:deep(.scroll-block) {
+      padding-left: $content__indent-x_lg;
+      padding-right: $content__indent-x_lg;
+    }
+  }
+}

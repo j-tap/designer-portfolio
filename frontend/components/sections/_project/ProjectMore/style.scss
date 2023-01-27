@@ -33,10 +33,17 @@
 
   &__list-item {
     overflow: hidden;
-    width: 680px;
+    width: 340px;
     max-width: 100%;
     flex-shrink: 0;
     box-sizing: content-box;
+
+    @include screen('md-down') {
+      width: 340px;
+    }
+    @include screen('lg') {
+      width: 680px;
+    }
 
     &:first-child {
       @include screen('sm') {

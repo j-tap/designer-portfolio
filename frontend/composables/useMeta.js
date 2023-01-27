@@ -48,6 +48,8 @@ export function metaInfo (info = {
       { property: 'og:url', content: url },
       { property: 'og:title', content: title },
       { property: 'og:image', content: image },
+      { property: 'og:image:width', content: '500' },
+      { property: 'og:image:height', content: '500' },
       { property: 'og:locale', content: lang },
       { property: 'twitter:card', content: twcard },
       { property: 'twitter:url', content: url },

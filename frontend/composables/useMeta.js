@@ -16,7 +16,8 @@ export function metaInfo (info = {
   const type = 'website'
   const twcard = 'summary_large_image'
 
-  const url = config.public.baseURL || defMeta.image
+  const url = config.public.baseURL
+  console.log(url)
   const description = info.description || defMeta.description
   const keywords = info.keywords || defMeta.keywords
   const author = defMeta.author

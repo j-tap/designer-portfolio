@@ -1,6 +1,6 @@
 <template>
-  <ContentWrap>
-    <TitleOutline class="text-404" tag="h1">404</TitleOutline>
+  <ContentWrap class="error-404">
+    <TitleOutline class="error-404__text" tag="h1">404</TitleOutline>
   </ContentWrap>
 </template>
 

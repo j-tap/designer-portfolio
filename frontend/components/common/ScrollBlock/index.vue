@@ -1,5 +1,6 @@
 <template>
-  <div
+  <Component
+    :is="props.tag"
     ref="elem"
     :class="classes"
     @mousedown.capture="start"
@@ -9,10 +10,17 @@
     @click.capture="click"
   >
     <slot />
-  </div>
+  </Component>
 </template>
 
 <script setup>
+const props = defineProps({
+  tag: {
+    type: String,
+    default: 'div',
+  },
+})
+
 const elem = ref(null)
 let isDown = ref(false);
 let isScrolled = ref(false);

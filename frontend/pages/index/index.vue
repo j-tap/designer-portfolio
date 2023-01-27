@@ -72,7 +72,9 @@ import { find } from '~/composables/useApi';
 import {metaInfo} from "~/composables/useMeta";
 
 const { data: dataHome } = await find('home')
-const { data: dataCategories } = await find('category-projects')
+const { data: dataCategories } = await find('category-projects', {
+  sort: [{ rank: 'asc' }],
+})
 
 const categories = computed(() => dataCategories || [])
 const home = computed(() => dataHome)

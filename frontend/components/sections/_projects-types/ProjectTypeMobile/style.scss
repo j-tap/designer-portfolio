@@ -1,3 +1,5 @@
+@import 'assets/style/mixins/project';
+
 .project-mobile {
   & &__fonts {
     margin-top: 8vw;
@@ -5,5 +7,7 @@
 
   & &__colors {
     margin-top: 4.7vw;
+
+    @include colors-block-indent();
   }
 }

@@ -1,3 +1,5 @@
+@import 'assets/style/mixins/project';
+
 .project-web {
   &__img-top {
     display: block;
@@ -28,6 +30,8 @@
 
   & &__colors {
     margin-top: 4.7vw;
+
+    @include colors-block-indent();
   }
 
   & &__images {

@@ -1,3 +1,5 @@
+@import 'assets/style/mixins/project';
+
 .project-uiux {
   &__pages {
 
@@ -9,6 +11,8 @@
 
   & &__colors {
     margin-top: 4.7vw;
+
+    @include colors-block-indent();
   }
 
   & &__other-pages {

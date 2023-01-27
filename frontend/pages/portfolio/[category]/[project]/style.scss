@@ -67,25 +67,14 @@
   list-style: none;
   padding: 0;
   margin: 0;
-
-  @include screen('sm') {
-    display: block;
-  }
-  @include screen('md-up') {
-    display: flex;
-    align-items: stretch;
-    flex-wrap: wrap;
-    height: clamp(40px, 4vw, 64px);
-  }
+  display: flex;
+  align-items: stretch;
+  flex-wrap: wrap;
+  min-height: clamp(40px, 4vw, 64px);
 
   &__item {
-    @include screen('sm') {
-      display: block;
-    }
-    @include screen('md-up') {
-      display: flex;
-      align-items: stretch;
-    }
+    display: flex;
+    align-items: stretch;
   }
 
   &__link {

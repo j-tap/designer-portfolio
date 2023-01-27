@@ -51,15 +51,24 @@
     font-size: clamp(46px, 8.9vw, 170px);
     text-transform: uppercase;
     white-space: nowrap;
-    line-height: 1;
     gap: clamp(15px, 3.2vw, 60px);
     margin-top: clamp(15px, 3.2vw, 60px);
 
     &:nth-child(1) {
-      margin-left: min(-320px, -26vw);
+      @include screen('sm') {
+        margin-left: min(-200px, -26vw);
+      }
+      @include screen('md-up') {
+        margin-left: min(-320px, -26vw);
+      }
     }
     &:nth-child(2) {
-      margin-left: min(-365px, -37vw);
+      @include screen('sm') {
+        margin-left: min(-235px, -30vw);
+      }
+      @include screen('md-up') {
+        margin-left: min(-365px, -37vw);
+      }
     }
     &:nth-child(3) {
       @include screen('sm') {

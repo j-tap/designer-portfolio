@@ -17,7 +17,6 @@ export function metaInfo (info = {
   const twcard = 'summary_large_image'
 
   const url = config.public.baseURL
-  console.log(url)
   const description = info.description || defMeta.description
   const keywords = info.keywords || defMeta.keywords
   const author = defMeta.author
@@ -28,11 +27,11 @@ export function metaInfo (info = {
     title = `${title} | ${t('app.name')}`
   }
 
-  let image = `${url}/_nuxt/og-image.png`
+  let image = `${apiUrl}/_nuxt/og-image.png`
   if (info.image) {
     image = `${apiUrl}${info.image}`
   } else if (defMeta.image) {
-    image = `${url}${defMeta.image}`
+    image = `${apiUrl}${defMeta.image}`
   }
 
   return {

@@ -1,10 +1,19 @@
 <template>
   <div class="project-uiux">
-    <ul v-if="pagesDefault.length" class="project-uiux__pages uiux-pages">
+    <ul
+      v-if="pagesDefault.length"
+      ref="pagesEl"
+      class="project-uiux__pages uiux-pages"
+    >
       <li
-        v-for="page in pagesDefault"
+        v-for="(page, ind) in pagesDefault"
         :key="strToNumHash(page.title)"
-        class="uiux-pages__item uiux-page"
+        :ref="ref => handlePageItemRef(ind, ref)"
+        :class="[
+          'uiux-pages__item',
+          'uiux-page',
+          { 'uiux-pages__item_first-two': ind === firstIndToTwoColumn }
+        ]"
       >
         <h2 class="uiux-page__title">{{ page.title }}</h2>
         <h3 v-if="page.subtitle" class="uiux-page__subtitle">{{ page.subtitle }}</h3>
@@ -62,7 +71,10 @@ const props = defineProps({
   data: Object,
 })
 
+const pagesEl = ref(null)
+const firstIndToTwoColumn = ref(-1)
 const pagesDefault = computed(() => getPagesByType(props.data.pages, pageTypes.default))
+
 const pagesOther = computed(() => getPagesByType(props.data.pages, pageTypes.other))
 const pagesMobile = computed(() => getPagesByType(props.data.pages, pageTypes.mobile))
 const viewOther = computed(() => ({
@@ -77,6 +89,32 @@ const viewAdaptive = computed(() => ({
 }))
 const displayOthers = computed(() => !!viewOther.value?.images.length)
 const displayAdaptive = computed(() => !!viewAdaptive.value?.images.length)
+
+onMounted(() => {
+  // TODO: no calc on mobile
+  setIndFirstItemInTwoColumn()
+})
+
+function setIndFirstItemInTwoColumn () {
+  const parentTop = pagesEl.value.offsetTop
+  let ind = 0
+
+  pagesEl.value.childNodes.forEach(item => {
+    if (item.tagName === 'LI') {
+      const itemTop = item.offsetTop
+
+      if (ind > 0 && inRange(itemTop, parentTop, parentTop + 100)) {
+        firstIndToTwoColumn.value = ind
+      }
+      ind += 1
+    }
+  })
+}
+
+
+function inRange (x, min, max) {
+  return ((x-min) * (x-max) <= 0)
+}
 </script>
 
 <style lang="scss" src="./style.scss" scoped/>

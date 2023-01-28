@@ -23,7 +23,7 @@ $move-final: calc(-50% + $offset);
     transform: translate3d($move-initial, 0, 0);
     animation-name: marquee;
     animation-timing-function: linear;
-    animation-duration: 18s;
+    animation-duration: 50s;
     animation-iteration-count: infinite;
     animation-play-state: running;
   }

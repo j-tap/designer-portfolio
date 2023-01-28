@@ -56,6 +56,7 @@ const projectsResp = ref(null)
 const projectsList = computed(() => projectsResp.value?.data || [])
 const categoryResp = await findBySlug('category-projects', categoryName.value)
 const isExist = !!categoryResp.data
+
 display404(!isExist)
 
 const category = computed(() => categoryResp.data)
@@ -74,7 +75,7 @@ if (isExist) {
     pagination: { pageSize: 99 },
   })
 
-  if (process.client && projectsList.value?.length > 5) {
+  if (process.client && window.innerWidth >= 768 && projectsList.value?.length > 5) {
     window.addEventListener('scroll', () => {
       updateProjectsPrlx(projectsList.value, window.scrollY)
     })

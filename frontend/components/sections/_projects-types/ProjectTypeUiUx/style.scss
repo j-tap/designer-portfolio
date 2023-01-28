@@ -39,12 +39,14 @@
     display: inline-block;
     width: 100%;
 
-    &:nth-child(3) {
-      margin-top: clamp(60px, 18vw, 300px);
-    }
-
     & + * {
       margin-top: clamp(20px, 6vw, 100px);
+    }
+
+    &_first-two {
+      @include screen('md-up') {
+        margin-top: clamp(60px, 18vw, 300px);
+      }
     }
   }
 }

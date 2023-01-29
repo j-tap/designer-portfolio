@@ -1,5 +1,8 @@
+import { useLoadingStore } from '~/stores/loadingStore'
+
 export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.$router.options.scrollBehavior = async (to, from, savedPosition) => {
+    const loadingStore = useLoadingStore()
     // console.log('scrollBehavior', to, from, savedPosition)
     // nuxtApp.hook('page:finish', () => {
     //   console.log('page:finish')
@@ -20,10 +23,18 @@ export default defineNuxtPlugin((nuxtApp) => {
     }
 
     return new Promise((resolve) => {
-      // TODO: Заменить на завершение всех загрузок
-      setTimeout(() => {
-        resolve(goTo)
-      }, 500)
+      let timeout = null
+
+      watch(loadingStore, ({ countLoading }) => {
+        if (timeout) {
+          clearTimeout(timeout)
+        }
+        timeout = setTimeout(() => {
+          if (countLoading === 0) {
+            resolve(goTo)
+          }
+        }, 500)
+      })
     })
   }
 })

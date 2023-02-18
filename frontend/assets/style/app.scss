@@ -29,6 +29,18 @@ body {
   font-family: $font__default;
   font-size: $font-size_default;
 
+  &::-webkit-scrollbar {
+    width: 10px;
+    background-color: $color__dark;
+  }
+  &::-webkit-scrollbar-track {
+    border: none;
+    background-color: $color__dark;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, .4);
+  }
+
   @include screen('sm') {
     font-weight: 300;
   }

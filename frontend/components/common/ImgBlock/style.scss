@@ -23,6 +23,7 @@
       rgba(#fff, 0)
     );
     animation: shimmer 1s infinite;
+    pointer-events: none;
 
     @keyframes shimmer {
       100% {
@@ -33,6 +34,7 @@
 
   picture {
     display: block;
+    height: 100%;
   }
 
   &_loaded & {

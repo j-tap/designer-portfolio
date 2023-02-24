@@ -156,6 +156,18 @@
         }
       },
       "type": "string"
+    },
+    "preview_hover": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": false,
+      "pluginOptions": {
+        "i18n": {
+          "localized": false
+        }
+      }
     }
   }
 }

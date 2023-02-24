@@ -97,9 +97,20 @@ const isExist = ref(false)
 const isReady = ref(false)
 const projectResp = ref(null)
 const moreProjectsResp = ref(null)
-const project = computed(() => projectResp.value?.data)
+
+const project = computed(() => {
+  let data = projectResp.value?.data
+
+  if (data) {
+    data.pages = data.pages.filter(o => o.active !== false)
+  }
+
+  return data
+})
+
 const moreProjectsList = computed(() => moreProjectsResp.value?.data.length ?
     moreProjectsResp.value.data.sort(() => 0.5 - Math.random()) : [])
+
 const categoryName = computed(() => route.params.category)
 
 fetchProjects()
@@ -116,7 +127,10 @@ watch(projectResp, (resp) => {
 useHead(metaInfo({
   title: `${project.value?.title} / ${categoryName.value}`,
   description: project.value?.subtitle,
-  image: project.value?.preview_social ? project.value.preview_social?.url || project.value.preview?.formats.medium.url : null,
+  image: project.value?.preview_social ?
+    project.value.preview_social?.url ||
+    project.value.preview?.formats.medium.url :
+    null,
 }))
 
 onMounted(() => {

@@ -7,6 +7,7 @@
       <ImgBlock
         class="project-preview__img"
         :src="urlFile(data.preview.url)"
+        :src-hover="urlFile(data.preview_hover?.url)"
         :blurhash="data.preview.blurhash"
         :width="data.preview.width"
         :height="data.preview.height"

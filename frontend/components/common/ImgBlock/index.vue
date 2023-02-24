@@ -1,5 +1,5 @@
 <template>
-  <picture :class="classes">
+  <div :class="classes">
     <BlurHash
       v-if="props.blurhash"
       class="img-block__blurhash"
@@ -7,17 +7,29 @@
       :width="size.width"
       :height="size.height"
     />
-    <img
-      class="img-block__img"
-      :src="src"
-      :alt="props.alt"
-      :width="size.width"
-      :height="size.height"
-      loading="lazy"
-      @load="onLoadImg"
-      @error="onError"
-    >
-  </picture>
+    <picture>
+      <source
+        v-if="srcLite"
+        :srcset="srcLite"
+        media="(max-width:1023px)"
+      >
+      <img
+        class="img-block__img"
+        :src="src"
+        :alt="props.alt"
+        :width="size.width"
+        :height="size.height"
+        loading="lazy"
+        @load="onLoadImg"
+        @error="onError"
+      >
+    </picture>
+    <div
+      v-if="srcHover"
+      :style="`background-image: url(${srcHover})`"
+      class="img-block__img-hover"
+    />
+  </div>
 </template>
 
 <script setup>
@@ -28,6 +40,14 @@ const props = defineProps({
   src: {
     type: String,
     required: true,
+  },
+  srcLite: {
+    type: String,
+    default: null,
+  },
+  srcHover: {
+    type: String,
+    default: null,
   },
   blurhash: {
     type: [String, null],

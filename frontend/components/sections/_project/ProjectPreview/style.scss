@@ -4,10 +4,6 @@
   color: inherit;
   transition: color .2s ease-in;
 
-  &_unlink {
-    pointer-events: none;
-  }
-
   &:hover {
     color: $color__blue;
   }
@@ -16,6 +12,7 @@
     margin: 0;
     padding: 0;
   }
+
   &__img {
     display: flex;
     width: 100%;
@@ -23,8 +20,6 @@
     aspect-ratio: 6 / 5;
     object-fit: contain;
     background-color: $color__white;
-    user-select: none;
-    pointer-events: none;
 
     &:deep(img) {
       align-self: center;
@@ -40,5 +35,11 @@
     font-size: clamp(16px, 2.4vw, 40px);
     text-transform: uppercase;
     line-height: 1.3;
+  }
+}
+
+[class] a.project-preview_unlink {
+  &:hover {
+    color: inherit;
   }
 }

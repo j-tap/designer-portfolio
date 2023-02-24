@@ -1,10 +1,12 @@
 <template>
-  <ContentWrap class="server-error">
-    <div>
-      <TitleOutline class="server-error__text" tag="h1">Sorry, unknown error</TitleOutline>
-      <button class="server-error__btn" @click="handleError">Clear errors</button>
-    </div>
-  </ContentWrap>
+  <div>
+    <ContentWrap class="server-error">
+      <div>
+        <TitleOutline class="server-error__text" tag="h1">Sorry, unknown error</TitleOutline>
+        <button class="server-error__btn" @click="handleError">Clear errors</button>
+      </div>
+    </ContentWrap>
+  </div>
 </template>
 
 <script setup>

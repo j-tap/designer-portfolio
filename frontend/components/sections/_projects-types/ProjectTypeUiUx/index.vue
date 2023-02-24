@@ -7,7 +7,7 @@
     >
       <li
         v-for="(page, ind) in pagesDefault"
-        :key="strToNumHash(page.title)"
+        :key="page.id"
         :ref="ref => handlePageItemRef(ind, ref)"
         :class="[
           'uiux-pages__item',
@@ -91,29 +91,32 @@ const displayOthers = computed(() => !!viewOther.value?.images.length)
 const displayAdaptive = computed(() => !!viewAdaptive.value?.images.length)
 
 onMounted(() => {
-  // TODO: no calc on mobile
-  setIndFirstItemInTwoColumn()
+  setTimeout(() => {
+    setIndFirstItemInTwoColumn()
+  }, 500)
 })
 
 function setIndFirstItemInTwoColumn () {
   const parentTop = pagesEl.value.offsetTop
   let ind = 0
 
-  pagesEl.value.childNodes.forEach(item => {
-    if (item.tagName === 'LI') {
+  for (let i = 0; i < pagesEl.value.childNodes.length; ++i) {
+    const item =  pagesEl.value.childNodes[i]
+
+    if (item.tagName === 'LI' && firstIndToTwoColumn.value === -1) {
       const itemTop = item.offsetTop
 
-      if (ind > 0 && inRange(itemTop, parentTop, parentTop + 100)) {
+      if (ind > 0 && inRange(itemTop, parentTop, parentTop + 200)) {
         firstIndToTwoColumn.value = ind
       }
+
       ind += 1
     }
-  })
+  }
 }
 
-
-function inRange (x, min, max) {
-  return ((x-min) * (x-max) <= 0)
+function inRange (top = 0, min = 0, max = 0) {
+  return ((top - min) * (top - max) <= 0)
 }
 </script>
 

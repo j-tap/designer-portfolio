@@ -23,13 +23,17 @@ export function datesDiff (startDate, endDate, unit) {
   return Math.abs(Math.ceil(result))
 }
 
-export function dateFormat (d) {
+export function dateFormat (d, options = {}) {
   const i18n = useI18n()
   const date = new Date(d)
-  const options = { day: 'numeric', month: 'long' }
+  const opt = {
+    day: 'numeric',
+    month: 'short',
+    ...options,
+  }
 
   return new Intl
-    .DateTimeFormat(i18n.locale.value, options)
+    .DateTimeFormat(i18n.locale.value, opt)
     .format(date)
 }
 

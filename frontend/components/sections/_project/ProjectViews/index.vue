@@ -2,7 +2,7 @@
   <ul class="project-views">
     <li
       v-for="(item, ind) in list"
-      :key="strToNumHash(item.title)"
+      :key="item.id"
       class="project-views__item"
     >
       <ProjectViewsItem

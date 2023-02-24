@@ -48,8 +48,10 @@ const props = defineProps({
   data: Object,
 })
 const imgs = computed(() => props.data.images)
+
 const imageTop = computed(() => imgs.value ? imgs.value[0] : null)
-const imageBottom = computed(() => imgs.value ? imgs.value[imgs.value.length - 1] : null)
+const imageBottom = computed(() => imgs.value && imgs.value > 1 ? imgs.value[imgs.value.length - 1] : null)
+
 const imagesList = computed(() => {
   if (props.data.pages) {
     const imgs = []

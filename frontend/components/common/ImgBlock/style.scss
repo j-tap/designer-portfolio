@@ -55,5 +55,6 @@
     filter: blur(30px);
     visibility: visible;
     transition: visibility .2s ease-in, opacity .2s ease-in;
+    pointer-events: none;
   }
 }

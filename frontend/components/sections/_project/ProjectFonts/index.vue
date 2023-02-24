@@ -4,7 +4,7 @@
     <ul class="project-fonts__list">
       <li
         v-for="item in props.items"
-        :key="strToNumHash(item.id)"
+        :key="item.id"
         class="project-fonts__item"
       >
         <span :style="{ fontFamily: item.title }">{{ item.title }}</span>

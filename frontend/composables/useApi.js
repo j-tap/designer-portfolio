@@ -55,7 +55,7 @@ async function sendRequest ({ name, params }, cb) {
   }
   const { locale } = useI18n()
   const query = qs.stringify({
-    locale: locale.value,
+    locale: toSimpleLocale(locale.value),
     populate: 'deep',
     ...params,
   }, { encodeValuesOnly: true })
@@ -90,4 +90,8 @@ function requestFinally () {
     const loadingStore = useLoadingStore()
     loadingStore.updateLoading(false)
   }
+}
+
+function toSimpleLocale (locale) {
+  return locale.split('-').shift()
 }

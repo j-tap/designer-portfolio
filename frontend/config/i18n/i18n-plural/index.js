@@ -1,4 +1,4 @@
-function ru (choice, choicesLength) {
+function ruRu (choice, choicesLength) {
   if (choice === 0) {
     return 0
   }
@@ -16,4 +16,4 @@ function ru (choice, choicesLength) {
   return choicesLength < 4 ? 2 : 3
 }
 
-export default { ru }
+export default { 'ru-RU': ruRu }

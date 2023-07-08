@@ -1,5 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import i18n from './config/i18n'
+import i18n from './config/i18n/'
 import strapi from './config/strapi'
 
 export default defineNuxtConfig({

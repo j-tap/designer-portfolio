@@ -24,35 +24,19 @@
 <script setup>
 import { TitleOutline } from '~/components/common'
 import { priceFormat } from '~/utils/formatData'
-import { dateFormat, datesDiff, getWeekendsDays } from '~/utils/formatDate'
-import { useMetaStore } from '~/stores/metaStore'
+import { dateFormat } from '~/utils/formatDate'
+import { getHours } from '~/composables/useCalcPrice'
 
-const metaStore = useMetaStore()
 const props = defineProps({
   time: Object,
 })
 
-const RATE = metaStore.pay_rate
-const HOURS_DAY = 8
-
 const timeHours = computed(() => {
   const { time } = props
-
-  if (time) {
-    if (time.hours) {
-      return time.hours
-    } else {
-      const weekends = getWeekendsDays(time.start, time.end)
-      const days = datesDiff(time.start, time.end, 'd')
-
-      return (days - weekends.length) * HOURS_DAY
-    }
-  }
-
-  return 0
+  return getHours(time)
 })
 
-const timePrice = computed(() => timeHours.value * RATE)
+const timePrice = computed(() => getPrice(timeHours.value))
 </script>
 
 <style lang="scss" src="./style.scss" scoped />

@@ -18,7 +18,7 @@ export function toWithSpaces (val) {
 }
 
 export function priceFormat (val) {
-  return `${toWithSpaces(val)}\xa0₽`
+  return `${toWithSpaces(val)}\xa0$`
 }
 
 export function kebabToPascalCase (str = '') {

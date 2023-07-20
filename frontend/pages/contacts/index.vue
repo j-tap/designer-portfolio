@@ -7,7 +7,11 @@
       </ClientOnly>
     </h1>
     <ul class="page-contacts__lis contacts-list">
-      <li class="contacts-list__item" v-for="item in contacts" :key="item.title">
+      <li
+        v-for="item in contacts"
+        :key="item.title"
+        class="contacts-list__item"
+      >
         <ClientOnly>
           <TitleOutline tag="span">{{ item.title }}</TitleOutline>
         </ClientOnly>

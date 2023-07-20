@@ -22,5 +22,5 @@ export default {
       file: 'en-US.js',
     },
   ],
-  vueI18n: './i18n.config.js',
+  vueI18n: './config/i18n/i18n.config.js', // path relative to nuxt.config
 }

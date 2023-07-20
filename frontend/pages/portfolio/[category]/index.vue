@@ -1,7 +1,18 @@
 <template>
   <div v-if="isExist" class="page-category">
     <ContentWrap>
-      <TitleOutline v-if="category" class="page-category__title" tag="h1">
+      <BackLink
+        :to="{ name: 'portfolio' }"
+        class="page-category__back"
+      >
+        {{ $t('portfolio.back_to_portfolio') }}
+      </BackLink>
+
+      <TitleOutline
+        v-if="category"
+        class="page-category__title"
+        tag="h1"
+      >
         {{ category.title }}
       </TitleOutline>
 
@@ -27,12 +38,19 @@
           />
         </li>
       </ul>
+
+      <BackLink
+        :to="{ name: 'portfolio' }"
+        class="page-category__back"
+      >
+        {{ $t('portfolio.back_to_portfolio') }}
+      </BackLink>
     </ContentWrap>
   </div>
 </template>
 
 <script setup>
-import { TitleOutline } from '~/components/common'
+import { BackLink, TitleOutline } from '~/components/common'
 import { ContentWrap } from '~/components/structure'
 import { ProjectPreview } from '~/components/sections'
 import { metaInfo } from '~/composables/useMeta'

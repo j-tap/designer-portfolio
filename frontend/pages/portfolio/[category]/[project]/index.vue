@@ -24,7 +24,15 @@
           </ul>
 
           <header class="page-project__head">
-            <h1 class="page-project__title">{{ project.title }}</h1>
+            <h1 class="page-project__title">
+              <NuxtLink
+                :to="project.link"
+                target="_blank"
+                external
+              >
+                {{ project.title }}
+              </NuxtLink>
+            </h1>
             <div v-if="project.subtitle" class="page-project__subtitle">{{ project.subtitle }}</div>
           </header>
 

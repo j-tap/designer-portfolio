@@ -11,16 +11,32 @@ export const useMetaStore = defineStore({
     image: null,
     author: null,
     pay_rate: 0,
+    first_name: null,
+    last_name: null,
+    specialization: null,
   }),
 
   getters: {
-    getMetaInfo: ({ title, description, keywords, image, author, pay_rate }) => ({
+    getMetaInfo: ({
       title,
       description,
       keywords,
       image,
       author,
       pay_rate,
+      first_name,
+      last_name,
+      specialization,
+    }) => ({
+      title,
+      description,
+      keywords,
+      image,
+      author,
+      pay_rate,
+      first_name,
+      last_name,
+      specialization,
     }),
   },
 
@@ -47,6 +63,9 @@ export const useMetaStore = defineStore({
           image: meta.image.url,
           author: meta.author,
           pay_rate: meta.pay_rate,
+          first_name: meta.first_name,
+          last_name: meta.last_name,
+          specialization: meta.specialization,
         })
       }
     }

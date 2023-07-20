@@ -1,20 +1,18 @@
 <template>
-  <div class="project-back">
-    <NuxtLink
-      :to="{
-        name: 'portfolio-category',
-        params: { category: props.categoryName },
-        hash: `#project-${props.projectId}`,
-      }"
-    >
-      <IconBase name="arrow-left" size="xl" />
-      {{ $t('portfolio.back_to_portfolio') }}
-    </NuxtLink>
-  </div>
+  <BackLink
+    :to="{
+      name: 'portfolio-category',
+      params: { category: props.categoryName },
+      hash: `#project-${props.projectId}`,
+    }"
+    class="project-back"
+  >
+    {{ $t('portfolio.back_to_portfolio') }}
+  </BackLink>
 </template>
 
 <script setup>
-import { IconBase } from '~/components/common'
+import { BackLink } from '~/components/common'
 
 const props = defineProps({
   categoryName: String,

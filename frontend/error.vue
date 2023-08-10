@@ -4,6 +4,13 @@
       <div>
         <TitleOutline class="server-error__text" tag="h1">Sorry, unknown error</TitleOutline>
         <button class="server-error__btn" @click="handleError">Clear errors</button>
+        <div v-if="isDev">
+          <p>Code: {{ error.statusCode }}</p>
+          <p>URL: {{ error.url }}</p>
+          <p>Status: {{ error.statusMessage }}</p>
+          <p>{{ error.message }}</p>
+          <pre v-html="error.stack" />
+        </div>
       </div>
     </ContentWrap>
   </div>
@@ -19,6 +26,8 @@ const props = defineProps({
 })
 
 const handleError = () => clearError({ redirect: '/' })
+const runtimeConfig = useRuntimeConfig()
+const isDev = computed(() => runtimeConfig.public.NODE_ENV !== 'production')
 
 useHead(metaInfo({
   title: 'Error. Sorry, unknown error',

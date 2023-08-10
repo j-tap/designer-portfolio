@@ -122,6 +122,7 @@ const moreProjectsList = computed(() => moreProjectsResp.value?.data.length ?
     moreProjectsResp.value.data.sort(() => 0.5 - Math.random()) : [])
 
 const categoryName = computed(() => route.params.category)
+const metaTitle = computed(() => `${project.value?.title} / ${categoryName.value}`)
 
 fetchProjects()
 fetchMore()
@@ -135,7 +136,7 @@ watch(projectResp, (resp) => {
 })
 
 useHead(metaInfo({
-  title: `${project.value?.title} / ${categoryName.value}`,
+  title: metaTitle,
   description: project.value?.subtitle,
   image: project.value?.preview_social ?
     project.value.preview_social?.url ||

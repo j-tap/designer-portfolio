@@ -97,7 +97,11 @@ onMounted(() => {
 })
 
 function setIndFirstItemInTwoColumn () {
-  const parentTop = pagesEl.value.offsetTop
+  if (!pagesEl.value) {
+    return
+  }
+
+  const parentTop = pagesEl.value?.offsetTop
   let ind = 0
 
   for (let i = 0; i < pagesEl.value.childNodes.length; ++i) {

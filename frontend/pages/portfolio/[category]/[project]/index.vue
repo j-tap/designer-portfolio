@@ -2,7 +2,7 @@
   <div class="page-project">
     <ContentWrap>
       <Transition>
-        <div v-if="isExist" v-show="isReady">
+        <div v-if="project?.id">
           <ul
             v-if="project.links?.length"
             class="page-project__links links-project"
@@ -57,7 +57,10 @@
           />
 
           <div class="page-project__content">
-            <Component :is="projectComponentName" :data="project" />
+            <Component
+              :is="projectComponentName"
+              :data="project"
+            />
           </div>
 
           <ProjectBack
@@ -102,74 +105,58 @@ const categoryToComponent = {
 const route = useRoute()
 const router = useRouter()
 
-const projectComponentName = shallowRef('')
-const isExist = ref(false)
-const isReady = ref(false)
-const projectResp = ref(null)
-const moreProjectsResp = ref(null)
+const project = ref({})
+const moreProjectsList = ref([])
 
-const project = computed(() => {
-  let data = projectResp.value?.data
+project.value = await fetchProjects()
+moreProjectsList.value = await fetchMore()
 
-  if (data) {
-    data.pages = data.pages.filter(o => o.active !== false)
-  }
-
-  return data
-})
-
-const moreProjectsList = computed(() => moreProjectsResp.value?.data.length ?
-    moreProjectsResp.value.data.sort(() => 0.5 - Math.random()) : [])
+if (!project.value?.id) {
+  display404()
+}
 
 const categoryName = computed(() => route.params.category)
 const metaTitle = computed(() => `${project.value?.title} / ${categoryName.value}`)
-
-fetchProjects()
-fetchMore()
-
-watch(projectResp, (resp) => {
-  isExist.value = !!resp?.data
-
-  if (!isExist.value) {
-    display404()
-  }
-})
+const metaImage = computed(() =>
+  project.value?.preview_social ?
+  project.value.preview_social?.url ||
+  project.value.preview?.formats.medium.url :
+  null
+)
+const projectComponentName = computed(() => categoryToComponent[categoryName.value])
 
 useHead(metaInfo({
-  title: metaTitle,
+  title: metaTitle.value,
   description: project.value?.subtitle,
-  image: project.value?.preview_social ?
-    project.value.preview_social?.url ||
-    project.value.preview?.formats.medium.url :
-    null,
+  image: metaImage.value,
 }))
 
-onMounted(() => {
-  projectComponentName.value = categoryToComponent[categoryName.value]
-
-  setTimeout(() => {
-    isReady.value = true
-  }, 400)
-})
-
 async function fetchProjects () {
-  projectResp.value = await findBySlug(
+  const resp = await findBySlug(
     'projects',
     route.params.project,
   )
+
+  if (resp?.data) {
+    resp.data.pages = resp.data.pages.filter(o => o.active !== false)
+  }
+
+  return resp?.data
 }
 
 async function fetchMore () {
-  moreProjectsResp.value = await find(
+  const resp = await find(
     'projects',
     {
       filters: {
         id: { $ne: project.value?.id },
-        categories: { id: { $in: project.value?.categories.map((o) => o.id) } },
+        categories: { id: { $in: project.value?.categories?.map((o) => o.id) } },
       },
       pagination: { pageSize: 15 },
     }
   )
+
+  return resp?.data ? resp.data.sort(() => 0.5 - Math.random()) : []
 }
 </script>
 

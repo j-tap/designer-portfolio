@@ -23,6 +23,7 @@ export function metaInfo (info = {
   const lang = locale.value
 
   let title = info.title || defMeta.title || t('app.name')
+
   if (route.name !== 'index') {
     title = `${title} | ${t('app.name')}`
   }

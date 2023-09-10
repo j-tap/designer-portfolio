@@ -108,6 +108,8 @@ const router = useRouter()
 const project = ref({})
 const moreProjectsList = ref([])
 
+const categoryName = computed(() => route.params.category)
+
 project.value = await fetchProjects()
 moreProjectsList.value = await fetchMore()
 
@@ -115,8 +117,7 @@ if (!project.value?.id) {
   display404()
 }
 
-const categoryName = computed(() => route.params.category)
-const metaTitle = computed(() => `${project.value?.title} / ${categoryName.value}`)
+const metaTitle = computed(() => `${project.value?.title || '404'} / ${categoryName.value}`)
 const metaImage = computed(() =>
   project.value?.preview_social ?
   project.value.preview_social?.url ||
@@ -125,16 +126,17 @@ const metaImage = computed(() =>
 )
 const projectComponentName = computed(() => categoryToComponent[categoryName.value])
 
-useHead(metaInfo({
-  title: metaTitle.value,
-  description: project.value?.subtitle,
-  image: metaImage.value,
-}))
-
 async function fetchProjects () {
   const resp = await findBySlug(
     'projects',
     route.params.project,
+    {
+      filters: {
+        categories: {
+          slug: { $in: categoryName.value },
+        },
+      },
+    }
   )
 
   if (resp?.data) {
@@ -158,6 +160,12 @@ async function fetchMore () {
 
   return resp?.data ? resp.data.sort(() => 0.5 - Math.random()) : []
 }
+
+useHead(metaInfo({
+  title: metaTitle.value,
+  description: project.value?.subtitle,
+  image: metaImage.value,
+}))
 </script>
 
 <style lang="scss" src="./style.scss" scoped/>

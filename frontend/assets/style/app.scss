@@ -2,6 +2,10 @@
 @import 'normalize';
 @import 'animations';
 
+:root {
+  color-scheme: dark;
+}
+
 ::selection {
   color: $color__dark;
   background: $color__white;

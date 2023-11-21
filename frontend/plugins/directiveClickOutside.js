@@ -1,11 +1,11 @@
-const name = 'click-outside';
+const name = 'click-outside'
 const onClickOutside = (elem, callback) => {
   document.addEventListener('mouseup', (evt) => {
     if (elem.value?.contains(evt.target)) {
-      return;
+      return
     }
-    callback();
-  });
+    callback()
+  })
 }
 
 const directive = {
@@ -18,7 +18,7 @@ const directive = {
   beforeUnmount (el) {
     document.body.removeEventListener('click', el.clickOutsideEvent)
   },
-};
+}
 
 export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.vueApp.directive(name, directive)

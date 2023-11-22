@@ -178,6 +178,16 @@
       },
       "type": "string",
       "regex": "(http|https):\\/\\/(w+)?.[a-z0-9-_.]+"
+    },
+    "meta": {
+      "type": "component",
+      "repeatable": false,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "common.meta"
     }
   }
 }

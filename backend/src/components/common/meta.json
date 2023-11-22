@@ -1,0 +1,16 @@
+{
+  "collectionName": "components_common_metas",
+  "info": {
+    "displayName": "meta",
+    "icon": "feather"
+  },
+  "options": {},
+  "attributes": {
+    "description": {
+      "type": "text"
+    },
+    "keywords": {
+      "type": "text"
+    }
+  }
+}

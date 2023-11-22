@@ -32,7 +32,7 @@
           "localized": true
         }
       },
-      "type": "string",
+      "type": "text",
       "required": true,
       "default": "Персональный сайт-портфолио UI/UX дизайнера Конойко Дианы"
     },
@@ -55,7 +55,7 @@
           "localized": true
         }
       },
-      "type": "string"
+      "type": "text"
     },
     "author": {
       "pluginOptions": {

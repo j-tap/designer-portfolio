@@ -16,8 +16,8 @@
           <TitleOutline tag="span">{{ item.title }}</TitleOutline>
         </ClientOnly>
         <NuxtLink
-          class="contacts-list__link"
           :to="item.link"
+          class="contacts-list__link"
           target="_blank"
           external
         >
@@ -34,15 +34,14 @@
 <script setup>
 import { TitleOutline } from '~/components/common'
 import { metaInfo } from '~/composables/useMeta'
-import { find } from '~/composables/useApi'
+import { serverFetch } from '~/composables/useApi'
 
 const { t } = useI18n()
-
-const { data } = await find('contact')
-const contacts = computed(() => data?.contact || [])
+const contactsData = serverFetch('contact', {}, [])
+const contacts = computed(() => contactsData.value?.contact)
 
 useHead(metaInfo({
-  title: t('menu.contacts'),
+  title: ref(t('menu.contacts')),
 }))
 </script>
 

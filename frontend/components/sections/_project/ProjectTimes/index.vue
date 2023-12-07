@@ -1,5 +1,5 @@
 <template>
-  <div class="project-time">
+  <div class="project-time" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
     <div class="project-time__dates">
       <h2 class="project-time__title">{{ $t('project.development_time') }}</h2>
       <TitleOutline class="project-time__value" tag="time">
@@ -14,9 +14,10 @@
       <TitleOutline class="project-time__value" tag="div">
         {{ timeHours }} {{ $t('common.hour', timeHours) }}
       </TitleOutline>
-      <TitleOutline class="project-time__value" tag="div">
+      <TitleOutline class="project-time__value" tag="div" itemprop="price" :content="timePrice">
         {{ priceFormat(timePrice) }}
       </TitleOutline>
+      <span class="sr-only" itemprop="priceCurrency" content="USD">$</span>
     </div>
   </div>
 </template>

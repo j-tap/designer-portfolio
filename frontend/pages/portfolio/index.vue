@@ -11,17 +11,15 @@
 import { PortfolioCategories } from '~/components/sections'
 import { ContentWrap } from '~/components/structure'
 import { metaInfo } from '~/composables/useMeta'
-import { find } from '~/composables/useApi'
+import { serverFetch } from '~/composables/useApi'
 
 const { t } = useI18n()
-
-const { data } = await find('category-projects', {
+const categories = serverFetch('category-projects', {
   sort: [{ rank: 'asc' }],
-})
-const categories = computed(() => data || [])
+}, [])
 
 useHead(metaInfo({
-  title: t('menu.portfolio'),
+  title: ref(t('menu.portfolio')),
 }))
 </script>
 

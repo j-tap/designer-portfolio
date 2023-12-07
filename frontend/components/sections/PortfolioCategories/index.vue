@@ -1,7 +1,7 @@
 <template>
   <ul class="portfolio-categories">
     <li
-      v-for="item in props.items"
+      v-for="item in items"
       :key="item.slug"
       class="portfolio-categories__item"
     >

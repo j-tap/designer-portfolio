@@ -26,6 +26,7 @@
           :blurhash="item.blurhash"
           :width="item.width"
           :height="item.height"
+          itemprop
           alt=" "
         />
       </li>

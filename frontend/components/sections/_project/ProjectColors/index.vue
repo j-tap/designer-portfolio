@@ -39,7 +39,7 @@ const sortFunctions = [
 const curSortFunction = ref(0)
 
 const props = defineProps({
-  items: Array,
+  items: { type: Array, default: () => [] },
 })
 
 const colorsList = computed(() => {

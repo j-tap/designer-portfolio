@@ -19,6 +19,7 @@
         :alt="props.alt"
         :width="size.width"
         :height="size.height"
+        :itemprop="itemprop ? 'image' : undefined"
         loading="lazy"
         @load="onLoadImg"
         @error="onError"
@@ -60,6 +61,10 @@ const props = defineProps({
   },
   height: {
     type: Number,
+  },
+  itemprop: {
+    type: Boolean,
+    default: false,
   },
 })
 

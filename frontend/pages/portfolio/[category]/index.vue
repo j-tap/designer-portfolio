@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isExist" class="page-category">
+  <div class="page-category">
     <ContentWrap>
       <BackLink
         :to="{ name: 'portfolio' }"
@@ -9,16 +9,15 @@
       </BackLink>
 
       <TitleOutline
-        v-if="category"
         class="page-category__title"
         tag="h1"
       >
-        {{ category.title }}
+        {{ title }}
       </TitleOutline>
 
-      <ul v-if="projectsList.length" class="page-category__projects projects-list">
+      <ul class="page-category__projects projects-list">
         <li
-          v-for="project in projectsList"
+          v-for="project in projects"
           :key="project.slug"
           :id="`project-${project.id}`"
           :ref="setProjectElems"
@@ -29,7 +28,7 @@
             :to="isCategoryIdentity ? null : {
               name: 'portfolio-category-project',
               params: {
-                category: categoryName,
+                category: categorySlug,
                 project: project.slug,
               }
             }"
@@ -40,6 +39,7 @@
       </ul>
 
       <BackLink
+        v-if="projects.length > 1"
         :to="{ name: 'portfolio' }"
         class="page-category__back"
       >
@@ -54,7 +54,7 @@ import { BackLink, TitleOutline } from '~/components/common'
 import { ContentWrap } from '~/components/structure'
 import { ProjectPreview } from '~/components/sections'
 import { metaInfo } from '~/composables/useMeta'
-import { find, findBySlug } from '~/composables/useApi'
+import { serverFetch } from '~/composables/useApi'
 import {
   updateProjectsPrlx,
   elems as projectElems,
@@ -63,39 +63,40 @@ import { display404 } from '~/composables/useErrorContent'
 
 const { t } = useI18n()
 const route = useRoute()
-const categoryName = computed(() => route.params.category)
-const isCategoryIdentity = computed(() => categoryName.value === 'identity')
+const categorySlug = computed(() => route.params.category)
+const isCategoryIdentity = computed(() => categorySlug.value === 'identity')
 
 definePageMeta({
   key: route => route.fullPath
 })
 
-const projectsResp = ref(null)
-const projectsList = computed(() => projectsResp.value?.data || [])
-const categoryResp = await findBySlug('category-projects', categoryName.value)
-const isExist = !!categoryResp.data
+const projects = serverFetch('projects', {
+  filters: {
+    categories: { slug: { $in: categorySlug.value } },
+  },
+  sort: [
+    { time: { start: 'desc', end: 'desc' } },
+    { rank: 'asc' },
+  ],
+  pagination: { pageSize: 99 },
+}, [])
+const category = serverFetch('category-projects', {
+  slug: categorySlug.value
+}, {}, 'findBySlug')
+const title = computed(() => category.value?.title)
 
-display404(!isExist)
+watch(category, async (val) => {
+  if (!val?.id) {
+    display404()
+  }
+}, { deep: true })
 
-const category = computed(() => categoryResp.data)
+scrollHandler()
 
-if (isExist) {
-  projectsResp.value = await find('projects', {
-    filters: {
-      categories: {
-        id: { $in: category.value?.id },
-      },
-    },
-    sort: [
-      { time: { start: 'desc', end: 'desc' } },
-      { rank: 'asc' },
-    ],
-    pagination: { pageSize: 99 },
-  })
-
-  if (process.client && window.innerWidth >= 768 && projectsList.value?.length > 5) {
+function scrollHandler () {
+  if (process.client && window.innerWidth >= 768 && projects.value?.length > 5) {
     window.addEventListener('scroll', () => {
-      updateProjectsPrlx(projectsList.value, window.scrollY)
+      updateProjectsPrlx(projects.value, window.scrollY)
     })
   }
 }
@@ -107,9 +108,7 @@ function setProjectElems (el) {
   }
 }
 
-useHead(metaInfo({
-  title: category.value?.title,
-}))
+useHead(metaInfo({ title }))
 </script>
 
 <style lang="scss" src="./style.scss" scoped/>

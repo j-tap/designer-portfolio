@@ -1,22 +1,24 @@
 <template>
   <div class="page-main">
-    <section v-if="home" class="page-main__section-head title-section">
+    <section class="page-main__section-head title-section">
       <ClientOnly>
         <MarqueeBlock class="title-section__row title-section__row_1">
           <TitleOutline tag="span">{{ meta.specialization }}</TitleOutline>&nbsp;
         </MarqueeBlock>
       </ClientOnly>
-      <h1 class="page-main__title">
+      <h1 class="page-main__title" itemscope itemtype="https://schema.org/Person">
         <span class="title-section__row title-section__row_2 row-title-2">
           <MarqueeBlock class="row-title-2__sub-large_sm" reverse>
             <TitleOutline tag="div">{{ $t('menu.portfolio') }}</TitleOutline>&nbsp;
           </MarqueeBlock>
           <TitleOutline class="row-title-2__sub-large_md-up" tag="div">{{ $t('menu.portfolio') }}</TitleOutline>
-          <span class="row-title-2__sub-small">{{ meta.specialization }}</span>
+          <span class="row-title-2__sub-small" itemprop="jobTitle">{{ meta.specialization }}</span>
         </span>
         <span class="title-section__row title-section__row_3 row-title-3">
           <MarqueeBlock class="row-title-3__marquee" reverse>
-            <TitleOutline tag="div">{{ meta.first_name }} {{ meta.last_name }}&nbsp;</TitleOutline>
+            <TitleOutline tag="div" itemprop="name">
+              {{ meta.first_name }} {{ meta.last_name }}&nbsp;
+            </TitleOutline>
           </MarqueeBlock>
           <TitleOutline class="row-title-3__static" tag="div">
             {{ meta.last_name }}
@@ -30,7 +32,7 @@
       </h2>
     </section>
 
-    <section v-if="home" class="page-main__section-info info-section">
+    <section class="page-main__section-info info-section">
       <h3 class="info-section__title">
         {{ home.experience?.title }}
       </h3>
@@ -67,20 +69,16 @@
 <script setup>
 import { TitleOutline, MarqueeBlock, HtmlMarked } from '~/components/common'
 import { PortfolioCategories } from '~/components/sections'
-import { find } from '~/composables/useApi'
+import { serverFetch } from '~/composables/useApi'
 import { metaInfo } from '~/composables/useMeta'
 import { useMetaStore } from '~/stores/metaStore'
 
 const metaStore = useMetaStore()
 const meta = computed(() => metaStore.getMetaInfo)
-const { data: dataHome } = await find('home')
-const { data: dataCategories } = await find('category-projects', {
+const home = serverFetch('home', {})
+const categories = serverFetch('category-projects', {
   sort: [{ rank: 'asc' }],
-})
-
-
-const categories = computed(() => dataCategories || [])
-const home = computed(() => dataHome)
+}, [])
 
 useHead(metaInfo())
 </script>

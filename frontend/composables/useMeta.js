@@ -1,11 +1,6 @@
 import { useMetaStore } from '~/stores/metaStore'
 
-export function metaInfo (info = {
-  title: null,
-  description: null,
-  keywords: null,
-  image: null,
-}) {
+export function metaInfo(info = {}) {
   const { locale } = useI18n()
   const { t } = useI18n()
   const route = useRoute()
@@ -13,56 +8,61 @@ export function metaInfo (info = {
   const metaStore = useMetaStore()
   const defMeta = metaStore.getMetaInfo
   const apiUrl = config.public.strapi.url
+  const baseUrl = config.public.baseURL
+
   const type = 'website'
   const twcard = 'summary_large_image'
+  const author = ref(defMeta.author)
+  const lang = computed(() => locale.value)
+  const currentUrl = computed(() => `${baseUrl}${route.path}`)
+  const title = computed(() => {
+    let tl = info.title?.value || defMeta.title || t('app.name')
+    if (route.name !== 'index') {
+      tl += ` | ${t('app.name')}`
+    }
+    return tl
+  })
+  const image = computed(() => {
+    let img = info.image?.value || defMeta.image || '/_nuxt/og-image.png'
+    if (info.image) {
+      img = `${apiUrl}${img}`
+    }
+    else {
+      img = `${baseUrl}${img}`
+    }
+    return img
+  })
+  const description = computed(() => info.description?.value || defMeta.description)
+  const keywords = computed(() => info.keywords?.value || defMeta.keywords)
 
-  const url = config.public.baseURL
-  const description = info.description || defMeta.description
-  const keywords = info.keywords || defMeta.keywords
-  const author = defMeta.author
-  const lang = locale.value
-
-  let title = info.title || defMeta.title || t('app.name')
-
-  if (route.name !== 'index') {
-    title = `${title} | ${t('app.name')}`
-  }
-
-  let image = `${apiUrl}/_nuxt/og-image.png`
-  if (info.image) {
-    image = `${apiUrl}${info.image}`
-  } else if (defMeta.image) {
-    image = `${apiUrl}${defMeta.image}`
-  }
-
-  return {
-    title: title,
+  return computed(() => ({
+    title: title.value,
     link: [
-      { rel: 'image_src', href: image },
+      { rel: 'image_src', href: image.value },
     ],
     meta: [
-      { name: 'title', content: title },
-      { name: 'description', content: description },
-      { name: 'keywords', content: keywords },
-      { name: 'author', content: author },
+      { name: 'title', content: title.value },
+      { name: 'description', content: description.value },
+      { name: 'keywords', content: keywords.value },
+      { name: 'author', content: author.value },
       { property: 'og:type', content: type },
-      { property: 'og:url', content: url },
-      { property: 'og:title', content: title },
-      { property: 'og:image', content: image },
+      { property: 'og:url', content: currentUrl },
+      { property: 'og:title', content: title.value },
+      { property: 'og:image', content: image.value },
       { property: 'og:image:width', content: '500' },
       { property: 'og:image:height', content: '500' },
-      { property: 'og:locale', content: lang },
+      { property: 'og:locale', content: lang.value },
       { property: 'twitter:card', content: twcard },
-      { property: 'twitter:url', content: url },
-      { property: 'twitter:title', content: title },
-      { property: 'twitter:description', content: description },
-      { property: 'twitter:image', content: image },
+      { property: 'twitter:url', content: currentUrl },
+      { property: 'twitter:title', content: title.value },
+      { property: 'twitter:description', content: description.value },
+      { property: 'twitter:image', content: image.value },
     ],
     bodyAttrs: {
       class: '',
     },
     htmlAttrs: {
-      lang,
+      lang: lang.value,
     },
-  }
+  }))
 }

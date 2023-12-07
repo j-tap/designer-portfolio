@@ -12,6 +12,7 @@
         :width="data.preview.width"
         :height="data.preview.height"
         :alt="data.slug"
+        itemprop
       />
       <Component :is="titleTag" class="project-preview__title">
         {{ data.title }}

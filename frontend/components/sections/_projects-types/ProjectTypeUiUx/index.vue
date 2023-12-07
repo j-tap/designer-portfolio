@@ -30,6 +30,7 @@
               :width="img.width"
               :height="img.height"
               :alt="page.subtitle"
+              itemprop
             />
           </li>
         </ul>

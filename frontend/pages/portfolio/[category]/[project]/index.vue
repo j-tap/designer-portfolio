@@ -2,7 +2,7 @@
   <div class="page-project">
     <ContentWrap>
       <Transition>
-        <div v-if="project?.id">
+        <div itemscope itemtype="https://schema.org/Product">
           <ul
             v-if="project.links?.length"
             class="page-project__links links-project"
@@ -24,7 +24,7 @@
           </ul>
 
           <header class="page-project__head">
-            <h1 class="page-project__title">
+            <h1 class="page-project__title" itemprop="name">
               <NuxtLink
                 v-if="project.link"
                 :to="project.link"
@@ -35,7 +35,13 @@
               </NuxtLink>
               <template v-else>{{ project.title }}</template>
             </h1>
-            <div v-if="project.subtitle" class="page-project__subtitle">{{ project.subtitle }}</div>
+            <div
+              v-if="project.subtitle"
+              class="page-project__subtitle"
+              itemprop="description"
+            >
+              {{ project.subtitle }}
+            </div>
           </header>
 
           <ProjectTimes
@@ -52,7 +58,7 @@
 
           <ProjectBack
             class="page-project__back"
-            :category-name="categoryName"
+            :category-name="categorySlug"
             :project-id="project.id"
           />
 
@@ -65,7 +71,7 @@
 
           <ProjectBack
             class="page-project__back"
-            :category-name="categoryName"
+            :category-name="categorySlug"
             :project-id="project.id"
           />
 
@@ -93,7 +99,7 @@ import {
   ProjectBack,
 } from '~/components/sections'
 import { metaInfo } from '~/composables/useMeta'
-import { find, findBySlug } from '~/composables/useApi'
+import { find, findBySlug, serverFetch } from '~/composables/useApi'
 import { display404 } from '~/composables/useErrorContent'
 
 const categoryToComponent = {
@@ -104,67 +110,50 @@ const categoryToComponent = {
 }
 const route = useRoute()
 const router = useRouter()
-
-const project = ref({})
-const moreProjectsList = ref([])
-
-const categoryName = computed(() => route.params.category)
-
-project.value = await fetchProjects()
-moreProjectsList.value = await fetchMore()
-
-if (!project.value?.id) {
-  display404()
-}
-
-const metaTitle = computed(() => `${project.value?.title || '404'} / ${categoryName.value}`)
-const metaImage = computed(() =>
-  project.value?.preview_social ?
-  project.value.preview_social?.url ||
-  project.value.preview?.formats.medium.url :
-  null
-)
-const projectComponentName = computed(() => categoryToComponent[categoryName.value])
-
-async function fetchProjects () {
-  const resp = await findBySlug(
-    'projects',
-    route.params.project,
-    {
-      filters: {
-        categories: {
-          slug: { $in: categoryName.value },
-        },
-      },
-    }
-  )
-
-  if (resp?.data) {
-    resp.data.pages = resp.data.pages.filter(o => o.active !== false)
+const categorySlug = computed(() => route.params.category)
+const projectSlug = computed(() => route.params.project)
+const projectData = serverFetch('projects', {
+  slug: projectSlug.value,
+  filters: {
+    categories: { slug: { $in: categorySlug.value } },
+  },
+}, {}, 'findBySlug')
+const project = computed(() => {
+  const result = { ...projectData.value }
+  if (result?.pages) {
+    result.pages = result.pages.filter(o => o.active !== false)
   }
+  return result
+})
+const moreProjects = serverFetch('projects', {
+  filters: {
+    slug: { $ne: projectSlug.value },
+    categories: { slug: { $in: categorySlug.value } },
+  },
+  pagination: { pageSize: 15 },
+}, [])
+const moreProjectsList = computed(() => moreProjects.value.sort(() => 0.5 - Math.random()) || [])
+const projectComponentName = computed(() => categoryToComponent[categorySlug.value])
+const title = computed(() => `${projectData.value?.title} / ${projectData.value?.categories?.find(o => o.slug === categorySlug.value)?.title}`)
+const metaDescr = computed(() => projectData.value?.meta?.description || projectData.value?.subtitle)
+const metaImg = computed(() =>
+    projectData.value.preview_social?.url ||
+    projectData.value.preview?.formats.medium.url ||
+    projectData.value.pages?.[0]?.images?.[0].formats.medium.url
+)
+const metaKeywords = computed(() => projectData.value?.meta?.keywords)
 
-  return resp?.data
-}
-
-async function fetchMore () {
-  const resp = await find(
-    'projects',
-    {
-      filters: {
-        id: { $ne: project.value?.id },
-        categories: { id: { $in: project.value?.categories?.map((o) => o.id) } },
-      },
-      pagination: { pageSize: 15 },
-    }
-  )
-
-  return resp?.data ? resp.data.sort(() => 0.5 - Math.random()) : []
-}
+watch(projectData, async (val) => {
+  if (!val?.id) {
+    display404()
+  }
+}, { deep: true })
 
 useHead(metaInfo({
-  title: metaTitle.value,
-  description: project.value?.subtitle,
-  image: metaImage.value,
+  title,
+  description: metaDescr,
+  image: metaImg,
+  keywords: metaKeywords,
 }))
 </script>
 

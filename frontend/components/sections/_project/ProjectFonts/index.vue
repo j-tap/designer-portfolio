@@ -16,7 +16,7 @@
 <script setup>
 const config = useRuntimeConfig()
 const props = defineProps({
-  items: Array,
+  items: { type: Array, default: () => [] },
 })
 
 const fontStyles = ref([])

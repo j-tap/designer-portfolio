@@ -4,6 +4,9 @@ import strapi from './config/strapi'
 
 export default defineNuxtConfig({
 	runtimeConfig: {
+		strapi: {
+			url: strapi.url,
+		},
 		public: {
 			baseURL: process.env.BASE_URL || 'http://localhost:3000',
 			NODE_ENV: process.env.NODE_ENV,

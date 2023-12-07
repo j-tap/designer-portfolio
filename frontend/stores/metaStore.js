@@ -51,16 +51,13 @@ export const useMetaStore = defineStore({
       this[key] = value
     },
 
-    async fetchMetaInfo () {
-      const metaResp = await find('meta-info')
-      const meta = metaResp.data
-
+    async updateMetaInfo (meta) {
       if (meta) {
         this.setMetaInfo({
           title: meta.title,
           description: meta.description,
           keywords: meta.keywords,
-          image: meta.image.url,
+          image: meta.image?.url,
           author: meta.author,
           pay_rate: meta.pay_rate,
           first_name: meta.first_name,

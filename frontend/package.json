@@ -1,7 +1,7 @@
 {
   "name": "frontend",
   "private": true,
-  "version": "0.1.0",
+  "version": "1.1.0",
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev --port 3019",
@@ -10,16 +10,16 @@
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
-    "@nuxtjs/i18n": "^8.0.0-beta.13",
+    "@nuxtjs/i18n": "8.0.0-beta.13",
     "@nuxtjs/strapi": "^1.9.3",
-    "nuxt": "^3.6.2"
+    "nuxt": "^3.8.2"
   },
   "dependencies": {
-    "@pinia/nuxt": "^0.4.11",
+    "@pinia/nuxt": "^0.5.1",
     "blurhash": "^2.0.5",
-    "marked": "^4.3.0",
-    "pinia": "^2.1.4",
+    "marked": "^10.0.0",
+    "pinia": "^2.1.7",
     "qs": "^6.11.2",
-    "sass": "^1.63.6"
+    "sass": "1.69.5"
   }
 }

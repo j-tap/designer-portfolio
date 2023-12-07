@@ -1,6 +1,33 @@
 import qs from 'qs'
 import { useLoadingStore } from '~/stores/loadingStore'
 
+export function serverFetch (name, params = {}, defaultValue = {}, fetchType = 'find') {
+  const nuxtApp = useNuxtApp()
+  const result = ref(defaultValue)
+  const key = `${name}-${JSON.stringify(params)}`
+
+  let slug = null
+  if (params?.slug) {
+    slug = params.slug
+    delete params.slug
+  }
+
+  const methods = {
+    find: () => find(name, params),
+    findBySlug: () => findBySlug(name, slug, params),
+  }
+  const fetchFunction = methods[fetchType]
+  useAsyncData(key, fetchFunction, {
+    // getCachedData: key => nuxtApp.payload?.static?.[key] ?? nuxtApp.payload?.data?.[key],
+  })
+    .then(({ data }) => {
+      result.value = data.value?.data
+    })
+
+  return result
+}
+
+
 export function urlFile (urlFile) {
   const config = useRuntimeConfig()
   const urlApi = config.public.strapi.url
@@ -19,8 +46,8 @@ export function getFormatImages (item) {
 }
 
 export async function find (name, params = {}) {
+  const { find } = useStrapi()
   return sendRequest({ name, params }, async (query) => {
-    const { find } = useStrapi()
     return await find(query)
   })
 }
@@ -53,9 +80,11 @@ async function sendRequest ({ name, params }, cb) {
     meta: null,
     status: false,
   }
-  const { locale } = useI18n()
+  const { $i18n } = useNuxtApp()
+  const { iso } = $i18n.localeProperties.value
+
   const query = qs.stringify({
-    locale: toSimpleLocale(locale.value),
+    locale: toSimpleLocale(iso),
     populate: 'deep',
     ...params,
   }, { encodeValuesOnly: true })
@@ -70,7 +99,8 @@ async function sendRequest ({ name, params }, cb) {
       result.meta = meta
       result.status = true
     }
-  } catch (error) {
+  }
+  catch (error) {
     requestFinally()
     console.error('Error api asyncData:', error)
     // throw showError({ statusCode: error.code, statusMessage: error.message })

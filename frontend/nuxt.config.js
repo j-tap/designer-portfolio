@@ -1,6 +1,9 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import i18n from './config/i18n/'
 import strapi from './config/strapi'
+import sitemap from './config/sitemap'
+
+const baseURL = process.env.BASE_URL
 
 export default defineNuxtConfig({
 	runtimeConfig: {
@@ -8,7 +11,7 @@ export default defineNuxtConfig({
 			url: strapi.url,
 		},
 		public: {
-			baseURL: process.env.BASE_URL || 'http://localhost:3000',
+			baseURL,
 			NODE_ENV: process.env.NODE_ENV,
 		},
 	},
@@ -33,11 +36,16 @@ export default defineNuxtConfig({
 	  pageTransition: { name: 'page', mode: 'out-in' },
 		layoutTransition: { name: 'layout', mode: 'out-in' },
   },
+	site: {
+		url: baseURL,
+	},
   modules: [
 		'@nuxtjs/strapi',
 	  '@nuxtjs/i18n',
 		'@pinia/nuxt',
+		'nuxt-simple-sitemap',
   ],
   strapi,
 	i18n,
+	sitemap,
 })

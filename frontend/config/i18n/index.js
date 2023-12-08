@@ -6,6 +6,11 @@ export default {
   vueI18nLoader: true,
   globalInjection: true,
   defaultLocale,
+  detectBrowserLanguage: {
+    useCookie: true,
+    cookieKey: 'i18n_redirected',
+    redirectOn: 'root', // recommended
+  },
   locales: [
     {
       code: 'ru-RU',

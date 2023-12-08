@@ -8,9 +8,11 @@
       </ClientOnly>
       <h1 class="page-main__title" itemscope itemtype="https://schema.org/Person">
         <span class="title-section__row title-section__row_2 row-title-2">
-          <MarqueeBlock class="row-title-2__sub-large_sm" reverse>
-            <TitleOutline tag="div">{{ $t('menu.portfolio') }}</TitleOutline>&nbsp;
-          </MarqueeBlock>
+          <ClientOnly>
+            <MarqueeBlock class="row-title-2__sub-large_sm" reverse>
+              <TitleOutline tag="div">{{ $t('menu.portfolio') }}</TitleOutline>&nbsp;
+            </MarqueeBlock>
+          </ClientOnly>
           <TitleOutline class="row-title-2__sub-large_md-up" tag="div">{{ $t('menu.portfolio') }}</TitleOutline>
           <span class="row-title-2__sub-small" itemprop="jobTitle">{{ meta.specialization }}</span>
         </span>

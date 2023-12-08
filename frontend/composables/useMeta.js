@@ -39,6 +39,7 @@ export function metaInfo(info = {}) {
     title: title.value,
     link: [
       { rel: 'image_src', href: image.value },
+      { rel: 'canonical', href: baseUrl },
     ],
     meta: [
       { name: 'title', content: title.value },

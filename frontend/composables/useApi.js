@@ -1,5 +1,4 @@
 import qs from 'qs'
-import { useI18n } from 'vue-i18n'
 import { useLoadingStore } from '~/stores/loadingStore'
 
 export function serverFetch (name, params = {}, defaultValue = {}, fetchType = 'find') {

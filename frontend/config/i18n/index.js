@@ -2,7 +2,7 @@ export const defaultLocale = 'en-US'
 
 export default {
   defaultLocale,
-  debug: true,
+  debug: false,
   strategy: 'no_prefix',
   langDir: 'locales',
   globalInjection: false,
@@ -16,14 +16,14 @@ export default {
       name: 'Русский',
       dir: 'ltr',
       iso: 'ru-RU',
-      file: 'ru-RU.js',
+      file: 'ru-RU.json',
     },
     {
       code: 'en-US',
       name: 'English',
       dir: 'ltr',
       iso: 'ru-RU',
-      file: 'en-US.js',
+      file: 'en-US.json',
     },
   ],
   vueI18n: 'config/i18n/i18n.config.js', // path relative to nuxt.config

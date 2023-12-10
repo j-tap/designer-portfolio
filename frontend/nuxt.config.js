@@ -1,7 +1,4 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import VueI18nVitePlugin from '@intlify/unplugin-vue-i18n/vite'
-import { resolve, dirname } from 'node:path'
-import { fileURLToPath } from 'url'
 import i18n from './config/i18n/'
 import strapi from './config/strapi'
 import sitemap from './config/sitemap'
@@ -23,14 +20,6 @@ export default defineNuxtConfig({
 		},
 	},
 	vite: {
-		plugins: [
-			VueI18nVitePlugin({
-				// runtimeOnly: false,
-				include: [
-					resolve(dirname(fileURLToPath(import.meta.url)), './locales/*.json')
-				],
-			}),
-		],
 		css: {
 			preprocessorOptions: {
 				scss: {
@@ -55,6 +44,7 @@ export default defineNuxtConfig({
 		url: baseURL,
 	},
   modules: [
+		'@nuxtjs/i18n',
 		'@nuxtjs/strapi',
 		'@pinia/nuxt',
 		'nuxt-simple-sitemap',

@@ -4,7 +4,7 @@
       <div>
         <TitleOutline class="server-error__text" tag="h1">Sorry, unknown error</TitleOutline>
         <button class="server-error__btn" @click="handleError">Clear errors</button>
-        <div>
+        <div v-if="isDev">
           <p>Code: {{ error.statusCode }}</p>
           <p>URL: {{ error.url }}</p>
           <p>Status: {{ error.statusMessage }}</p>

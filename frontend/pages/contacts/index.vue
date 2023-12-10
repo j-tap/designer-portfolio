@@ -1,9 +1,9 @@
 <template>
   <div class="page-contacts">
     <h1 class="page-contacts__title page-title">
-      <TitleOutline class="page-title__item" tag="span">{{ $t('menu.contacts') }}</TitleOutline>
+      <TitleOutline class="page-title__item" tag="span">{{ t('menu.contacts') }}</TitleOutline>
       <ClientOnly>
-        &nbsp;<TitleOutline class="page-title__item" tag="span">{{ $t('menu.contacts') }}</TitleOutline>
+        &nbsp;<TitleOutline class="page-title__item" tag="span">{{ t('menu.contacts') }}</TitleOutline>
       </ClientOnly>
     </h1>
     <ul class="page-contacts__lis contacts-list">

@@ -1,15 +1,14 @@
 export const defaultLocale = 'en-US'
 
 export default {
+  defaultLocale,
+  debug: true,
   strategy: 'no_prefix',
   langDir: 'locales',
+  globalInjection: false,
   vueI18nLoader: true,
-  globalInjection: true,
-  defaultLocale,
   detectBrowserLanguage: {
-    useCookie: true,
-    cookieKey: 'i18n_redirected',
-    redirectOn: 'root', // recommended
+    useCookie: false,
   },
   locales: [
     {
@@ -27,5 +26,5 @@ export default {
       file: 'en-US.js',
     },
   ],
-  vueI18n: './config/i18n/i18n.config.js', // path relative to nuxt.config
+  vueI18n: 'config/i18n/i18n.config.js', // path relative to nuxt.config
 }

@@ -1,8 +1,8 @@
 import { useMetaStore } from '~/stores/metaStore'
+import { useI18n } from 'vue-i18n'
 
 export function metaInfo(info = {}) {
-  const { locale } = useI18n()
-  const { t } = useI18n()
+  const { t, locale } = useI18n()
   const route = useRoute()
   const config = useRuntimeConfig()
   const metaStore = useMetaStore()

@@ -4,7 +4,7 @@
       v-if="isDisplayHint"
       class="images-items__notify"
     >
-      {{ $t('carousel.pull_to_side_to_see_more') }} &rarr;
+      {{ t('carousel.pull_to_side_to_see_more') }} &rarr;
     </p>
     <div class="images-items__wrap-list">
       <ScrollBlock>
@@ -27,6 +27,7 @@
 <script setup>
 import { ScrollBlock } from '~/components/common'
 
+const { t } = useI18n()
 const props = defineProps({
   images: Array,
   imagesSize: {

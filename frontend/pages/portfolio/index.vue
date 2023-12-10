@@ -1,7 +1,7 @@
 <template>
   <div class="page-portfolio">
     <ContentWrap>
-      <h1 class="page-portfolio__title">Portfolio</h1>
+      <h1 class="page-portfolio__title">{{t('menu.portfolio')}}</h1>
       <PortfolioCategories :items="categories" />
     </ContentWrap>
   </div>

@@ -7,7 +7,6 @@
 </template>
 
 <script setup>
-import { initLocale } from '~/composables/useInitLocale'
 import { useCommonStore } from '~/stores/commonStore'
 import { useMetaStore } from '~/stores/metaStore'
 import { useLoadingStore } from '~/stores/loadingStore'
@@ -18,7 +17,6 @@ const commonStore = useCommonStore()
 const metaStore = useMetaStore()
 const loadingStore = useLoadingStore()
 
-initLocale()
 updateMeta()
 
 const classes = computed(() => {

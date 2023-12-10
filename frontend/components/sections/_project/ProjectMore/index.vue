@@ -1,6 +1,6 @@
 <template>
   <div class="more-projects">
-    <h2 class="more-projects__title">{{ $t('project.more_my_projects') }}</h2>
+    <h2 class="more-projects__title">{{ t('project.more_my_projects') }}</h2>
     <ScrollBlock class="more-projects__wrap-list">
       <ul class="more-projects__list">
         <li
@@ -26,6 +26,7 @@
 import { ScrollBlock } from '~/components/common'
 import { ProjectPreview } from '~/components/sections'
 
+const { t } = useI18n()
 const route = useRoute()
 const props = defineProps({
   items: Array,

@@ -16,6 +16,7 @@ export default defineNuxtConfig({
 		},
 		public: {
 			baseURL,
+			yandexMetrikaId: process.env.YANDEX_METRIKA_ID,
 			NODE_ENV: process.env.NODE_ENV,
 		},
 	},

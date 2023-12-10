@@ -10,10 +10,10 @@
         <span class="title-section__row title-section__row_2 row-title-2">
           <ClientOnly>
             <MarqueeBlock class="row-title-2__sub-large_sm" reverse>
-              <TitleOutline tag="div">{{ $t('menu.portfolio') }}</TitleOutline>&nbsp;
+              <TitleOutline tag="div">{{ t('menu.portfolio') }}</TitleOutline>&nbsp;
             </MarqueeBlock>
           </ClientOnly>
-          <TitleOutline class="row-title-2__sub-large_md-up" tag="div">{{ $t('menu.portfolio') }}</TitleOutline>
+          <TitleOutline class="row-title-2__sub-large_md-up" tag="div">{{ t('menu.portfolio') }}</TitleOutline>
           <span class="row-title-2__sub-small" itemprop="jobTitle">{{ meta.specialization }}</span>
         </span>
         <span class="title-section__row title-section__row_3 row-title-3">
@@ -29,39 +29,39 @@
         </span>
       </h1>
       <h2 class="title-section__row title-section__row_4">
-        <span class="title-section__row_4__sub-small" v-html="home.small_description" />
+        <span class="title-section__row_4__sub-small" v-html="home?.small_description" />
         <TitleOutline class="title-section__row_4__sub-large" tag="div">{{ meta.specialization }}</TitleOutline>
       </h2>
     </section>
 
     <section class="page-main__section-info info-section">
       <h3 class="info-section__title">
-        {{ home.experience?.title }}
+        {{ home?.experience?.title }}
       </h3>
-      <HtmlMarked :text="home.experience?.text" class="info-section__description" />
+      <HtmlMarked :text="home?.experience?.text" class="info-section__description" />
 
       <div class="info-section__details info-details">
         <div class="info-details__one">
           <h3 class="info-details__title">
-            {{ home.tools?.title }}
+            {{ home?.tools?.title }}
           </h3>
-          <HtmlMarked :text="home.tools?.text" class="info-details__list-column" />
+          <HtmlMarked :text="home?.tools?.text" class="info-details__list-column" />
         </div>
         <div class="info-details__two">
-          <h3 class="info-details__title">{{ home.skills?.title }}</h3>
-          <HtmlMarked :text="home.skills?.text" />
+          <h3 class="info-details__title">{{ home?.skills?.title }}</h3>
+          <HtmlMarked :text="home?.skills?.text" />
         </div>
       </div>
 
       <div class="info-important">
         <h3 class="info-important__title">
-          {{ home.important?.title }}
+          {{ home?.important?.title }}
         </h3>
-        <HtmlMarked :text="home.important?.text" class="info-important__text" />
+        <HtmlMarked :text="home?.important?.text" class="info-important__text" />
       </div>
 
       <div class="info-section__portfolio">
-        <h3 class="info-section__title info-section__title_small">{{ $t('menu.portfolio') }}</h3>
+        <h3 class="info-section__title info-section__title_small">{{ t('menu.portfolio') }}</h3>
         <PortfolioCategories :items="categories" />
       </div>
     </section>
@@ -74,7 +74,9 @@ import { PortfolioCategories } from '~/components/sections'
 import { serverFetch } from '~/composables/useApi'
 import { metaInfo } from '~/composables/useMeta'
 import { useMetaStore } from '~/stores/metaStore'
-
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
+console.log('t', t('menu.main'))
 const metaStore = useMetaStore()
 const meta = computed(() => metaStore.getMetaInfo)
 const home = serverFetch('home', {})

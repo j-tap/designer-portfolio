@@ -7,13 +7,14 @@
     }"
     class="project-back"
   >
-    {{ $t('portfolio.back_to_portfolio') }}
+    {{ t('portfolio.back_to_portfolio') }}
   </BackLink>
 </template>
 
 <script setup>
 import { BackLink } from '~/components/common'
 
+const { t } = useI18n()
 const props = defineProps({
   categoryName: String,
   projectId: Number,

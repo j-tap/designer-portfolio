@@ -1,4 +1,5 @@
 import qs from 'qs'
+import { useI18n } from 'vue-i18n'
 import { useLoadingStore } from '~/stores/loadingStore'
 
 export function serverFetch (name, params = {}, defaultValue = {}, fetchType = 'find') {
@@ -18,7 +19,7 @@ export function serverFetch (name, params = {}, defaultValue = {}, fetchType = '
   }
   const fetchFunction = methods[fetchType]
   useAsyncData(key, fetchFunction, {
-    // getCachedData: key => nuxtApp.payload?.static?.[key] ?? nuxtApp.payload?.data?.[key],
+    getCachedData: key => nuxtApp.payload?.static?.[key] ?? nuxtApp.payload?.data?.[key],
   })
     .then(({ data }) => {
       result.value = data.value?.data
@@ -75,16 +76,14 @@ export async function findOne (name, params = {}) {
 }
 
 async function sendRequest ({ name, params }, cb) {
+  const { locale } = useI18n()
   let result = {
     data: null,
     meta: null,
     status: false,
   }
-  const { $i18n } = useNuxtApp()
-  const { iso } = $i18n.localeProperties.value
-
   const query = qs.stringify({
-    locale: toSimpleLocale(iso),
+    locale: toSimpleLocale(locale.value),
     populate: 'deep',
     ...params,
   }, { encodeValuesOnly: true })

@@ -1,6 +1,6 @@
 <template>
   <div class="project-steps">
-    <h2 class="project-steps__title">{{ $t('project.steps') }}</h2>
+    <h2 class="project-steps__title">{{ t('project.steps') }}</h2>
     <ol class="project-steps__list">
       <li
           v-for="item in props.steps"
@@ -14,6 +14,7 @@
 </template>
 
 <script setup>
+const { t } = useI18n()
 const props = defineProps({
   steps: Array,
 })

@@ -1,6 +1,6 @@
 <template>
   <div class="project-fonts" v-if="props.items.length">
-    <h2 class="project-fonts__title">{{ $t('project.fonts') }}</h2>
+    <h2 class="project-fonts__title">{{ t('project.fonts') }}</h2>
     <ul class="project-fonts__list">
       <li
         v-for="item in props.items"
@@ -14,6 +14,7 @@
 </template>
 
 <script setup>
+const { t } = useI18n()
 const config = useRuntimeConfig()
 const props = defineProps({
   items: { type: Array, default: () => [] },

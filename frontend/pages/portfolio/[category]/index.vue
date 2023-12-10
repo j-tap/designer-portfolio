@@ -5,7 +5,7 @@
         :to="{ name: 'portfolio' }"
         class="page-category__back"
       >
-        {{ $t('portfolio.back_to_portfolio') }}
+        {{ t('portfolio.back_to_portfolio') }}
       </BackLink>
 
       <TitleOutline
@@ -43,7 +43,7 @@
         :to="{ name: 'portfolio' }"
         class="page-category__back"
       >
-        {{ $t('portfolio.back_to_portfolio') }}
+        {{ t('portfolio.back_to_portfolio') }}
       </BackLink>
     </ContentWrap>
   </div>

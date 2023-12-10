@@ -74,9 +74,7 @@ import { PortfolioCategories } from '~/components/sections'
 import { serverFetch } from '~/composables/useApi'
 import { metaInfo } from '~/composables/useMeta'
 import { useMetaStore } from '~/stores/metaStore'
-import { useI18n } from 'vue-i18n'
-const { t } = useI18n()
-console.log('t', t('menu.main'))
+
 const metaStore = useMetaStore()
 const meta = computed(() => metaStore.getMetaInfo)
 const home = serverFetch('home', {})

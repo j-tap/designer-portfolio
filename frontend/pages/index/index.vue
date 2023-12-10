@@ -75,6 +75,7 @@ import { serverFetch } from '~/composables/useApi'
 import { metaInfo } from '~/composables/useMeta'
 import { useMetaStore } from '~/stores/metaStore'
 
+const { t } = useI18n()
 const metaStore = useMetaStore()
 const meta = computed(() => metaStore.getMetaInfo)
 const home = serverFetch('home', {})

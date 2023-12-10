@@ -34,6 +34,7 @@ export default defineNuxtConfig({
       viewport: 'width=device-width, initial-scale=1.0',
 			meta: [
 				{ name: 'google-site-verification', content: process.env.GOOGLE_SITE_VERIFICATION },
+				{ name: 'yandex-verification', content: process.env.YANDEX_SITE_VERIFICATION },
 				{ 'http-equiv': 'Cache-Control', content: `max-age=${process.env.CACHE_TIME || '60'}, must-revalidate` },
 			],
     },

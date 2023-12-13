@@ -1,3 +1,7 @@
+const excludes = [
+  'identity',
+]
+
 export default {
   urls: async () => {
     const portfolioUrl = '/portfolio'
@@ -14,7 +18,9 @@ export default {
 
     projects.forEach(project => {
       project.categories.forEach(category => {
-        dynamicRoutes.push(`${portfolioUrl}/${category.slug}/${project.slug}`)
+        if (!excludes.includes(category.slug)) {
+          dynamicRoutes.push(`${portfolioUrl}/${category.slug}/${project.slug}`)
+        }
       })
     })
 

@@ -1,38 +1,47 @@
 import { asSitemapUrl, defineSitemapEventHandler } from '#imports'
 
-const excludes = [
+const excludesCategories = [
   'identity',
 ]
+const excludesSubcategories = [
+  'logotipy',
+]
+const portfolioUrl = '/portfolio'
 
 export default defineSitemapEventHandler(async () => {
-  const portfolioUrl = '/portfolio'
   const apiUrl = process.env.STRAPI_URL + '/api'
-  const { data: categories } = await $fetch(`${apiUrl}/category-projects`)
-  const { data: projects } = await $fetch(`${apiUrl}/projects?populate=categories`)
+  const { data: categories } = await $fetch(`${apiUrl}/category-projects?populate=subcategories`)
+  const { data: projects } = await $fetch(`${apiUrl}/projects?populate=categories&populate=subcategories`)
   const dynamicRoutes = []
 
   categories.forEach(category => {
-    dynamicRoutes.push(`${portfolioUrl}/${category.slug}`)
+    if (!excludesCategories.includes(category.slug)) {
+      dynamicRoutes.push(`${portfolioUrl}/${category.slug}`)
+    }
+    if (category.subcategories) {
+      category.subcategories.forEach(subcategory => {
+        dynamicRoutes.push(`${portfolioUrl}/${category.slug}/${subcategory.slug}`)
+      })
+    }
   })
 
   projects.forEach(project => {
-    project.categories.forEach(category => {
-      if (!excludes.includes(category.slug)) {
-        dynamicRoutes.push(`${portfolioUrl}/${category.slug}/${project.slug}`)
-      }
-    })
+    console.log(project)
+    if (project.subcategories?.length) {
+      project.subcategories.forEach(subcategory => {
+        if (!excludesSubcategories.includes(subcategory.slug)) {
+          dynamicRoutes.push(`${portfolioUrl}/${subcategory.category.slug}/${subcategory.slug}/${project.slug}`)
+        }
+      })
+    }
+    else {
+      project.categories.forEach(category => {
+        if (!excludesCategories.includes(category.slug)) {
+          dynamicRoutes.push(`${portfolioUrl}/${category.slug}/${project.slug}`)
+        }
+      })
+    }
   })
 
   return dynamicRoutes
-
-  // // fetch data directly in the correct type
-  // const posts = await $fetch<ReturnType<typeof asSitemapUrl>>('/api/posts')
-  // const pages = await $fetch<{ pages: { slug: string, title: string } }>('/api/posts')
-  // return [
-  //   ...posts,
-  //   // map URLS as needed
-  //   ...pages.map(p => asSitemapUrl({
-  //     loc: p.slug,
-  //   }))
-  // ]
 })

@@ -81,6 +81,28 @@
         margin-left: $content__indent-x_lg;
       }
     }
+    &:nth-child(4) {
+      @include screen('sm') {
+        margin-left: -200px;
+      }
+      @include screen('md') {
+        margin-left: $content__indent-x_md;
+      }
+      @include screen('lg') {
+        margin-left: $content__indent-x_lg;
+      }
+    }
+    &:nth-child(5) {
+      @include screen('sm') {
+        margin-left: -150px;
+      }
+      @include screen('md') {
+        margin-left: $content__indent-x_md;
+      }
+      @include screen('lg') {
+        margin-left: $content__indent-x_lg;
+      }
+    }
   }
 
   &__link {

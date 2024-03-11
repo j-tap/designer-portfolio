@@ -1,0 +1,52 @@
+.title-page {
+  $self: &;
+
+  font-size: clamp(46px, 8.6vw, 170px);
+  text-transform: uppercase;
+  white-space: nowrap;
+  line-height: 1;
+  margin: 0;
+
+  @include screen('sm') {
+    padding-left: $content__indent-x_sm;
+  }
+  @include screen('md') {
+    padding-left: $content__indent-x_md;
+  }
+  @include screen('lg') {
+    padding-left: $content__indent-x_lg;
+  }
+
+  &_decor {
+    position: relative;
+
+    @include screen('md-up') {
+      left: 50%;
+      transform: translateX(-50%);
+      margin-left: -34%;
+    }
+
+    #{$self}__item {
+      &:nth-child(1) {
+        @include screen('sm') {
+          display: none;
+        }
+        @include screen('md-up') {
+          display: inline-block;
+        }
+      }
+    }
+  }
+
+  &__item {
+    font-family: $font__decor;
+
+    &:nth-child(1) {
+      display: none;
+    }
+
+    &:nth-child(2) {
+      color: $color__white;
+    }
+  }
+}

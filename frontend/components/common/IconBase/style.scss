@@ -3,7 +3,7 @@
   display: inline-block;
   color: inherit;
 
-  &_size-xl {
+  &_size-md {
     @include screen('sm') {
       width: 24px;
       height: 24px;
@@ -11,6 +11,17 @@
     @include screen('md-up') {
       width: 44px;
       height: 44px;
+    }
+  }
+
+  &_size-lg {
+    @include screen('sm') {
+      width: 36px;
+      height: 36px;
+    }
+    @include screen('md-up') {
+      width: 66px;
+      height: 66px;
     }
   }
 

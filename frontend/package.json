@@ -4,23 +4,24 @@
   "version": "1.1.0",
   "scripts": {
     "build": "nuxt build",
-    "dev": "nuxt dev --port 3019",
+    "dev": "nuxt dev --port 3019 --host 0.0.0.0",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
-    "@nuxtjs/strapi": "^1.9.3",
-    "nuxt": "^3.8.2",
-    "nuxt-simple-sitemap": "^4.1.9"
+    "@nuxtjs/sitemap": "^5.1.2",
+    "@nuxtjs/strapi": "^1.11.0",
+    "nuxt": "^3.10.3"
   },
   "dependencies": {
-    "@nuxtjs/i18n": "8.0.0-rc.8",
+    "@nuxt/devtools": "npm:@nuxt/devtools-edge@latest",
+    "@nuxtjs/i18n": "^8.1.1",
     "@pinia/nuxt": "^0.5.1",
     "blurhash": "^2.0.5",
-    "marked": "^10.0.0",
+    "marked": "^12.0.1",
     "pinia": "^2.1.7",
-    "qs": "^6.11.2",
-    "sass": "1.69.5"
+    "qs": "^6.12.0",
+    "sass": "^1.71.1"
   }
 }

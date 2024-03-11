@@ -1,0 +1,47 @@
+.portfolio-subcategories-nav {
+  &__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: clamp(15px, 3vw, 50px)
+  }
+
+  &__item {
+    line-height: 1;
+    font-weight: 700;
+    font-size: clamp(18px, 2.4vw, 30px);
+    text-transform: uppercase;
+  }
+
+  &__link {
+    display: inline-block;
+    position: relative;
+    text-decoration: none;
+    color: inherit;
+    transition: color .15s ease-in;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      right: 50%;
+      height: 1px;
+      background-color: $color__blue;
+      transition: left .15s ease-in, right .15s ease-in;
+    }
+
+    &_active,
+    &:hover,
+    &:focus {
+      color: $color__blue;
+
+      &::after {
+        left: 0;
+        right: 0;
+      }
+    }
+  }
+}

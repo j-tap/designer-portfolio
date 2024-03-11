@@ -1,4 +1,4 @@
-.page-project {
+.portfolio-project {
   & &__links {
     @include screen('sm') {
       width: calc(100% + $content__indent-x_sm * 2);

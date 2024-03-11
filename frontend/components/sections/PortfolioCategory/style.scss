@@ -3,20 +3,15 @@
 
   &__back {
     &:first-child {
-      padding-bottom: 6vw;
+      padding-bottom: 1vw;
     }
     &:last-child {
       padding-top: 6vw;
     }
   }
 
-  &__title {
+  &__head {
     margin: 6.7vw 0 0 auto;
-    font-size: clamp(35px, 5vw, 130px);
-    text-transform: uppercase;
-    font-weight: 700;
-    line-height: 1;
-    display: block;
 
     @include screen('sm') {
       margin-bottom: 30px;
@@ -32,6 +27,24 @@
         margin-top: -20.3vw;
       }
     }
+  }
+}
+
+.page-category-head {
+  display: block;
+  position: relative;
+
+  &__title {
+    font-size: clamp(35px, 5vw, 130px);
+    text-transform: uppercase;
+    font-weight: 700;
+    line-height: 1;
+    display: block;
+  }
+
+  &__nav {
+    margin-top: clamp(14px, 2vw, 25px);
+    margin-bottom: clamp(25px, 6vw, 60px);
   }
 }
 

@@ -4,11 +4,20 @@ import strapi from './config/strapi'
 import sitemap from './config/sitemap'
 
 const baseURL = process.env.BASE_URL
+const isDev = process.env.NODE_ENV !== 'production'
 
 export default defineNuxtConfig({
-	debug: false,
+	// debug: isDev,
+	devtools: { enabled: isDev },
 	build: {
 		transpile: ['vue-i18n'],
+	},
+	nitro: {
+		prerender: {
+			crawlLinks: true,
+			routes: ['/', 'sitemap.xml'],
+			ignore: ['/card'],
+		},
 	},
 	runtimeConfig: {
 		strapi: {
@@ -46,10 +55,11 @@ export default defineNuxtConfig({
 		url: baseURL,
 	},
   modules: [
+		'@nuxt/devtools',
 		'@nuxtjs/i18n',
+		'@nuxtjs/sitemap',
 		'@nuxtjs/strapi',
 		'@pinia/nuxt',
-		'nuxt-simple-sitemap',
   ],
   strapi,
 	i18n,

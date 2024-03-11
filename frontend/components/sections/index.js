@@ -1,5 +1,9 @@
 export { default as PortfolioCategories } from './PortfolioCategories'
+export { default as PortfolioCategory } from './PortfolioCategory'
+export { default as PortfolioProject } from './PortfolioProject'
+export { default as PortfolioSubcategoriesNav } from './PortfolioSubcategoriesNav'
 export { default as ImagesItems } from './ImagesItems'
+export { default as SocialsList } from './SocialsList'
 export { default as Error404 } from './Error404'
 
 export { default as ProjectBack } from './_project/ProjectBack'

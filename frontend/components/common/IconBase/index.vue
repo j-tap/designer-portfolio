@@ -20,7 +20,15 @@ const props = defineProps({
 
 const icon = computed(() => `${kebabToPascalCase(props.name)}`)
 const iconComponent = computed(() =>
-    defineAsyncComponent(() => import(`./icons/Icon${icon.value}.vue`)))
+  defineAsyncComponent(async () => {
+    try {
+      return await import(`./icons/Icon${icon.value}.vue`);
+    }
+    catch (err) {
+      return await import('./icons/IconUnknown.vue');
+    }
+  })
+)
 
 const classes = computed(() => [
   'icon',

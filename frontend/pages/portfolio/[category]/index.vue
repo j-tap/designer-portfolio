@@ -1,70 +1,28 @@
 <template>
   <div class="page-category">
     <ContentWrap>
-      <BackLink
-        :to="{ name: 'portfolio' }"
-        class="page-category__back"
-      >
-        {{ t('portfolio.back_to_portfolio') }}
-      </BackLink>
-
-      <TitleOutline
-        class="page-category__title"
-        tag="h1"
-      >
-        {{ title }}
-      </TitleOutline>
-
-      <ul class="page-category__projects projects-list">
-        <li
-          v-for="project in projects"
-          :key="project.slug"
-          :id="`project-${project.id}`"
-          :ref="setProjectElems"
-          class="projects-list__item"
-        >
-          <ProjectPreview
-            :data="project"
-            :to="isCategoryIdentity ? null : {
-              name: 'portfolio-category-project',
-              params: {
-                category: categorySlug,
-                project: project.slug,
-              }
-            }"
-            title-tag="h2"
-            class="projects-list__item-preview"
-          />
-        </li>
-      </ul>
-
-      <BackLink
-        v-if="projects.length > 1"
-        :to="{ name: 'portfolio' }"
-        class="page-category__back"
-      >
-        {{ t('portfolio.back_to_portfolio') }}
-      </BackLink>
+      <PortfolioCategory
+        :projects="projects"
+        :category="category"
+        :subcategories="subcategories"
+        :title="title"
+        :back="{
+          to: { name: 'portfolio' },
+          title: t('portfolio.back_to_portfolio'),
+        }"
+      />
     </ContentWrap>
   </div>
 </template>
 
 <script setup>
-import { BackLink, TitleOutline } from '~/components/common'
 import { ContentWrap } from '~/components/structure'
-import { ProjectPreview } from '~/components/sections'
-import { metaInfo } from '~/composables/useMeta'
-import { serverFetch } from '~/composables/useApi'
-import {
-  updateProjectsPrlx,
-  elems as projectElems,
-} from '~/composables/useElemsParalax'
-import { display404 } from '~/composables/useErrorContent'
+import { PortfolioCategory } from '~/components/sections'
 
 const { t } = useI18n()
 const route = useRoute()
+const router = useRouter()
 const categorySlug = computed(() => route.params.category)
-const isCategoryIdentity = computed(() => categorySlug.value === 'identity')
 
 definePageMeta({
   key: route => route.fullPath
@@ -83,9 +41,19 @@ const projects = serverFetch('projects', {
 const category = serverFetch('category-projects', {
   slug: categorySlug.value
 }, {}, 'findBySlug')
+const subcategories = computed(() => category.value?.subcategories?.sort((a, b) => a.rank - b.rank) || [])
 const title = computed(() => category.value?.title)
 
 watch(category, async (val) => {
+  if (subcategories.value?.length) {
+    router.push({
+      name: 'portfolio-category-subcategory',
+      params: {
+        category: categorySlug.value,
+        subcategory: subcategories.value[0].slug,
+      },
+    })
+  }
   if (!val?.id) {
     display404()
   }
@@ -101,14 +69,5 @@ function scrollHandler () {
   }
 }
 
-function setProjectElems (el) {
-  if (el) {
-    // TODO: Need clean after updated
-    projectElems.value.push(el)
-  }
-}
-
 useHead(metaInfo({ title }))
 </script>
-
-<style lang="scss" src="./style.scss" scoped/>

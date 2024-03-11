@@ -89,7 +89,8 @@ async function sendRequest ({ name, params }, cb) {
 
   try {
     requestStart()
-    const { data, meta } = await cb(`${name}?${query}`)
+    const url = `${name}?${query}`
+    const { data, meta } = await cb(url)
     requestFinally()
 
     if (data) {

@@ -3,7 +3,7 @@
     <NuxtLink
       :to="to"
     >
-      <IconBase name="arrow-left" size="xl" />
+      <IconBase name="arrow-left" />
       <slot />
     </NuxtLink>
   </div>

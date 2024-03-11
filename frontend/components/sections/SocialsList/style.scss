@@ -1,0 +1,45 @@
+$widthItem: clamp(80px, 8vw, 142px);
+$gap: clamp(15px, 4vw, 90px);
+$indent: calc($gap + $widthItem);
+
+.socials-list {
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: $gap;
+
+  @include screen('sm') {
+    width: calc($indent + $gap + $widthItem * 2);
+  }
+  @include screen('md-up') {
+    width: calc($indent + $gap + $widthItem * 4);
+  }
+
+  &__item {
+    display: block;
+    width: $widthItem;
+    height: $widthItem;
+
+    @include screen('sm') {
+      &:nth-child(4n + 3) {
+        margin-left: $indent;
+      }
+    }
+    @include screen('md-up') {
+      &:nth-child(5n + 4) {
+        margin-left: $indent;
+      }
+    }
+  }
+
+  &__link {
+    display: flex;
+    text-decoration: none;
+    width: 100%;
+    height: 100%;
+    border: 1px solid $color__white;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5vw;
+  }
+}

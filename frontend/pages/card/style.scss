@@ -1,0 +1,49 @@
+.page-card {
+  &__subtitle {
+    font-weight: 700;
+    font-size: clamp(30px, 3.2vw, 60px);
+    text-transform: uppercase;
+    text-align: right;
+    margin: 1vw 0 0;
+    line-height: 1;
+
+    @include screen('sm') {
+      padding-right: $content__indent-x_sm;
+    }
+    @include screen('md') {
+      padding-right: $content__indent-x_md;
+    }
+    @include screen('lg') {
+      padding-right: $content__indent-x_lg;
+    }
+
+    b {
+      font-size: clamp(40px, 8vw, 70px);
+      padding-left: clamp(6px, 1vw, 15px);
+      white-space: nowrap;
+      vertical-align: text-bottom;
+    }
+  }
+
+  &__socials {
+    @include screen('sm') {
+      margin-top: 50px;
+    }
+    @include screen('md-up') {
+      margin-top: clamp(40px, 6vw, 80px);
+    }
+  }
+}
+
+.card-socials {
+  display: block;;
+
+  &__list {
+    list-style: none;
+    padding: 0;
+
+    & + & {
+      margin-top: clamp(15px, 4vw, 90px);
+    }
+  }
+}

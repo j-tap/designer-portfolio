@@ -26,7 +26,6 @@ export default defineSitemapEventHandler(async () => {
   })
 
   projects.forEach(project => {
-    console.log(project)
     if (project.subcategories?.length) {
       project.subcategories.forEach(subcategory => {
         if (!excludesSubcategories.includes(subcategory.slug)) {

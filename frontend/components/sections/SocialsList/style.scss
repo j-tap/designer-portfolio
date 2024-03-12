@@ -41,5 +41,11 @@ $indent: calc($gap + $widthItem);
     align-items: center;
     justify-content: center;
     padding: 1.5vw;
+    transition: border-color .15s ease-in;
+
+    &:hover {
+      color: $color__blue;
+      border-color: $color__blue;
+    }
   }
 }

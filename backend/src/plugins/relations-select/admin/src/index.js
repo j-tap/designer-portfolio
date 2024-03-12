@@ -9,7 +9,6 @@ const name = pluginPkg.strapi.name;
 
 export default {
   register(app) {
-    console.log('app', app);
     app.customFields.register({
       name: 'relations-select',
       pluginId,

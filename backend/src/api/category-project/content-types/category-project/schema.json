@@ -45,6 +45,12 @@
       },
       "type": "string",
       "required": false
+    },
+    "subcategories": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::subcategory-project.subcategory-project",
+      "mappedBy": "category"
     }
   }
 }

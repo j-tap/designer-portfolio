@@ -29,6 +29,11 @@ export interface PageContact extends Schema.Component {
       Attribute.SetMinMaxLength<{
         minLength: 2;
       }>;
+    display: Attribute.JSON &
+      Attribute.CustomField<
+        'plugin::multi-select.multi-select',
+        ['contacts', 'card']
+      >;
   };
 }
 

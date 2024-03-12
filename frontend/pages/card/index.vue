@@ -27,7 +27,7 @@ const contactsData = serverFetch('contact', {}, [])
 const links = computed(() => contactsData.value?.contact?.filter(filterLink).map(mapLink))
 
 function filterLink(link) {
-  return link.display.includes('card')
+  return link.display?.includes('card')
 }
 
 function mapLink (link) {

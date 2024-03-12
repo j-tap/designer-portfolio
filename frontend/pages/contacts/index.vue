@@ -35,7 +35,11 @@ import { serverFetch } from '~/composables/useApi'
 const { t } = useI18n()
 const title = ref(t('menu.contacts'))
 const contactsData = serverFetch('contact', {}, [])
-const contacts = computed(() => contactsData.value?.contact?.filter(o => o.display.includes('contacts')))
+const contacts = computed(() => contactsData.value?.contact?.filter(filterLink))
+
+function filterLink(link) {
+  return link.display?.includes('contacts')
+}
 
 useHead(metaInfo({ title }))
 </script>

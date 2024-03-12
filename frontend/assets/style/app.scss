@@ -60,6 +60,12 @@ a {
   }
 }
 
+.icon {
+  svg {
+    transition: color .15s ease-in-out;
+  }
+}
+
 .page-enter-active,
 .page-leave-active {
   transition: all .3s;

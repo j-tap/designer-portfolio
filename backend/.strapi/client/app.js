@@ -10,7 +10,11 @@ import multiSelect from "strapi-plugin-multi-select/strapi-admin";
 import relationsSelect from "../../src/plugins/relations-select/strapi-admin";
 import { renderAdmin } from "@strapi/strapi/admin";
 
+import customisations from "../../src/admin/app.js";
+
 renderAdmin(document.getElementById("strapi"), {
+  customisations,
+
   plugins: {
     "drag-drop-content-types": dragDropContentTypes,
     "color-picker": colorPicker,

@@ -44,7 +44,13 @@
         }
       },
       "type": "string",
-      "regex": "Системное поле"
+      "unique": false
+    },
+    "category": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::category-project.category-project",
+      "inversedBy": "subcategories"
     }
   }
 }

@@ -17,6 +17,14 @@
       "required": true,
       "minLength": 2,
       "regex": "(^(https?):\\/\\/[^\\s$.?#].[^\\s]*$)|(\\S+@\\S+\\.\\S+)"
+    },
+    "display": {
+      "type": "customField",
+      "options": [
+        "contacts",
+        "card"
+      ],
+      "customField": "plugin::multi-select.multi-select"
     }
   }
 }

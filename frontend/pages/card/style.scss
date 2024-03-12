@@ -17,11 +17,15 @@
       padding-right: $content__indent-x_lg;
     }
 
+    small {
+      font-size: inherit;
+      color: $color__gray;
+    }
+
     b {
       font-size: clamp(40px, 8vw, 70px);
       padding-left: clamp(6px, 1vw, 15px);
       white-space: nowrap;
-      vertical-align: text-bottom;
     }
   }
 

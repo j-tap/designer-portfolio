@@ -1,7 +1,10 @@
 <template>
   <div class="page-card">
     <TitlePage class="page-card__title" decor>{{ title }}</TitlePage>
-    <h2 class="page-card__subtitle">{{ meta.specialization }} <b>{{ meta.first_name }} {{ meta.last_name }}</b></h2>
+    <h2 class="page-card__subtitle">
+      <small>{{ meta.specialization }}</small>
+      <b>{{ meta.first_name }} {{ meta.last_name }}</b>
+    </h2>
 
     <div class="page-card__socials card-socials">
       <SocialsList

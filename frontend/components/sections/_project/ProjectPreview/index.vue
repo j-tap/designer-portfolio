@@ -1,7 +1,7 @@
 <template>
-  <NuxtLink
-    :to="to"
-    :class="classes"
+  <component
+    :is="wrapTag"
+    v-bind="wrapAttrs"
   >
     <figure class="project-preview__inner">
       <ImgBlock
@@ -14,11 +14,11 @@
         :alt="data.slug"
         itemprop
       />
-      <Component :is="titleTag" class="project-preview__title">
+      <component :is="titleTag" class="project-preview__title">
         {{ data.title }}
-      </Component>
+      </component>
     </figure>
-  </NuxtLink>
+  </component>
 </template>
 
 <script setup>
@@ -26,13 +26,20 @@ import { ImgBlock } from '~/components/common'
 
 const props = defineProps({
   data: Object,
-  to: Object,
+  to: {
+    type: Object,
+    default: null,
+  },
   titleTag: {
     type: String,
     default: 'figcaption',
   }
 })
-const classes = computed(() => ['project-preview', { 'project-preview_unlink': !props.to }])
+const wrapTag = computed(() => props.to ? resolveComponent('NuxtLink') : 'div')
+const wrapAttrs = computed(() => ({
+  class: ['project-preview', { 'project-preview_unlink': !props.to }],
+  ...(props.to ? { to: props.to } : {}),
+}))
 </script>
 
 <style lang="scss" src="./style.scss" scoped />

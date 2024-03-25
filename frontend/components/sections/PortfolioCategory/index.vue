@@ -122,13 +122,9 @@ function getTo ({ slug }) {
   const params = {
     category: categorySlug.value,
     project: slug,
+    ...(props.subcategories?.length ? { subcategory: subcategorySlug.value || props.subcategories[0].slug } : {}),
   }
-  let name = 'portfolio-category-project'
-
-  if (props.subcategories?.length) {
-    name = 'portfolio-category-subcategory-project'
-    params.subcategory = subcategorySlug.value
-  }
+  const name = props.subcategories?.length ? 'portfolio-category-subcategory-project' : 'portfolio-category-project'
 
   return { name, params }
 }

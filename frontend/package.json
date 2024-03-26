@@ -12,16 +12,16 @@
   "devDependencies": {
     "@nuxtjs/sitemap": "^5.1.2",
     "@nuxtjs/strapi": "^1.11.0",
-    "nuxt": "^3.10.3"
+    "nuxt": "^3.11.1"
   },
   "dependencies": {
-    "@nuxt/devtools": "npm:@nuxt/devtools-edge@latest",
-    "@nuxtjs/i18n": "^8.1.1",
+    "@nuxt/devtools": "^1.1.3",
+    "@nuxtjs/i18n": "^8.2.0",
     "@pinia/nuxt": "^0.5.1",
     "blurhash": "^2.0.5",
     "marked": "^12.0.1",
     "pinia": "^2.1.7",
     "qs": "^6.12.0",
-    "sass": "^1.71.1"
+    "sass": "^1.72.0"
   }
 }

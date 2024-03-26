@@ -9,9 +9,10 @@ const excludesSubcategories = [
 const portfolioUrl = '/portfolio'
 
 export default defineSitemapEventHandler(async () => {
-  const apiUrl = process.env.STRAPI_URL + '/api'
-  const { data: categories } = await $fetch(`${apiUrl}/category-projects?populate=subcategories`)
-  const { data: projects } = await $fetch(`${apiUrl}/projects?populate=categories&populate=subcategories`)
+  const config = useRuntimeConfig()
+  const urlApi = config.public.strapi.url + '/api'
+  const { data: categories } = await $fetch(`${urlApi}/category-projects?populate=subcategories`)
+  const { data: projects } = await $fetch(`${urlApi}/projects?populate=categories&populate=subcategories`)
   const dynamicRoutes = []
 
   categories.forEach(category => {

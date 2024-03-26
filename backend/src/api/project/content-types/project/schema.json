@@ -188,6 +188,18 @@
         }
       },
       "component": "common.meta"
+    },
+    "presentation": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": true,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
     }
   }
 }

@@ -60,7 +60,12 @@
     />
 
     <div class="portfolio-project__content">
+      <ProjectPresentation
+        v-if="project.presentation"
+        :data="project.presentation"
+      />
       <Component
+        v-else
         :is="projectComponentName"
         :data="project"
       />
@@ -88,6 +93,7 @@ import {
   ProjectTypeUiUx,
   ProjectTypeWeb,
   ProjectTypeIdentity,
+  ProjectPresentation,
   ProjectMore,
   ProjectBack,
 } from '~/components/sections'

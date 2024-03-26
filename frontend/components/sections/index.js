@@ -15,6 +15,7 @@ export { default as ProjectViews } from './_project/ProjectViews'
 export { default as ProjectViewsItem } from './_project/ProjectViews/item.vue'
 export { default as ProjectMore } from './_project/ProjectMore'
 export { default as ProjectPreview } from './_project/ProjectPreview'
+export { default as ProjectPresentation } from './_project/ProjectPresentation'
 
 export { default as ProjectTypeMobile } from './_projects-types/ProjectTypeMobile'
 export { default as ProjectTypeUiUx } from './_projects-types/ProjectTypeUiUx'

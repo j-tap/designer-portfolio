@@ -62,7 +62,7 @@
     <div class="portfolio-project__content">
       <ProjectPresentation
         v-if="project.presentation"
-        :data="project.presentation"
+        :images="project.presentation"
       />
       <Component
         v-else

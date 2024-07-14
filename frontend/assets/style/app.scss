@@ -4,6 +4,8 @@
 
 :root {
   color-scheme: dark;
+  accent-color: $color__blue;
+  outline-color: $color__blue;
 }
 
 ::selection {
@@ -89,4 +91,59 @@ a {
 .sr-only {
   position: absolute;
   left: -9999px;
+}
+
+.info-section {
+  @include screen('sm') {
+    padding: $content__indent-x_sm;
+  }
+  @include screen('md') {
+    padding: $content__indent-x_md;
+  }
+  @include screen('lg') {
+    padding: $content__indent-x_lg;
+  }
+}
+
+.field {
+  display: block;
+  width: 100%;
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid $color__white;
+  height: $control__size;
+  line-height: $control__size;
+  transition: border .15s ease-in-out;
+
+  &::placeholder {
+    color: $color__white;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: $color__blue;
+  }
+}
+
+textarea.field {
+  height: auto;
+  min-height: $control__size;
+  line-height: 1.2;
+  resize: none;
+}
+
+.btn {
+  background-color: $color__blue;
+  color: $color__dark;
+  border: none;
+  height: $control__size;
+  min-width: $control__size;
+  font-size: $btn__fs;
+  cursor: pointer;
+  transition: background-color .15s ease-in-out;
+
+  &:hover,
+  &:focus {
+    background-color: $color__white;
+  }
 }

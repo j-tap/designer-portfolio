@@ -1024,7 +1024,7 @@ export interface ApiMetaInfoMetaInfo extends Schema.SingleType {
         };
       }> &
       Attribute.DefaultTo<'\u041F\u0435\u0440\u0441\u043E\u043D\u0430\u043B\u044C\u043D\u044B\u0439 \u0441\u0430\u0439\u0442-\u043F\u043E\u0440\u0442\u0444\u043E\u043B\u0438\u043E UI/UX \u0434\u0438\u0437\u0430\u0439\u043D\u0435\u0440\u0430 \u041A\u043E\u043D\u043E\u0439\u043A\u043E \u0414\u0438\u0430\u043D\u044B'>;
-    image: Attribute.Media &
+    image: Attribute.Media<'images'> &
       Attribute.Required &
       Attribute.SetPluginOptions<{
         i18n: {
@@ -1164,20 +1164,20 @@ export interface ApiProjectProject extends Schema.CollectionType {
           localized: false;
         };
       }>;
-    preview: Attribute.Media &
+    preview: Attribute.Media<'images'> &
       Attribute.Required &
       Attribute.SetPluginOptions<{
         i18n: {
           localized: false;
         };
       }>;
-    preview_social: Attribute.Media &
+    preview_social: Attribute.Media<'images'> &
       Attribute.SetPluginOptions<{
         i18n: {
           localized: false;
         };
       }>;
-    images: Attribute.Media &
+    images: Attribute.Media<'images', true> &
       Attribute.SetPluginOptions<{
         i18n: {
           localized: false;
@@ -1211,7 +1211,7 @@ export interface ApiProjectProject extends Schema.CollectionType {
           localized: true;
         };
       }>;
-    preview_hover: Attribute.Media &
+    preview_hover: Attribute.Media<'images'> &
       Attribute.SetPluginOptions<{
         i18n: {
           localized: false;
@@ -1229,7 +1229,7 @@ export interface ApiProjectProject extends Schema.CollectionType {
           localized: true;
         };
       }>;
-    presentation: Attribute.Media &
+    presentation: Attribute.Media<'images', true> &
       Attribute.SetPluginOptions<{
         i18n: {
           localized: true;
@@ -1253,6 +1253,167 @@ export interface ApiProjectProject extends Schema.CollectionType {
       'api::project.project',
       'oneToMany',
       'api::project.project'
+    >;
+    locale: Attribute.String;
+  };
+}
+
+export interface ApiReviewReview extends Schema.CollectionType {
+  collectionName: 'reviews';
+  info: {
+    singularName: 'review';
+    pluralName: 'reviews';
+    displayName: '\u041E\u0442\u0437\u044B\u0432\u044B';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    name: Attribute.String & Attribute.Required;
+    company: Attribute.String & Attribute.Required;
+    link: Attribute.String;
+    rating: Attribute.Integer &
+      Attribute.Required &
+      Attribute.SetMinMax<
+        {
+          min: 1;
+          max: 5;
+        },
+        number
+      > &
+      Attribute.DefaultTo<5>;
+    text: Attribute.Text;
+    development: Attribute.Relation<
+      'api::review.review',
+      'oneToOne',
+      'api::reviews-development.reviews-development'
+    >;
+    cooperation: Attribute.Relation<
+      'api::review.review',
+      'oneToOne',
+      'api::reviews-cooperation.reviews-cooperation'
+    >;
+    files: Attribute.Media<'images' | 'files' | 'videos', true>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::review.review',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::review.review',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiReviewsCooperationReviewsCooperation
+  extends Schema.CollectionType {
+  collectionName: 'reviews_cooperations';
+  info: {
+    singularName: 'reviews-cooperation';
+    pluralName: 'reviews-cooperations';
+    displayName: '\u041E\u0442\u0437\u044B\u0432\u044B - \u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u0447\u0435\u0441\u0442\u0432\u043E';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    title: Attribute.String &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    rank: Attribute.String &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::reviews-cooperation.reviews-cooperation',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::reviews-cooperation.reviews-cooperation',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    localizations: Attribute.Relation<
+      'api::reviews-cooperation.reviews-cooperation',
+      'oneToMany',
+      'api::reviews-cooperation.reviews-cooperation'
+    >;
+    locale: Attribute.String;
+  };
+}
+
+export interface ApiReviewsDevelopmentReviewsDevelopment
+  extends Schema.CollectionType {
+  collectionName: 'reviews_developments';
+  info: {
+    singularName: 'reviews-development';
+    pluralName: 'reviews-developments';
+    displayName: '\u041E\u0442\u0437\u044B\u0432\u044B - \u0440\u0430\u0437\u0440\u0430\u0431\u043E\u0442\u043A\u0430';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    title: Attribute.String &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    rank: Attribute.String &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::reviews-development.reviews-development',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::reviews-development.reviews-development',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    localizations: Attribute.Relation<
+      'api::reviews-development.reviews-development',
+      'oneToMany',
+      'api::reviews-development.reviews-development'
     >;
     locale: Attribute.String;
   };
@@ -1399,6 +1560,9 @@ declare module '@strapi/types' {
       'api::home.home': ApiHomeHome;
       'api::meta-info.meta-info': ApiMetaInfoMetaInfo;
       'api::project.project': ApiProjectProject;
+      'api::review.review': ApiReviewReview;
+      'api::reviews-cooperation.reviews-cooperation': ApiReviewsCooperationReviewsCooperation;
+      'api::reviews-development.reviews-development': ApiReviewsDevelopmentReviewsDevelopment;
       'api::step.step': ApiStepStep;
       'api::subcategory-project.subcategory-project': ApiSubcategoryProjectSubcategoryProject;
     }

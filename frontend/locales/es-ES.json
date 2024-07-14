@@ -1,0 +1,24 @@
+{
+  "app.name": "Diseñador UI/UX Konoiko Diana",
+  "app.card": "Tarjeta",
+
+  "menu.main": "Inicio",
+  "menu.portfolio": "Portafolio",
+  "menu.reviews": "Reseñas",
+  "menu.contacts": "Contactos",
+
+  "portfolio.back_to_portfolio": "volver al portafolio",
+  "portfolio.back_to_{category}": "volver a {category}",
+  "project.steps": "Pasos",
+  "project.price": "Precio",
+  "project.development_time": "Tiempo de desarrollo",
+  "project.fonts": "Fuentes",
+  "project.more_my_projects": "Más de mis proyectos",
+  "project.other_pages": "Otras páginas",
+  "project.adaptive_version": "Versión adaptable",
+  "project.other_pages_subtitle": "Además de las páginas únicas, también hay típicas",
+  "project.adaptive_version_subtitle": "Versión adaptable",
+  "carousel.pull_to_side_to_see_more": "arrastra la ventana hacia un lado para ver más",
+  "common.hour": "Horas | Hora | Horas | Horas",
+  "common.error_{code}": "Error {code}"
+}

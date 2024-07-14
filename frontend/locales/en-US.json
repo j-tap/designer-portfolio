@@ -1,9 +1,12 @@
 {
   "app.name": "UI/UX designer Konoiko Diana",
   "app.card": "Card",
+
   "menu.main": "Home",
   "menu.portfolio": "Portfolio",
+  "menu.reviews": "Reviews",
   "menu.contacts": "Contacts",
+
   "portfolio.back_to_portfolio": "back to portfolio",
   "portfolio.back_to_{category}": "back to {category}",
   "project.steps": "Steps",

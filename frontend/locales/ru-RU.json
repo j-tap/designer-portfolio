@@ -1,9 +1,12 @@
 {
   "app.name": "UI/UX дизайнер Конойко Диана",
   "app.card": "Визитка",
+
   "menu.main": "Главная",
   "menu.portfolio": "Портфолио",
+  "menu.reviews": "Отзывы",
   "menu.contacts": "Контакты",
+
   "portfolio.back_to_portfolio": "вернуться к портфолио",
   "portfolio.back_to_{category}": "вернуться в {category}",
   "project.steps": "Этапы",

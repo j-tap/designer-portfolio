@@ -149,16 +149,6 @@
 }
 
 .info-section {
-  @include screen('sm') {
-    padding: $content__indent-x_sm;
-  }
-  @include screen('md') {
-    padding: $content__indent-x_md;
-  }
-  @include screen('lg') {
-    padding: $content__indent-x_lg;
-  }
-
   &__title {
     margin: 0;
     padding: 0;

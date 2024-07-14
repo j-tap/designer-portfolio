@@ -1,0 +1,57 @@
+{
+  "kind": "collectionType",
+  "collectionName": "reviews",
+  "info": {
+    "singularName": "review",
+    "pluralName": "reviews",
+    "displayName": "Отзывы",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "company": {
+      "type": "string",
+      "required": true
+    },
+    "link": {
+      "type": "string"
+    },
+    "rating": {
+      "type": "integer",
+      "default": 5,
+      "required": true,
+      "max": 5,
+      "min": 1
+    },
+    "text": {
+      "type": "text"
+    },
+    "development": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::reviews-development.reviews-development"
+    },
+    "cooperation": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::reviews-cooperation.reviews-cooperation"
+    },
+    "files": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos"
+      ]
+    }
+  }
+}

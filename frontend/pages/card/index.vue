@@ -27,7 +27,7 @@ const metaStore = useMetaStore()
 const title = ref(t('app.card'))
 const meta = computed(() => metaStore.getMetaInfo)
 const contactsData = serverFetch('contact', {}, [])
-const links = computed(() => contactsData.value?.contact?.filter(filterLink).map(mapLink))
+const links = computed(() => contactsData.value?.contact?.filter(filterLink).map(mapLink) || [])
 
 function filterLink(link) {
   return link.display?.includes('card')

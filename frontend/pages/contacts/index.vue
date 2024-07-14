@@ -5,12 +5,10 @@
     <ul class="page-contacts__list contacts-list">
       <li
         v-for="item in contacts"
-        :key="item.title"
+        :key="item.id"
         class="contacts-list__item"
       >
-        <ClientOnly>
-          <TitleOutline tag="span">{{ item.title }}</TitleOutline>
-        </ClientOnly>
+        <TitleOutline v-if="isClient" tag="span">{{ item.title }}</TitleOutline>
         <NuxtLink
           :to="item.link"
           class="contacts-list__link"
@@ -19,9 +17,7 @@
         >
           {{ item.title }}
         </NuxtLink>
-        <ClientOnly>
-          <TitleOutline tag="span">{{ item.title }}</TitleOutline>
-        </ClientOnly>
+        <TitleOutline v-if="isClient" tag="span">{{ item.title }}</TitleOutline>
       </li>
     </ul>
   </div>
@@ -35,7 +31,8 @@ import { serverFetch } from '~/composables/useApi'
 const { t } = useI18n()
 const title = ref(t('menu.contacts'))
 const contactsData = serverFetch('contact', {}, [])
-const contacts = computed(() => contactsData.value?.contact?.filter(filterLink))
+const contacts = computed(() => contactsData.value?.contact?.filter(filterLink) || [])
+const isClient = computed(() => process?.client)
 
 function filterLink(link) {
   return link.display?.includes('contacts')

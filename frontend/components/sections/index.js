@@ -4,6 +4,8 @@ export { default as PortfolioProject } from './PortfolioProject'
 export { default as PortfolioSubcategoriesNav } from './PortfolioSubcategoriesNav'
 export { default as ImagesItems } from './ImagesItems'
 export { default as SocialsList } from './SocialsList'
+export { default as ReviewsList } from './_reviews/ReviewsList'
+export { default as ReviewForm } from './_reviews/ReviewForm'
 export { default as Error404 } from './Error404'
 
 export { default as ProjectBack } from './_project/ProjectBack'

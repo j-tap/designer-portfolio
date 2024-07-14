@@ -1,0 +1,53 @@
+.review-form {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: 3px
+  }
+
+  .btn[type="submit"] {
+    width: 322px;
+    max-width: 100%;
+  }
+}
+
+.review-rating {
+  display: flex;
+  gap: 10px;
+
+  &__item {
+    position: relative;
+    user-select: none;
+    cursor: pointer;
+    text-align: center;
+
+    input {
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0;
+    }
+
+    span {
+      font-size: 14px;
+
+      &::before {
+        content: '☆';
+        font-size: 24px;
+        display: block;
+        margin-bottom: 3px;
+      }
+    }
+
+    &_active {
+      span::before {
+        content: '★';
+        color: $color__blue;
+      }
+    }
+  }
+}

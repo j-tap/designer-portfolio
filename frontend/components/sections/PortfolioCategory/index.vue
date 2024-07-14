@@ -115,16 +115,23 @@ function setProjectElems (el) {
 }
 
 function getTo ({ slug }) {
-  if (detailExclude.some(v => route.path.includes(v))) {
-    return null
+  const isSubCat = !!props.subcategories?.length
+  const detailExcludeSubCats = detailExclude.map(v => v.split('/'))
+  const isExcluded = detailExclude.some(v => route.path.includes(v)) ||
+    (!isSubCat && detailExcludeSubCats.some(([s1, s2]) =>
+      route.path.includes(s1) || route.path.includes(s2)
+    ))
+
+  if (isExcluded) {
+    return null;
   }
 
   const params = {
     category: categorySlug.value,
     project: slug,
-    ...(props.subcategories?.length ? { subcategory: subcategorySlug.value || props.subcategories[0].slug } : {}),
+    ...(isSubCat ? { subcategory: subcategorySlug.value || props.subcategories[0].slug } : {}),
   }
-  const name = props.subcategories?.length ? 'portfolio-category-subcategory-project' : 'portfolio-category-project'
+  const name = isSubCat ? 'portfolio-category-subcategory-project' : 'portfolio-category-project'
 
   return { name, params }
 }

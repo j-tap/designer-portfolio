@@ -5,8 +5,8 @@ export function serverFetch (name, params = {}, defaultValue = {}, fetchType = '
   const nuxtApp = useNuxtApp()
   const result = ref(defaultValue)
   const key = `${name}-${JSON.stringify(params)}`
-
   let slug = null
+
   if (params?.slug) {
     slug = params.slug
     delete params.slug
@@ -16,8 +16,8 @@ export function serverFetch (name, params = {}, defaultValue = {}, fetchType = '
     find: () => find(name, params),
     findBySlug: () => findBySlug(name, slug, params),
   }
-  const fetchFunction = methods[fetchType]
-  useAsyncData(key, fetchFunction, {
+
+  useAsyncData(key, methods[fetchType], {
     getCachedData: key => nuxtApp.payload?.static?.[key] ?? nuxtApp.payload?.data?.[key],
   })
     .then(({ data }) => {
@@ -27,11 +27,18 @@ export function serverFetch (name, params = {}, defaultValue = {}, fetchType = '
   return result
 }
 
+export async function serverCreate (name, data = {}) {
+  try {
+    return await create(name, data)
+  }
+  catch (error) {
+    console.error('Error api serverCreate:', error)
+  }
+}
 
 export function urlFile (urlFile) {
   const config = useRuntimeConfig()
-  const urlApi = config.public.strapi.url
-  return `${urlApi}${urlFile}`
+  return `${config.public.strapi.url}${urlFile}`
 }
 
 export function getFormatImages (item) {
@@ -46,8 +53,8 @@ export function getFormatImages (item) {
 }
 
 export async function find (name, params = {}) {
-  const { find } = useStrapi()
-  return sendRequest({ name, params }, async (query) => {
+  return sendRequest(name, params, 'get', async (query) => {
+    const { find } = useStrapi()
     return await find(query)
   })
 }
@@ -60,7 +67,7 @@ export async function findBySlug (name, slug, params = {}) {
       slug: { $eq: slug },
     },
   }
-  return sendRequest({ name, params: modParams }, async (query) => {
+  return sendRequest(name, modParams, 'get', async (query) => {
     const { find } = useStrapi()
     const result = await find(query)
     return { ...result, data: result.data[0] }
@@ -68,59 +75,66 @@ export async function findBySlug (name, slug, params = {}) {
 }
 
 export async function findOne (name, params = {}) {
-  return sendRequest({ name, params }, async (query) => {
+  return sendRequest(name, params, 'get', async (query) => {
     const { findOne } = useStrapi()
     return await findOne(query)
   })
 }
 
-async function sendRequest ({ name, params }, cb) {
-  const { locale } = useI18n()
-  let result = {
+export async function create (name, params) {
+  return sendRequest(name, params, 'post', async (url, data) => {
+    const { create } = useStrapi()
+    return await create(url, data)
+  })
+}
+
+async function sendRequest (name, params, method, cb) {
+  let locale = null
+
+  try {
+    const i18n = useI18n()
+    locale = i18n?.locale?.value
+  }
+  catch (error) {}
+
+  const query = method === 'get' ? qs.stringify({
+    locale: toSimpleLocale(locale),
+    populate: 'deep',
+    ...params,
+  }, { encodeValuesOnly: true }) : ''
+
+  const result = {
     data: null,
     meta: null,
     status: false,
   }
-  const query = qs.stringify({
-    locale: toSimpleLocale(locale.value),
-    populate: 'deep',
-    ...params,
-  }, { encodeValuesOnly: true })
 
   try {
-    requestStart()
-    const url = `${name}?${query}`
-    const { data, meta } = await cb(url)
-    requestFinally()
+    updateLoading(true)
+    const url = `${name}${query ? `?${query}` : ''}`
+    const resp = method === 'get' ? await cb(url) : await cb(url, params)
 
-    if (data) {
-      result.data = data
-      result.meta = meta
-      result.status = true
-    }
+    result.data = resp?.data || resp
+    result.meta = resp?.meta
+    result.status = true
   }
   catch (error) {
-    requestFinally()
     console.error('Error api asyncData:', error)
-    // throw showError({ statusCode: error.code, statusMessage: error.message })
+  }
+  finally {
+    updateLoading(false)
   }
 
   return result
 }
 
-function requestStart () {
+function updateLoading (isLoading) {
   if (process.client) {
     const loadingStore = useLoadingStore()
-    loadingStore.updateLoading(true)
-  }
-}
-function requestFinally () {
-  if (process.client) {
-    const loadingStore = useLoadingStore()
-    loadingStore.updateLoading(false)
+    loadingStore.updateLoading(isLoading)
   }
 }
 
 function toSimpleLocale (locale) {
-  return locale.split('-').shift()
+  return locale.split('-')[0]
 }

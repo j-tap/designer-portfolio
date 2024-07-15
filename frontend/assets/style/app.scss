@@ -133,14 +133,43 @@ textarea.field {
 }
 
 .btn {
+  display: block;
   background-color: $color__blue;
   color: $color__dark;
   border: none;
   height: $control__size;
+  line-height: $control__size;
   min-width: $control__size;
+  padding-left: $control__size / 2;
+  padding-right: $control__size / 2;
   font-size: $btn__fs;
   cursor: pointer;
   transition: background-color .15s ease-in-out;
+  text-align: center;
+  text-decoration: none;
+
+  &_xs {
+    height: $control__size_xs;
+    line-height: $control__size_xs;
+    min-width: $control__size_xs;
+    padding-left: $control__size_xs / 2;
+    padding-right: $control__size_xs / 2;
+    font-size: $btn__fs / 1.5;
+  }
+
+  &_sm {
+    height: $control__size_sm;
+    line-height: $control__size_sm;
+    min-width: $control__size_sm;
+    padding-left: $control__size_sm / 2;
+    padding-right: $control__size_sm / 2;
+    font-size: $btn__fs / 1.2;
+  }
+
+  &_icon {
+    padding-left: 0;
+    padding-right: 0;
+  }
 
   &:hover,
   &:focus {

@@ -10,4 +10,5 @@ module.exports = ({ env }) => [
   'strapi::favicon',
   'strapi::public',
   {name: 'global::redirector'},
+  { name: 'global::logRequest' },
 ];

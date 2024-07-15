@@ -7,14 +7,15 @@
         :items="reviews"
         class="page-reviews__list"
       />
-      <ReviewForm
-        v-if="canSendReview"
-        :form="form"
-        :data="data"
-        class="page-reviews__form"
-        @send="sendForm"
-      />
-      <p v-else>Спасибо, что оставили отзыв</p>
+      <div class="page-reviews__form">
+        <ReviewForm
+          v-if="canSendReview"
+          :form="form"
+          :data="data"
+          @send="sendForm"
+        />
+        <h3 v-else>Спасибо, что оставили отзыв</h3>
+      </div>
     </div>
   </div>
 </template>
@@ -25,14 +26,13 @@ import { ReviewsList, ReviewForm } from '~/components/sections'
 import { metaInfo } from '~/composables/useMeta'
 import { serverFetch, serverCreate } from '~/composables/useApi'
 import { useReviewsStore } from '~/stores/reviewsStore'
-// import { useMetaStore } from '~/stores/metaStore'
 
 const { t } = useI18n()
 const reviewsStore = useReviewsStore()
-// const metaStore = useMetaStore()
 const title = ref(t('menu.reviews'))
-// const meta = computed(() => metaStore.getMetaInfo)
-const reviewsData = serverFetch('reviews', {}, [])
+const reviewsData = serverFetch('reviews', {
+  sort: [{ createdAt: 'desc' }],
+}, [])
 const reviews = computed(() => reviewsData.value)
 const developmentsData = serverFetch('reviews-developments')
 const cooperationsData = serverFetch('reviews-cooperations')
@@ -55,25 +55,25 @@ const form = reactive({
 })
 
 async function sendForm (form) {
-  console.log('form', form)
+  const data = {}
   const formData = new FormData()
-  // const fields = Object.keys(form).filter(s => s !== 'files')
-  // fields.forEach(field => {
-  //   formData.append(field, form[field])
-  // })
 
-  const { files } = form
-  const newForm = { ...form }
-  delete newForm.files
-
-  formData.append('data', JSON.stringify(newForm))
-  files.forEach(file => {
-    formData.append('files', file)
+  Object.keys(form).forEach(key => {
+    if (!['files'].includes(key)) {
+      data[key] = form[key]
+    }
+    else if (key === 'files') {
+      form.files.forEach(file => {
+        formData.append(`files.${key}`, file, file.name)
+      })
+    }
   })
-  console.log('formData', formData)
-  const { data } = await serverCreate('reviews', formData)
-  console.log('resp data', data)
-  if (data?.id) {
+
+  formData.append('data', JSON.stringify(data))
+
+  const { ok } = await serverCreate('reviews', formData)
+
+  if (ok) {
     reviewsStore.setCanSendReview(false)
   }
 }

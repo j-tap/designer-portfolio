@@ -14,16 +14,7 @@
 
     <div class="review-form__field">
       <span>Оценка</span>
-      <div class="review-rating">
-        <label
-          v-for="i in 5"
-          :key="i"
-          :class="['review-rating__item', { 'review-rating__item_active': form.rating >= i }]"
-        >
-          <input v-model="form.rating" :value="i" type="radio" />
-          <span>{{ i }}</span>
-        </label>
-      </div>
+      <RatingStars v-model="form.rating" changeable />
     </div>
 
     <div class="review-form__field">
@@ -61,11 +52,18 @@
     </label>
 
     <div class="review-form__field">
-      <label for="formInputFile">Загрузите файлы, которыми хотите поделиться</label>
-      <div>
+      <div class="files-upload">
+        <label class="btn btn_sm" for="formInputFile">Загрузите файлы, которыми хотите поделиться</label>
         <input type="file" id="formInputFile" multiple @change="onFileUpload">
-        <ul v-if="form.files.length">
-          <li v-for="(file, i) in form.files" :key="i">{{ file.name }}</li>
+        <ul v-if="form.files.length" class="files-list">
+          <li
+            v-for="(file, i) in form.files"
+            :key="i"
+            class="files-list__item"
+          >
+            <button class="btn btn_xs btn_icon" type="button" @click="removeFile(file)">&times;</button>
+            <span class="files-list__name">{{ file.name }}</span>
+          </li>
         </ul>
       </div>
     </div>
@@ -75,6 +73,8 @@
 </template>
 
 <script setup>
+import { RatingStars } from '~/components/common'
+
 const props = defineProps({
   form: {
     type: Object,
@@ -86,8 +86,14 @@ const props = defineProps({
   },
 })
 
-const onFileUpload = (evt) => {
-  this.form.files = Array.from(evt.target.files)
+function removeFile (file) {
+  props.form.files.splice(props.form.files.indexOf(file), 1)
+}
+
+function onFileUpload (evt) {
+  Object.entries(evt.target.files).forEach(([, file]) => {
+    props.form.files.push(file)
+  })
 }
 </script>
 

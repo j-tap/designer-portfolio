@@ -1,23 +1,39 @@
 .reviews-list {
-
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
 }
 
 .review {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+
   &__header {
     display: flex;
+    flex-wrap: wrap;
+    align-items: start;
     justify-content: space-between;
+    gap: 5px 0;
   }
   &__content {
-
+    display: flex;
+    flex-direction: column;
   }
   &__name {
 
   }
   &__date {
-
+    width: 50%;
   }
   &__company {
 
+  }
+  &__link {
+    width: 50%;
   }
   &__rating {
 
@@ -33,5 +49,35 @@
   }
   &__files {
 
+  }
+}
+
+.file-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: start;
+  gap: 10px;
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 96px;
+    text-align: center;
+    font-size: 14px;
+
+    img {
+      align-self: center;
+      max-width: 80%;
+      max-height: 80%;
+      aspect-ratio: 1;
+      display: block;
+      object-fit: contain;
+    }
+
+    p {
+      margin: 5px 0;
+      flex-grow: 1;
+    }
   }
 }

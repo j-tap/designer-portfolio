@@ -81,10 +81,11 @@ export async function findOne (name, params = {}) {
   })
 }
 
-export async function create (name, params) {
-  return sendRequest(name, params, 'post', async (url, data) => {
-    const { create } = useStrapi()
-    return await create(url, data)
+export async function create (name, body) {
+  const config = useRuntimeConfig()
+  return await fetch(`${config.public.strapi.url}/api/${name}`, {
+    method: 'post',
+    body,
   })
 }
 

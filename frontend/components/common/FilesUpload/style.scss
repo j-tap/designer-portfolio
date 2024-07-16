@@ -1,0 +1,13 @@
+.files-upload {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(14px, 1vw, 20px);
+
+  input {
+    display: none;
+  }
+
+  &__list {
+    //
+  }
+}

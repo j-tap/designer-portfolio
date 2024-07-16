@@ -33,14 +33,14 @@
     "text": {
       "type": "text"
     },
-    "development": {
+    "developments": {
       "type": "relation",
-      "relation": "oneToOne",
+      "relation": "oneToMany",
       "target": "api::reviews-development.reviews-development"
     },
-    "cooperation": {
+    "cooperations": {
       "type": "relation",
-      "relation": "oneToOne",
+      "relation": "oneToMany",
       "target": "api::reviews-cooperation.reviews-cooperation"
     },
     "files": {

@@ -28,7 +28,8 @@ export function dateFormat (d, options = {}) {
   const date = new Date(d)
   const opt = {
     day: 'numeric',
-    month: 'short',
+    month: 'numeric',
+    year: 'numeric',
     ...options,
   }
 

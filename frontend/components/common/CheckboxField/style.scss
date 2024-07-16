@@ -1,0 +1,29 @@
+.checkbox {
+  position: relative;
+  width: 19px;
+  height: 19px;
+
+  input {
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+
+    &:checked + span {
+      background-color: $color__blue;
+      border-color: $color__blue;
+    }
+
+    & + span {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      border: 1px solid $color__white;
+      pointer-events: none;
+      transition: background-color .15s ease-in-out, border-color .15s ease-in-out;
+    }
+  }
+}

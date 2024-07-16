@@ -1,0 +1,50 @@
+.files-list {
+  $self: &;
+  $close__size: 24px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
+
+  img {
+    width: $control__size_xs;
+    aspect-ratio: 1;
+    display: block;
+    object-fit: contain;
+  }
+
+  &__item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 14px;
+    max-width: 100%;
+
+    &:hover,
+    &:focus {
+      #{$self}__remove {
+        opacity: 1;
+      }
+    }
+  }
+
+  &__icon {
+    //
+  }
+
+  &__remove {
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  &__name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: $close__size;
+  }
+}

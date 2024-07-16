@@ -10,10 +10,79 @@
     margin: 1vw 0 0;
   }
 
+  &__form-title {
+    font-family: $font__decor;
+    font-weight: 700;
+    font-size: clamp(24px, 2.1vw, 40px);
+    text-transform: uppercase;
+    margin: 0;
+
+    @include screen('md-down') {
+      &::after {
+        content: '⌃';
+        font-size: 110%;
+        display: block;
+        float: right;
+        margin-top: -8px;
+        transform: rotateZ(-180deg);
+      }
+
+      &_active {
+        &::after {
+          margin-top: 0;
+          transform: rotateZ(0);
+        }
+      }
+    }
+  }
+
   &__wrap {
-    margin-top: clamp(40px, 3.6vw, 80px);
     display: flex;
-    gap: 60px;
+    gap: clamp(80px, 7.5vw, 140px);
+  }
+
+  &__form-wrap {
+    padding: clamp(30px, 3.6vw, 70px);
+
+    @include screen('md-down') {
+      border: 1px solid $color__white;
+      margin-top: clamp(20px, 4vw, 50px);
+    }
+    @include screen('lg') {
+      padding-right: $content__indent-x_lg;
+      margin-right: $content__indent-x_lg * -1;
+      width: 37.5%;
+      border-left: 1px solid $color__white;
+      border-top: 1px solid $color__white;
+    }
+  }
+
+  &__form-success {
+    margin-top: clamp(30px, 2.1vw, 40px);
+
+    h3 {
+      margin-top: 0;
+    }
+    p {
+      margin: 0;
+      font-weight: 300;
+    }
+  }
+
+  &__form {
+    @include screen('md-down') {
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height 0.4s ease;
+
+      &_show {
+        max-height: 1999px;
+      }
+    }
+
+    & > * {
+      margin-top: clamp(30px, 2.1vw, 40px);
+    }
   }
 
   @include screen('md-down') {
@@ -25,14 +94,7 @@
     &__list {
       width: 60%;
       flex-grow: 1;
-    }
-
-    &__form {
-      width: 40%;
-
-      h3 {
-        margin-top: 0;
-      }
+      margin-top: clamp(40px, 3.4vw, 70px);
     }
   }
 }

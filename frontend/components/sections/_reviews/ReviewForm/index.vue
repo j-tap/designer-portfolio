@@ -1,79 +1,80 @@
 <template>
   <form
     v-if="form"
-    class="review-form"
-    @submit.prevent="$emit('send', form)"
+    class="form review-form"
+    @submit.prevent="sendForm"
   >
-    <label class="review-form__field">
-      <input v-model="form.name" class="field" type="text" placeholder="Имя" required />
+    <label class="form__item">
+      <span class="label">Имя *</span>
+      <input v-model="form.name" class="field" type="text" placeholder="Напишите имя" required />
     </label>
 
-    <label class="review-form__field">
-      <input v-model="form.company" class="field" type="text" placeholder="Компания/Проект" required />
+    <label class="form__item">
+      <span class="label">Компания/Проект *</span>
+      <input v-model="form.company" class="field" type="text" placeholder="Напишите компанию" required />
     </label>
 
-    <div class="review-form__field">
-      <span>Оценка</span>
-      <RatingStars v-model="form.rating" changeable />
+    <label class="form__item">
+      <span class="label">Ссылка</span>
+      <TooltipBase text="Вставьте ссылку на проект или сайт компании">
+        <input v-model="form.link" class="field" type="text" placeholder="Вставьте ссылку" />
+      </TooltipBase>
+    </label>
+
+    <div class="form__item">
+      <span class="label">Оценка</span>
+      <RatingStars v-model="form.rating" editable />
     </div>
 
-    <div class="review-form__field">
-      <select v-model="form.development" class="field" required>
-        <option value="" disabled>Разработка</option>
-        <option
-          v-for="item in data.developments"
-          :key="item.id"
+    <div class="form__item form__item_large">
+      <span class="label">Сотрудничество</span>
+      <label
+        v-for="item in data.cooperations"
+        :key="item.id"
+        class="checkbox-row"
+      >
+        <CheckboxField
+          :checked="form.cooperations.includes(item.id)"
           :value="item.id"
-        >
-          {{ item?.title }}
-        </option>
-      </select>
+          required
+          @change="onChangeCheck(item.id, 'cooperations')"
+        />
+        {{ item?.title }}
+      </label>
     </div>
 
-    <div class="review-form__field">
-      <select v-model="form.cooperation" class="field" required>
-        <option value="" disabled>Сотрудничество</option>
-        <option
-          v-for="item in data.cooperations"
-          :key="item.id"
+    <div class="form__item form__item_large">
+      <span class="label">Услуги</span>
+      <label
+        v-for="item in data.developments"
+        :key="item.id"
+        class="checkbox-row"
+      >
+        <CheckboxField
+          :checked="form.developments.includes(item.id)"
           :value="item.id"
-        >
-          {{ item?.title }}
-        </option>
-      </select>
+          required
+          @change="onChangeCheck(item.id, 'developments')"
+        />
+        {{ item?.title }}
+      </label>
     </div>
 
-    <label class="review-form__field">
-      <input v-model="form.link" class="field" type="text" placeholder="Ссылка" />
+    <label class="form__item">
+      <span class="label">Отзыв</span>
+      <textarea v-model="form.text" class="field" placeholder="Напишите отзыв" rows="6"></textarea>
     </label>
 
-    <label class="review-form__field">
-      <textarea v-model="form.text" class="field" placeholder="Отзыв" rows="6"></textarea>
-    </label>
+    <FilesUpload v-model="form.files" editable />
 
-    <div class="review-form__field">
-      <div class="files-upload">
-        <label class="btn btn_sm" for="formInputFile">Загрузите файлы, которыми хотите поделиться</label>
-        <input type="file" id="formInputFile" multiple @change="onFileUpload">
-        <ul v-if="form.files.length" class="files-list">
-          <li
-            v-for="(file, i) in form.files"
-            :key="i"
-            class="files-list__item"
-          >
-            <button class="btn btn_xs btn_icon" type="button" @click="removeFile(file)">&times;</button>
-            <span class="files-list__name">{{ file.name }}</span>
-          </li>
-        </ul>
-      </div>
-    </div>
-
-    <button class="btn" type="submit">Отправить отзыв</button>
+    <button class="btn" type="submit">Отправить</button>
   </form>
 </template>
 
 <script setup>
-import { RatingStars } from '~/components/common'
+import { RatingStars, CheckboxField, TooltipBase, FilesUpload } from '~/components/common'
+
+const emit = defineEmits(['send'])
 
 const props = defineProps({
   form: {
@@ -86,14 +87,18 @@ const props = defineProps({
   },
 })
 
-function removeFile (file) {
-  props.form.files.splice(props.form.files.indexOf(file), 1)
+function onChangeCheck (id, key) {
+  if (props.form[key].includes(id)) {
+    props.form[key] = props.form[key].filter(v => v !== id)
+  }
+  else {
+    props.form[key].push(id)
+  }
 }
 
-function onFileUpload (evt) {
-  Object.entries(evt.target.files).forEach(([, file]) => {
-    props.form.files.push(file)
-  })
+function sendForm () {
+  // if (props.form.cooperation.length && props.form.developments.length) {
+  emit('send', props.form)
 }
 </script>
 

@@ -24,7 +24,7 @@ const commonStore = useCommonStore()
 const menuMain = [
   { name: 'index', locale: 'menu.main' },
   { name: 'portfolio', locale: 'menu.portfolio' },
-  // { name: 'reviews', locale: 'menu.reviews' },
+  { name: 'reviews', locale: 'menu.reviews' },
   { name: 'contacts', locale: 'menu.contacts' },
 ]
 const openMenu = ref(false);

@@ -1,5 +1,5 @@
 <template>
-  <div :class="['rating-stars', { 'rating-stars_changeable': changeable }]">
+  <div :class="['rating-stars', { 'rating-stars_changeable': editable }]">
     <label
       v-for="i in max"
       :key="i"
@@ -7,7 +7,7 @@
     >
       <input :value="i" type="radio" :checked="modelValue === i" @input="onChange" />
       <span>
-        <span v-if="changeable">{{ i }}</span>
+        <span v-if="editable">{{ i }}</span>
       </span>
     </label>
   </div>
@@ -24,7 +24,7 @@ const props = defineProps({
     type: Number,
     default: max,
   },
-  changeable: {
+  editable: {
     type: Boolean,
     default: false,
   },
@@ -33,7 +33,7 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue'])
 
 function onChange ({ target }) {
-  if (props.changeable) {
+  if (props.editable) {
     emit('update:modelValue', parseInt(target.value, 10))
   }
 }

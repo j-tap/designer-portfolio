@@ -130,7 +130,7 @@ async function sendRequest (name, params, method, cb) {
 }
 
 function updateLoading (isLoading) {
-  if (process.client) {
+  if (window !== undefined) {
     const loadingStore = useLoadingStore()
     loadingStore.updateLoading(isLoading)
   }

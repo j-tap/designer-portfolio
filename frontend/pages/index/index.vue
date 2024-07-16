@@ -1,12 +1,12 @@
 <template>
   <div class="page-main">
     <section class="page-main__section-head title-section">
-      <MarqueeBlock v-if="isClient" class="title-section__row title-section__row_1">
+      <MarqueeBlock class="title-section__row title-section__row_1">
         <TitleOutline tag="span">{{ meta.specialization }}</TitleOutline>&nbsp;
       </MarqueeBlock>
       <h1 class="page-main__title" itemscope itemtype="https://schema.org/Person">
         <span class="title-section__row title-section__row_2 row-title-2">
-          <MarqueeBlock v-if="isClient" class="row-title-2__sub-large_sm" reverse>
+          <MarqueeBlock class="row-title-2__sub-large_sm" reverse>
             <TitleOutline tag="div">{{ t('menu.portfolio') }}</TitleOutline>&nbsp;
           </MarqueeBlock>
           <TitleOutline class="row-title-2__sub-large_md-up" tag="div">{{ t('menu.portfolio') }}</TitleOutline>
@@ -74,7 +74,6 @@ import { useMetaStore } from '~/stores/metaStore'
 const { t } = useI18n()
 const metaStore = useMetaStore()
 const meta = computed(() => metaStore.getMetaInfo)
-const isClient = computed(() => process?.client)
 const home = serverFetch('home', {})
 const categories = serverFetch('category-projects', {
   sort: [{ rank: 'asc' }],

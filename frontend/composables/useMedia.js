@@ -10,7 +10,7 @@ const sizes = {
 }
 
 export function useMedia (size) {
-    if (process.client) {
+    if (window !== undefined) {
         const result = ref(sizes[size](window.outerWidth))
 
         useEventListener(window, 'resize', () => {

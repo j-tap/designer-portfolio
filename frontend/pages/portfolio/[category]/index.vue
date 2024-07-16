@@ -62,7 +62,7 @@ watch(category, async (val) => {
 scrollHandler()
 
 function scrollHandler () {
-  if (process.client && window.innerWidth >= 768 && projects.value?.length > 5) {
+  if (window !== undefined && window.innerWidth >= 768 && projects.value?.length > 5) {
     window.addEventListener('scroll', () => {
       updateProjectsPrlx(projects.value, window.scrollY)
     })

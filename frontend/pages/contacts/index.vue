@@ -8,7 +8,7 @@
         :key="item.id"
         class="contacts-list__item"
       >
-        <TitleOutline v-if="isClient" tag="span">{{ item.title }}</TitleOutline>
+        <TitleOutline tag="span">{{ item.title }}</TitleOutline>
         <NuxtLink
           :to="item.link"
           class="contacts-list__link"
@@ -17,7 +17,7 @@
         >
           {{ item.title }}
         </NuxtLink>
-        <TitleOutline v-if="isClient" tag="span">{{ item.title }}</TitleOutline>
+        <TitleOutline tag="span">{{ item.title }}</TitleOutline>
       </li>
     </ul>
   </div>
@@ -32,7 +32,6 @@ const { t } = useI18n()
 const title = ref(t('menu.contacts'))
 const contactsData = serverFetch('contact', {}, [])
 const contacts = computed(() => contactsData.value?.contact?.filter(filterLink) || [])
-const isClient = computed(() => process?.client)
 
 function filterLink(link) {
   return link.display?.includes('contacts')

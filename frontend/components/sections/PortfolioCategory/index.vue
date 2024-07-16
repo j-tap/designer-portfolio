@@ -86,7 +86,6 @@ const props = defineProps({
   },
 })
 
-const { t } = useI18n()
 const route = useRoute()
 const categorySlug = computed(() => route.params.category)
 const subcategorySlug = computed(() => route.params.subcategory)
@@ -100,9 +99,9 @@ watch(props.category, async (val) => {
 scrollHandler()
 
 function scrollHandler () {
-  if (process.client && window.innerWidth >= 768 && props.projects.value?.length > 5) {
+  if (window?.innerWidth >= 768) { //  && props.projects?.length > 5
     window.addEventListener('scroll', () => {
-      updateProjectsPrlx(projects.value, window.scrollY)
+      updateProjectsPrlx(props.projects, window.scrollY)
     })
   }
 }

@@ -6,14 +6,14 @@ module.exports = {
 
   async afterCreate(event) {
     const { result } = event;
-    const domain = 'konoiko.design';
+    const domain = process.env.DOMAIN || 'localhost';
     const site = `https://${domain}`;
 
     try{
       strapi.plugins['email'].services.email.send({
         to: process.env.SMTP_USERNAME,
         from: `Diana UI/UX <noreply@${process.env.SMTP_FROM}>`,
-        subject: 'Новый отзыв на сайте konoiko.design',
+        subject: `Новый отзыв на сайте ${domain}`,
         text: '${result.text}',
         html: `
 <p>Новый отзыв на сайте <a href="${site}" target="_blank">${domain}</a></p>

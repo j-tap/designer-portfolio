@@ -3201,7 +3201,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@strapi/plugin-email@npm:4.25.3":
+"@strapi/plugin-email@npm:4.25.3, @strapi/plugin-email@npm:^4.25.3":
   version: 4.25.3
   resolution: "@strapi/plugin-email@npm:4.25.3"
   dependencies:
@@ -4958,6 +4958,7 @@ __metadata:
   dependencies:
     "@retikolo/drag-drop-content-types": "npm:^1.6.0"
     "@strapi/plugin-color-picker": "npm:^4.25.3"
+    "@strapi/plugin-email": "npm:^4.25.3"
     "@strapi/plugin-i18n": "npm:^4.25.3"
     "@strapi/plugin-users-permissions": "npm:^4.25.3"
     "@strapi/strapi": "npm:^4.25.3"
@@ -4970,6 +4971,7 @@ __metadata:
     strapi-plugin-populate-deep: "npm:^3.0.1"
     strapi-plugin-slugify: "npm:^2.3.8"
     strapi-plugin-transformer: "npm:^3.1.2"
+    strapi-provider-email-smtp: "npm:^1.0.3"
     styled-components: "npm:^5.2.1"
   languageName: unknown
   linkType: soft
@@ -9997,7 +9999,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash@npm:4.17.21, lodash@npm:^4.17.19, lodash@npm:^4.17.20, lodash@npm:^4.17.21, lodash@npm:^4.17.4":
+"lodash@npm:4.17.21, lodash@npm:^4.17.15, lodash@npm:^4.17.19, lodash@npm:^4.17.20, lodash@npm:^4.17.21, lodash@npm:^4.17.4":
   version: 4.17.21
   resolution: "lodash@npm:4.17.21"
   checksum: d8cbea072bb08655bb4c989da418994b073a608dffa608b09ac04b43a791b12aeae7cd7ad919aa4c925f33b48490b5cfe6c1f71d827956071dae2e7bb3a6b74c
@@ -10914,6 +10916,13 @@ __metadata:
   dependencies:
     nodemailer-fetch: "npm:1.6.0"
   checksum: 15d19fb0d1b546527da4e2d443cd53e50c3a7638b5b33a1ccd7ddc401680bc9163337cf09f6fb4e76a5f12de42f5fadf85dad80e56378edc3c27dd641413b3f7
+  languageName: node
+  linkType: hard
+
+"nodemailer@npm:^6.4.6":
+  version: 6.9.14
+  resolution: "nodemailer@npm:6.9.14"
+  checksum: 2542986849bc6ec2bf12fb7b72226da0ce9c6a0946216dea020d9eedee3ac1a4eb2413f59772a3ddd4bb9188d5ce859167a030c065719473f71319e052a319dc
   languageName: node
   linkType: hard
 
@@ -13728,6 +13737,16 @@ __metadata:
     lodash: ^4.17.21
     yup: ^0.32.9
   checksum: 0dca07edcb56a9e5b83b590c7f8a552607068f4a0e32cba56552443ef5638b37642d57ee0f7cf8e27d60429f134bfafb70303c1d1ad07c847ceec3eb4dfbc09e
+  languageName: node
+  linkType: hard
+
+"strapi-provider-email-smtp@npm:^1.0.3":
+  version: 1.0.3
+  resolution: "strapi-provider-email-smtp@npm:1.0.3"
+  dependencies:
+    lodash: "npm:^4.17.15"
+    nodemailer: "npm:^6.4.6"
+  checksum: b9e620720f98d893eb200c7ca871cc62c75899cb2821a42f4752a275f0ff26336fbd1c0168387ffdc59304d46b0426e3562229b36777bc0554468a3a5e4c728e
   languageName: node
   linkType: hard
 

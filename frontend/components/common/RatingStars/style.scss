@@ -33,7 +33,7 @@
 
       &::before {
         content: '☆';
-        font-size: 24px;
+        font-size: clamp(20px, 1.8vw, 32px);
         display: block;
         margin-bottom: 3px;
       }

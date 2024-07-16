@@ -1284,14 +1284,14 @@ export interface ApiReviewReview extends Schema.CollectionType {
       > &
       Attribute.DefaultTo<5>;
     text: Attribute.Text;
-    development: Attribute.Relation<
+    developments: Attribute.Relation<
       'api::review.review',
-      'oneToOne',
+      'oneToMany',
       'api::reviews-development.reviews-development'
     >;
-    cooperation: Attribute.Relation<
+    cooperations: Attribute.Relation<
       'api::review.review',
-      'oneToOne',
+      'oneToMany',
       'api::reviews-cooperation.reviews-cooperation'
     >;
     files: Attribute.Media<'images' | 'files' | 'videos', true>;

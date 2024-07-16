@@ -3,38 +3,30 @@
     <li
       v-for="item in items"
       :key="item.id"
-      class="reviews-list__item review"
+      class="reviews-list__item"
     >
-      <header class="review__header">
-        <time class="review__date" :datetime="item.createdAt" >{{ dateFormat(item.createdAt) }}</time>
-        <RatingStars class="review__rating" v-model="item.rating" />
-        <a class="review__link" :href="item.link" target="_blank">{{ item.link }}</a>
-      </header>
-      <article class="review__content">
-        <div class="review__development">{{ item.development?.title }}</div>
-        <div class="review__cooperation">{{ item.cooperation?.title }}</div>
-        <blockquote class="review__text">
-          <p>{{ item.text }}</p>
-          <footer>
-            —<span class="review__name">{{ item.name }}</span>,
-            <cite class="review__company">{{ item.company }}</cite>
-          </footer>
-        </blockquote>
-        <div class="file-list review__files">
-          <div
-            v-for="file in item.files"
-            :key="file.id"
-            class="file-list__item"
-          >
-            <img
-              v-if="isImage(file.mime)"
-              :src="urlFile(file.url)"
-              :alt="file.name"
-            />
-            <p>{{ file.name }}</p>
-            <a class="btn btn_xs" :href="file.url" download>Download</a>
+      <article class="review">
+        <header class="review__header">
+          <div class="review__subheader">
+            <h2 class="review__title">
+              <a v-if="item.link" :href="item.link" target="_blank">{{ item.company }}</a>
+              <span v-else>{{ item.company }}</span>
+            </h2>
+            <RatingStars v-model="item.rating" />
           </div>
+          <div class="review__subheader">
+            <time class="review__date" :datetime="item.createdAt" >{{ dateFormat(item.createdAt) }}</time>
+            <div v-if="item.cooperations" class="review__cooperations">
+              {{ item.cooperations.map(o => o.title).join(',' + '&nbsp;'.repeat(5)) }}
+            </div>
+            <span class="review__name">{{ item.name }}</span>
+          </div>
+        </header>
+        <div v-if="item.developments" class="review__developments">
+          {{ item.developments.map(o => o.title).join(',' + '&nbsp;'.repeat(5)) }}
         </div>
+        <p class="review__text">{{ item.text }}</p>
+        <FilesList :items="item.files" />
       </article>
     </li>
   </ul>
@@ -42,7 +34,7 @@
 </template>
 
 <script setup>
-import { RatingStars } from '~/components/common'
+import { RatingStars, FilesList } from '~/components/common'
 import { dateFormat } from '~/utils/formatDate'
 
 const props = defineProps({
@@ -51,10 +43,6 @@ const props = defineProps({
     required: true,
   },
 })
-
-function isImage (mime) {
-  return !mime.startsWith('image/')
-}
 </script>
 
 <style lang="scss" scoped src="./style.scss"/>

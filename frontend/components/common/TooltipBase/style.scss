@@ -1,0 +1,41 @@
+$size: 19px;
+
+.tooltip-wrap {
+  position: relative;
+
+  &__info {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    margin-top: ($size / 2) * -1;
+    width: $size;
+    height: $size;
+    background-color: $color__blue;
+    color: $color__dark;
+    text-align: center;
+    border-radius: 50%;
+    font-size: 14px;
+    line-height: $size;
+    font-style: normal;
+  }
+
+  &__text {
+    visibility: hidden;
+    position: absolute;
+    margin: 0;
+    bottom: calc(50% + $size);
+    right: $size / 2;
+    padding: 15px;
+    background-color: rgba($color__dark, .8);
+    backdrop-filter: blur(3px);
+    font-size: 14px;
+    z-index: 10;
+    opacity: 0;
+    transition: opacity .15s ease-in-out, visibility .15s ease-in-out;
+
+    &_show {
+      visibility: visible;
+      opacity: 1;
+    }
+  }
+}

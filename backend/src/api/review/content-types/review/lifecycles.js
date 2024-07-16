@@ -11,7 +11,7 @@ module.exports = {
 
     try{
       strapi.plugins['email'].services.email.send({
-        to: process.env.SMTP_USERNAME,
+        to: process.env.ADMIN_EMAIL,
         from: `Diana UI/UX <noreply@${process.env.SMTP_FROM}>`,
         subject: `Новый отзыв на сайте ${domain}`,
         text: '${result.text}',

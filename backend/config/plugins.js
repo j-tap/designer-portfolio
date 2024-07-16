@@ -1,4 +1,4 @@
-module.exports = {
+module.exports = ({ env }) => ({
   'drag-drop-content-types': {
     enabled: true,
   },
@@ -49,4 +49,24 @@ module.exports = {
     enabled: true,
     resolve: './src/plugins/relations-select',
   },
-}
+
+  email: {
+    config: {
+      provider: 'strapi-provider-email-smtp',
+      providerOptions: {
+        host: env('SMTP_HOST'),
+        port: env('SMTP_PORT'),
+        secure: true,
+        username: env('SMTP_USERNAME'),
+        password: env('SMTP_PASSWORD'),
+        rejectUnauthorized: true,
+        requireTLS: true,
+        connectionTimeout: 1,
+      },
+      settings: {
+        defaultFrom: `Diana UI/UX <noreply@${env('SMTP_FROM')}>`,
+        defaultReplyTo: `Diana UI/UX <noreply@${env('SMTP_FROM')}>`,
+      },
+    },
+  },
+});

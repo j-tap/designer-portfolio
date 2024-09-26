@@ -7,7 +7,7 @@
     >
       <NuxtLink
         class="menu__link"
-        :to="{ name: item.name }"
+        :to="localePath({ name: item.name })"
         @click.native="onClickItem(item)"
       >
         <TitleOutline class="menu__link-text_sm">{{ t(item.locale) }}</TitleOutline>

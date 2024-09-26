@@ -86,6 +86,7 @@ const props = defineProps({
   },
 })
 
+const localePath = useLocalePath()
 const route = useRoute()
 const categorySlug = computed(() => route.params.category)
 const subcategorySlug = computed(() => route.params.subcategory)
@@ -132,7 +133,7 @@ function getTo ({ slug }) {
   }
   const name = isSubCat ? 'portfolio-category-subcategory-project' : 'portfolio-category-project'
 
-  return { name, params }
+  return localePath({ name, params })
 }
 </script>
 

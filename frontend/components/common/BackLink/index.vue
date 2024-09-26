@@ -1,7 +1,7 @@
 <template>
   <div class="back-link">
     <NuxtLink
-      :to="to"
+      :to="localePath(to)"
     >
       <IconBase name="arrow-left" />
       <slot />

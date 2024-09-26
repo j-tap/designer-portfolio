@@ -7,7 +7,7 @@
     >
       <NuxtLink
         class="portfolio-categories__title"
-        :to="{ name: 'portfolio-category', params: { category: item.slug } }"
+        :to="localePath({ name: 'portfolio-category', params: { category: item.slug } })"
       >
         <TitleOutline
           class="portfolio-categories__title-text"

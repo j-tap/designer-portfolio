@@ -33,10 +33,10 @@ const projectMeta = getProjectMeta(project, categorySlug)
 
 watch(project, (val) => {
   if (!val.id) {
-    router.push({
+    router.push(localePath({
       name: 'portfolio-category-subcategory',
       params: { category: categorySlug.value, subcategory: projectSlug.value },
-    })
+    }))
   }
 }, { deep: true })
 

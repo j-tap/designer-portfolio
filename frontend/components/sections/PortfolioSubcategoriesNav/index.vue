@@ -13,13 +13,13 @@
               'portfolio-subcategories-nav__link_active': active?.slug === item.slug,
             },
           ]"
-          :to="{
+          :to="localePath({
             name: 'portfolio-category-subcategory',
             params: {
               category: item.category.slug,
               subcategory: item.slug,
             },
-          }"
+          })"
         >
           {{ item.title }}
         </NuxtLink>

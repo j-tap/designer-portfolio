@@ -10,7 +10,7 @@
         class="links-project__item"
       >
         <NuxtLink
-          :to="item.link"
+          :to="localePath(item.link)"
           class="links-project__link"
           target="_blank"
           external
@@ -24,7 +24,7 @@
       <h1 class="portfolio-project__title" itemprop="name">
         <NuxtLink
           v-if="project.link"
-          :to="project.link"
+          :to="localePath(project.link)"
           target="_blank"
           external
         >

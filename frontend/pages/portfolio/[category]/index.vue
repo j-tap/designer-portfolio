@@ -46,13 +46,13 @@ const title = computed(() => category.value?.title)
 
 watch(category, async (val) => {
   if (subcategories.value?.length) {
-    router.push({
+    router.push(localePath({
       name: 'portfolio-category-subcategory',
       params: {
         category: categorySlug.value,
         subcategory: subcategories.value[0].slug,
       },
-    })
+    }))
   }
   if (!val?.id) {
     display404()

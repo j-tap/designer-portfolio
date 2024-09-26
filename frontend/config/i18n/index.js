@@ -1,4 +1,4 @@
-export const defaultLocale = 'en-US'
+export const defaultLocale = 'en'
 
 export default {
   defaultLocale,

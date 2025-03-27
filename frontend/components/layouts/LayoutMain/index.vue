@@ -28,9 +28,14 @@ const blurClasses = computed(() => [
 ])
 
 onMounted(() => {
+  console.log('onMounted')
   if (process.client) {
+    console.log('onMounted client')
     isLoaded.value = true
   }
+})
+watch(isLoaded, (newValue) => {
+  console.log('isLoaded changed:', newValue)
 })
 </script>
 

@@ -26,8 +26,6 @@ const classes = computed(() => {
   ]
 })
 
-console.log('app init')
-
 async function updateMeta () {
   const { data } = await useAsyncData('meta-info', () => find('meta-info'), {
     getCachedData: key => nuxtApp.payload?.static?.[key] ?? nuxtApp.payload?.data?.[key],

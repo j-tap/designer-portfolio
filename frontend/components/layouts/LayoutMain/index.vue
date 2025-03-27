@@ -26,16 +26,10 @@ const blurClasses = computed(() => [
   'blur-backdrop',
   { 'blur-backdrop_display': commonStore.getDisplayMobileMenu },
 ])
-console.log('layout init')
-onMounted(() => {
-  console.log('onMounted')
-  if (process.client) {
-    console.log('onMounted client')
-    isLoaded.value = true
-  }
-})
-watch(isLoaded, (newValue) => {
-  console.log('isLoaded changed:', newValue)
+
+onMounted(async () => {
+  await nextTick();
+  isLoaded.value = true
 })
 </script>
 

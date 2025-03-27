@@ -27,10 +27,11 @@ const blurClasses = computed(() => [
   { 'blur-backdrop_display': commonStore.getDisplayMobileMenu },
 ])
 
-onMounted(async () => {
-  await nextTick();
-  isLoaded.value = true
-})
+if (process.client) {
+  onMounted(() => {
+    isLoaded.value = true
+  })
+}
 </script>
 
 <style lang="scss" src="./style.scss" scoped />

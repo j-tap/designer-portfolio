@@ -28,6 +28,9 @@ export default defineNuxtConfig({
 			// crawlLinks: true,
 			// routes: ['/', 'sitemap.xml'],
 			ignore: ['/card']
+		},
+		routeRules: {
+			'/**': { streaming: false }
 		}
 	},
 

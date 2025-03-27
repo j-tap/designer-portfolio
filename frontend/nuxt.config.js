@@ -15,6 +15,15 @@ export default defineNuxtConfig({
 	},
 
 	nitro: {
+    preset: 'node-server',
+    compressPublicAssets: false,
+    publicAssets: [
+      {
+        baseURL: '/_nuxt/',
+        dir: '.output/public/_nuxt',
+        maxAge: 60 * 60 * 24 * 365
+      }
+    ],
 		prerender: {
 			// crawlLinks: true,
 			// routes: ['/', 'sitemap.xml'],

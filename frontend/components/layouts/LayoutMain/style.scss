@@ -21,7 +21,7 @@
     transition: opacity .3s ease-in, visibility .3s ease-in;
   }
 
-  &_loaded {
+  &.layout-default_loaded {
     &::after {
       opacity: 0;
       visibility: hidden;

@@ -15,7 +15,7 @@ import { useCommonStore } from '~/stores/commonStore'
 
 const commonStore = useCommonStore()
 
-const isLoaded = ref(!process.client)
+const isLoaded = ref(false)
 
 const classes = computed(() => [
   'layout-default',

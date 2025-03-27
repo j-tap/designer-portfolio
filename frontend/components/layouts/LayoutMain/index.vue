@@ -12,11 +12,10 @@
 <script setup>
 import TheHeader from '~/components/TheHeader/index.vue'
 import { useCommonStore } from '~/stores/commonStore'
-import { isClient } from '#app'
 
 const commonStore = useCommonStore()
 
-const isLoaded = ref(!isClient)
+const isLoaded = ref(!process.client)
 
 const classes = computed(() => [
   'layout-default',
@@ -29,7 +28,7 @@ const blurClasses = computed(() => [
 ])
 
 onMounted(() => {
-  if (isClient) {
+  if (process.client) {
     isLoaded.value = true
   }
 })

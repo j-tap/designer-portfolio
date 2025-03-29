@@ -1,0 +1,20 @@
+services:
+  strapi:
+    build:
+      context: ./backend
+    ports:
+      - "${STRAPI_PORT:-1337}:1337"
+    env_file: ./backend/.env
+    environment:
+      - STRAPI_PORT=${PORT}
+    command: "yarn develop"
+
+  nuxt:
+    build:
+      context: ./frontend
+    ports:
+      - "${NUXT_PORT:-3019}:3000"
+    env_file: ./frontend/.env
+    environment:
+      - NUXT_PORT=${PORT}
+    command: "yarn dev"

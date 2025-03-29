@@ -64,4 +64,3 @@ node_modules
 .output
 .env
 dist
-.yarn

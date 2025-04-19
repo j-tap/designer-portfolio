@@ -15,7 +15,9 @@ services:
     build:
       context: ./backend
     ports:
-      - "${PORT_BACKEND}:${PORT_BACKEND}"
+      - "${PORT}:${PORT}"
+    environment:
+      PORT_BACKEND: ${PORT}
     command: "yarn develop"
     volumes:
       - ./backend/.tmp:/app/.tmp
@@ -31,7 +33,9 @@ services:
     build:
       context: ./frontend
     ports:
-      - "${PORT_FRONTEND}:${PORT_FRONTEND}"
+      - "${PORT}:${PORT}"
+    environment:
+      PORT_FRONTEND: ${PORT}
     command: "yarn dev"
     volumes:
       - ./frontend/public:/app/public

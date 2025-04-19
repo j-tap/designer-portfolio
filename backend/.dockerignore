@@ -1,6 +1,5 @@
 node_modules
 package-lock.json
-.yarn
 .cache
 .yarn/unplugged
 .pnp.*

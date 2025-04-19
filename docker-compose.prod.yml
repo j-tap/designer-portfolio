@@ -1,0 +1,16 @@
+services:
+#  postgres:
+#    ports:
+#      - "${DB_PORT}"
+
+  strapi:
+    build:
+      args:
+        MODE: production
+    command: "node node_modules/@strapi/strapi/bin/strapi.js start"
+
+  nuxt:
+    build:
+      args:
+        MODE: production
+    command: "node .output/server/index.mjs"

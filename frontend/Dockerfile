@@ -14,4 +14,7 @@ RUN yarn install
 
 COPY . .
 
+ARG MODE=dev
+ENV NODE_ENV=${MODE}
+
 CMD ["yarn", "dev"]

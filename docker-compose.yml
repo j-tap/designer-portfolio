@@ -1,20 +1,40 @@
 services:
+#  postgres:
+#    image: postgres:15
+#    restart: unless-stopped
+#    volumes:
+#      - pgdata:/var/lib/postgresql/data
+#    environment:
+#      POSTGRES_DB: ${DB_NAME}
+#      POSTGRES_USER: ${DB_USER}
+#      POSTGRES_PASSWORD: ${DB_PASSWORD}
+#    ports:
+#      - "${DB_PORT}:${DB_PORT}"
+
   strapi:
     build:
       context: ./backend
     ports:
-      - "${STRAPI_PORT:-1337}:1337"
-    env_file: ./backend/.env
-    environment:
-      - STRAPI_PORT=${PORT}
+      - "${PORT_BACKEND}:${PORT_BACKEND}"
     command: "yarn develop"
+    volumes:
+      - ./backend/.tmp:/app/.tmp
+      - ./backend/src:/app/src
+      - ./backend/config:/app/config
+      - ./backend/public:/app/public
+      - ./backend/tmp:/tmp
+      - ./backend/yarn-cache:/root/.yarn
+#    depends_on:
+#      - postgres
 
   nuxt:
     build:
       context: ./frontend
     ports:
-      - "${NUXT_PORT:-3019}:3000"
-    env_file: ./frontend/.env
-    environment:
-      - NUXT_PORT=${PORT}
+      - "${PORT_FRONTEND}:${PORT_FRONTEND}"
     command: "yarn dev"
+    volumes:
+      - ./frontend/public:/app/public
+
+volumes:
+  pgdata:

@@ -25,7 +25,5 @@ jobs:
           ssh ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << 'EOF'
             cd ${{ secrets.VPS_PROJECT_PATH }}
             git pull origin main
-            docker compose down
-            docker compose build
-            docker compose up -d
+            make dev
           EOF

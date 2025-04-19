@@ -63,7 +63,7 @@ export default defineNuxtConfig({
 	},
 
 	devServer: {
-		port: process.env.PORT
+		port: process.env.PORT_FRONTEND
 	},
 
 	app: {

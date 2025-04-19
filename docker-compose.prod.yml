@@ -4,12 +4,17 @@ services:
 #      - "${DB_PORT}"
 
   strapi:
+    environment:
+      NODE_ENV: production
     build:
+      context: ./backend
       args:
         MODE: production
     command: "node node_modules/@strapi/strapi/bin/strapi.js start"
 
   nuxt:
+    environment:
+      NODE_ENV: production
     build:
       args:
         MODE: production

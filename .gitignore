@@ -51,3 +51,4 @@ logs
 results
 node_modules
 .node_history
+.env

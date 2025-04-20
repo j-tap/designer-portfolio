@@ -2,16 +2,33 @@ services:
   strapi:
     labels:
       - "traefik.enable=true"
+
+      # HTTPS
       - "traefik.http.routers.strapi.rule=Host(`$TRAEFIK_DOMAIN`)"
       - "traefik.http.routers.strapi.entrypoints=websecure"
       - "traefik.http.routers.strapi.tls.certresolver=myresolver"
 
+      # HTTP redirect
+      - "traefik.http.routers.strapi-http.rule=Host(`$TRAEFIK_DOMAIN`)"
+      - "traefik.http.routers.strapi-http.entrypoints=web"
+      - "traefik.http.routers.strapi-http.middlewares=https-redirect"
+
   nuxt:
     labels:
       - "traefik.enable=true"
+
+      # HTTPS
       - "traefik.http.routers.nuxt.rule=Host(`$TRAEFIK_DOMAIN`)"
       - "traefik.http.routers.nuxt.entrypoints=websecure"
       - "traefik.http.routers.nuxt.tls.certresolver=myresolver"
+
+      # HTTP redirect
+      - "traefik.http.routers.nuxt-http.rule=Host(`$TRAEFIK_DOMAIN`)"
+      - "traefik.http.routers.nuxt-http.entrypoints=web"
+      - "traefik.http.routers.nuxt-http.middlewares=https-redirect"
+
+      # Middleware definition
+      - "traefik.http.middlewares.https-redirect.redirectscheme.scheme=https"
 
 networks:
   traefik:

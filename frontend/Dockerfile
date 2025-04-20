@@ -10,11 +10,13 @@ COPY .yarnrc.yml ./
 RUN corepack enable
 
 COPY package.json yarn.lock ./
-RUN yarn install
+RUN yarn install --immutable
 
 COPY . .
 
-ARG MODE=dev
+ARG MODE=production
 ENV NODE_ENV=${MODE}
 
-CMD ["yarn", "dev"]
+RUN yarn build
+
+CMD ["node", ".output/server/index.mjs"]

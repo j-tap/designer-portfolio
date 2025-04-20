@@ -9,7 +9,7 @@ services:
       - "traefik.http.routers.strapi.tls.certresolver=myresolver"
       - "traefik.http.routers.strapi.middlewares=strapi-stripprefix"
       - "traefik.http.middlewares.strapi-stripprefix.stripprefix.prefixes=/strapi"
-      - "traefik.http.services.strapi.loadbalancer.server.port=1337"
+      - "traefik.http.services.strapi.loadbalancer.server.port=${PORT_BACKEND}"
 
       # HTTP redirect
       - "traefik.http.routers.strapi-http.rule=Host(`${TRAEFIK_DOMAIN}`) && PathPrefix(`/strapi`)"
@@ -24,6 +24,7 @@ services:
       - "traefik.http.routers.nuxt.rule=Host(`${TRAEFIK_DOMAIN}`)"
       - "traefik.http.routers.nuxt.entrypoints=websecure"
       - "traefik.http.routers.nuxt.tls.certresolver=myresolver"
+      - "traefik.http.services.nuxt.loadbalancer.server.port=${PORT_FRONTEND}"
 
       # HTTP redirect
       - "traefik.http.routers.nuxt-http.rule=Host(`${TRAEFIK_DOMAIN}`)"

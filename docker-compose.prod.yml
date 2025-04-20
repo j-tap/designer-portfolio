@@ -19,3 +19,7 @@ services:
       args:
         MODE: production
     command: "node .output/server/index.mjs"
+
+networks:
+  traefik:
+    external: true

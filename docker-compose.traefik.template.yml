@@ -12,3 +12,7 @@ services:
       - "traefik.http.routers.nuxt.rule=Host(`$TRAEFIK_DOMAIN`)"
       - "traefik.http.routers.nuxt.entrypoints=websecure"
       - "traefik.http.routers.nuxt.tls.certresolver=myresolver"
+
+networks:
+  traefik:
+    external: true

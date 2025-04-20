@@ -2,16 +2,25 @@
 
 awk -F'=' '
   /^[[:space:]]*($|#)/ { next }
+
   FILENAME == ARGV[1] {
-    backend[$1] = $2;
-    keys[$1] = 1;
+    backend[$1] = $2
+    keys[$1] = 1
     next
   }
+
   FILENAME == ARGV[2] {
-    frontend[$1] = $2;
-    keys[$1] = 1;
+    frontend[$1] = $2
+    keys[$1] = 1
     next
   }
+
+  FILENAME == ARGV[3] {
+    original[$1] = $2
+    all_existing[$1] = 1
+    next
+  }
+
   END {
     for (key in keys) {
       if ((key in backend) && (key in frontend)) {
@@ -23,7 +32,13 @@ awk -F'=' '
         print key "=" frontend[key]
       }
     }
+
+    for (key in all_existing) {
+      if (!(key in keys)) {
+        print key "=" original[key]
+      }
+    }
   }
-' backend/.env frontend/.env > .env
+' backend/.env frontend/.env .env > .env.merged && mv .env.merged .env
 
 echo "Merge .env successfully"

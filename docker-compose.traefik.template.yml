@@ -2,13 +2,13 @@ services:
   strapi:
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.strapi.rule=Host(`$TRAEFIK_DOMAIN_BACKEND`)"
+      - "traefik.http.routers.strapi.rule=Host(`$TRAEFIK_DOMAIN`)"
       - "traefik.http.routers.strapi.entrypoints=websecure"
       - "traefik.http.routers.strapi.tls.certresolver=myresolver"
 
   nuxt:
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.nuxt.rule=Host(`$TRAEFIK_DOMAIN_FRONTEND`)"
+      - "traefik.http.routers.nuxt.rule=Host(`$TRAEFIK_DOMAIN`)"
       - "traefik.http.routers.nuxt.entrypoints=websecure"
       - "traefik.http.routers.nuxt.tls.certresolver=myresolver"

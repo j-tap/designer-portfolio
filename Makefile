@@ -5,7 +5,7 @@ merge_env:
 	./merge_env.sh
 
 generate_traefik:
-	set -a && . .env && envsubst < docker-compose.traefik.template.yml > docker-compose.traefik.yml
+	bash -c "set -a && source .env && envsubst < docker-compose.traefik.template.yml > docker-compose.traefik.yml"
 
 clean:
 	rm -rf frontend/.output frontend/.nuxt frontend/.vite frontend/.turbo

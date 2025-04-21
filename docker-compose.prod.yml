@@ -6,6 +6,7 @@ services:
   strapi:
     environment:
       NODE_ENV: production
+    ports: []
     restart: unless-stopped
     build:
       context: ./backend
@@ -16,6 +17,7 @@ services:
   nuxt:
     environment:
       NODE_ENV: production
+    ports: []
     restart: unless-stopped
     build:
       args:

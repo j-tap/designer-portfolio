@@ -1,5 +1,7 @@
 services:
   strapi:
+    networks:
+      - traefik
     labels:
       - "traefik.enable=true"
 
@@ -17,6 +19,8 @@ services:
       - "traefik.http.routers.strapi-http.middlewares=https-redirect,strapi-stripprefix"
 
   nuxt:
+    networks:
+      - traefik
     labels:
       - "traefik.enable=true"
 
@@ -33,8 +37,3 @@ services:
 
       # Middleware definition
       - "traefik.http.middlewares.https-redirect.redirectscheme.scheme=https"
-
-
-networks:
-  traefik:
-    external: true

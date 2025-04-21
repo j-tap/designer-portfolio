@@ -4,41 +4,39 @@ awk -F'=' '
   /^[[:space:]]*($|#)/ { next }
 
   FILENAME == ARGV[1] {
-    backend[$1] = $2
-    keys[$1] = 1
-    next
+    backend[$1] = $2; next
   }
-
   FILENAME == ARGV[2] {
-    frontend[$1] = $2
-    keys[$1] = 1
-    next
+    frontend[$1] = $2; next
   }
-
   FILENAME == ARGV[3] {
-    original[$1] = $2
-    all_existing[$1] = 1
-    next
+    original[$1] = $2; next
   }
 
   END {
-    for (key in keys) {
-      if ((key in backend) && (key in frontend)) {
-        print key "_BACKEND=" backend[key]
-        print key "_FRONTEND=" frontend[key]
-      } else if (key in backend) {
-        print key "=" backend[key]
-      } else if (key in frontend) {
-        print key "=" frontend[key]
-      }
-    }
+    # собираем все ключи
+    for (k in backend)   keys[k] = 1
+    for (k in frontend)  keys[k] = 1
+    for (k in original)  keys[k] = 1
 
-    for (key in all_existing) {
-      if (!(key in keys)) {
-        print key "=" original[key]
+    for (k in keys) {
+      if (k in original) {
+        # если есть в корневом .env — печатаем его
+        print k "=" original[k]
+      }
+      else if ((k in backend) && (k in frontend)) {
+        print k "_BACKEND=" backend[k]
+        print k "_FRONTEND=" frontend[k]
+      }
+      else if (k in backend) {
+        print k "=" backend[k]
+      }
+      else {
+        print k "=" frontend[k]
       }
     }
   }
-' backend/.env frontend/.env .env > .env.merged && mv .env.merged .env
+' backend/.env frontend/.env .env > .env.merged \
+  && mv .env.merged .env
 
-echo "Merge .env successfully"
+echo "Merge .env успешно"

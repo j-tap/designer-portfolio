@@ -34,7 +34,7 @@ services:
       - "${PORT_FRONTEND}:${PORT_FRONTEND}"
     command: "yarn dev"
     volumes:
-      - ./frontend/public:/app/public
+      - ./frontend/public:/app/public:ro
 
 volumes:
   pgdata:

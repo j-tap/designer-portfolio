@@ -1,8 +1,4 @@
 services:
-#  postgres:
-#    ports:
-#      - "${DB_PORT}"
-
   strapi:
     environment:
       NODE_ENV: production
@@ -13,6 +9,17 @@ services:
       args:
         MODE: production
     command: "node node_modules/@strapi/strapi/bin/strapi.js start"
+    networks:
+      - traefik
+    volumes:
+      - ./backend/.tmp:/app/.tmp
+      - ./backend/src:/app/src
+      - ./backend/config:/app/config
+      - ./backend/public:/app/public
+      - ./backend/tmp:/tmp
+      - ./backend/yarn-cache:/root/.yarn
+#    depends_on:
+#      - postgres
 
   nuxt:
     environment:
@@ -20,9 +27,17 @@ services:
     ports: []
     restart: unless-stopped
     build:
+      context: ./frontend
       args:
         MODE: production
     command: "node .output/server/index.mjs"
+    networks:
+      - traefik
+    volumes:
+      - ./frontend/public:/app/public:ro
+
+#volumes:
+#  pgdata:
 
 networks:
   traefik:

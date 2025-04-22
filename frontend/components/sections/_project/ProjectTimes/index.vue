@@ -12,7 +12,7 @@
     <div class="project-time__prices">
       <h2 class="project-time__title">{{ t('project.price') }}</h2>
       <TitleOutline class="project-time__value" tag="div">
-        {{ timeHours }} {{ t('common.hour', timeHours) }}
+        {{ timeHours }} {{ tc('common.hour', timeHours) }}
       </TitleOutline>
       <TitleOutline class="project-time__value" tag="div" itemprop="price" :content="timePrice">
         {{ priceFormat(timePrice) }}
@@ -28,7 +28,7 @@ import { priceFormat } from '~/utils/formatData'
 import { dateFormat } from '~/utils/formatDate'
 import { getHours } from '~/composables/useCalcPrice'
 
-const { t } = useI18n()
+const { t, tc } = useI18n()
 const props = defineProps({
   time: Object,
 })

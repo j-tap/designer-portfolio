@@ -1,4 +1,4 @@
-FROM node:18
+FROM node:18-alpine AS build
 
 WORKDIR /app
 
@@ -10,10 +10,10 @@ RUN corepack enable
 
 COPY package.json yarn.lock ./
 
-ARG MODE=dev
-ENV NODE_ENV=${MODE}
+ARG NODE_ENV_BACKEND=dev
+ENV NODE_ENV_BACKEND=${NODE_ENV_BACKEND}
 
-RUN if [ "$MODE" = "production" ]; then \
+RUN if [ "$NODE_ENV_BACKEND" = "production" ]; then \
       yarn install --immutable --check-cache || yarn install; \
     else \
       yarn install; \
@@ -21,4 +21,6 @@ RUN if [ "$MODE" = "production" ]; then \
 
 COPY . .
 
-CMD ["yarn", "develop"]
+RUN yarn build
+
+CMD ["npm", "run", "start"]

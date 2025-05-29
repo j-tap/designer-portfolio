@@ -8,7 +8,7 @@ services:
       # HTTPS
       - "traefik.http.routers.konoiko-strapi.rule=Host(`${TRAEFIK_DOMAIN}`) && PathPrefix(`/strapi`)"
       - "traefik.http.middlewares.strip-strapi.stripprefix.prefixes=/strapi"
-      - "traefik.http.routers.jtap-strapi.middlewares=strip-strapi"
+      - "traefik.http.routers.konoiko-strapi.middlewares=strip-strapi"
       - "traefik.http.routers.konoiko-strapi.entrypoints=websecure"
       - "traefik.http.routers.konoiko-strapi.tls.certresolver=myresolver"
       - "traefik.http.services.konoiko-strapi.loadbalancer.server.port=${PORT_BACKEND}"

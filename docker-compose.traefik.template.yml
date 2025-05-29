@@ -7,16 +7,16 @@ services:
 
       # HTTPS
       - "traefik.http.routers.konoiko-strapi.rule=Host(`${TRAEFIK_DOMAIN}`) && PathPrefix(`/strapi`)"
+      - "traefik.http.middlewares.strip-strapi.stripprefix.prefixes=/strapi"
+      - "traefik.http.routers.jtap-strapi.middlewares=strip-strapi"
       - "traefik.http.routers.konoiko-strapi.entrypoints=websecure"
       - "traefik.http.routers.konoiko-strapi.tls.certresolver=myresolver"
-      - "traefik.http.routers.konoiko-strapi.middlewares=konoiko-strapi-stripprefix"
-      - "traefik.http.middlewares.konoiko-strapi-stripprefix.stripprefix.prefixes=/strapi"
       - "traefik.http.services.konoiko-strapi.loadbalancer.server.port=${PORT_BACKEND}"
 
       # HTTP redirect
       - "traefik.http.routers.konoiko-strapi-http.rule=Host(`${TRAEFIK_DOMAIN}`) && PathPrefix(`/strapi`)"
       - "traefik.http.routers.konoiko-strapi-http.entrypoints=web"
-      - "traefik.http.routers.konoiko-strapi-http.middlewares=https-redirect,konoiko-strapi-stripprefix"
+      - "traefik.http.routers.konoiko-strapi-http.middlewares=https-redirect"
 
   nuxt:
     networks:

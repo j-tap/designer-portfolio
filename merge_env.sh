@@ -14,14 +14,12 @@ awk -F'=' '
   }
 
   END {
-    # собираем все ключи
     for (k in backend)   keys[k] = 1
     for (k in frontend)  keys[k] = 1
     for (k in original)  keys[k] = 1
 
     for (k in keys) {
       if (k in original) {
-        # если есть в корневом .env — печатаем его
         print k "=" original[k]
       }
       else if ((k in backend) && (k in frontend)) {
@@ -39,4 +37,4 @@ awk -F'=' '
 ' backend/.env frontend/.env .env > .env.merged \
   && mv .env.merged .env
 
-echo "Merge .env успешно"
+echo "Merge .env successful"

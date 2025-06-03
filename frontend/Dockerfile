@@ -1,13 +1,13 @@
-FROM node:18
+FROM node:20
 
 WORKDIR /app
 
 RUN mkdir -p .yarn/releases
 
-COPY .yarn/releases/yarn-4.8.0.cjs .yarn/releases/
+COPY .yarn/releases/yarn-4.9.1 .yarn/releases/
 COPY .yarnrc.yml ./
 
-RUN corepack enable
+RUN corepack enable && corepack prepare yarn@4.9.1 --activate
 
 COPY package.json yarn.lock ./
 RUN yarn install

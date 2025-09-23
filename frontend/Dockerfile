@@ -4,7 +4,7 @@ WORKDIR /app
 
 RUN mkdir -p .yarn/releases
 
-COPY .yarn/releases/yarn-4.9.1 .yarn/releases/
+COPY .yarn/releases/yarn-4.9.1.cjs .yarn/releases/
 COPY .yarnrc.yml ./
 
 RUN corepack enable && corepack prepare yarn@4.9.1 --activate

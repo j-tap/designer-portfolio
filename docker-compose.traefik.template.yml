@@ -16,7 +16,7 @@ services:
       # HTTP redirect
       - "traefik.http.routers.konoiko-strapi-http.rule=Host(`${TRAEFIK_DOMAIN}`) && PathPrefix(`/strapi`)"
       - "traefik.http.routers.konoiko-strapi-http.entrypoints=web"
-      - "traefik.http.routers.konoiko-strapi-http.middlewares=https-redirect"
+      - "traefik.http.routers.konoiko-strapi-http.middlewares=konoiko-https-redirect"
 
   nuxt:
     networks:
@@ -33,7 +33,7 @@ services:
       # HTTP redirect
       - "traefik.http.routers.konoiko-http.rule=Host(`${TRAEFIK_DOMAIN}`)"
       - "traefik.http.routers.konoiko-http.entrypoints=web"
-      - "traefik.http.routers.konoiko-http.middlewares=https-redirect"
+      - "traefik.http.routers.konoiko-http.middlewares=konoiko-https-redirect"
 
       # Middleware definition
-      - "traefik.http.middlewares.https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.konoiko-https-redirect.redirectscheme.scheme=https"

@@ -4,6 +4,7 @@
 
   "menu.main": "Home",
   "menu.portfolio": "Portfolio",
+  "menu.posts": "Posts",
   "menu.reviews": "Reviews",
   "menu.contacts": "Contacts",
 
@@ -20,5 +21,11 @@
   "project.adaptive_version_subtitle": "Adaptive version",
   "carousel.pull_to_side_to_see_more": "pull the window box to the side to see more",
   "common.hour": "Hours | Hour | Hours | Hours",
-  "common.error_{code}": "Error {code}"
+  "common.error_{code}": "Error {code}",
+  "posts.empty": "No posts yet",
+  "posts.description": "Collection of posts about design, UX/UI and work experience",
+  "posts.image_alt": "Post image",
+  "posts.back_to_list": "Back to posts list",
+  "posts.view_on_linkedin": "View on LinkedIn",
+  "posts.not_found": "Post not found"
 }

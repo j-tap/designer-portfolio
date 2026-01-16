@@ -82,6 +82,24 @@ export default defineNuxtConfig({
 					'Referrer-Policy': 'strict-origin-when-cross-origin',
 				}
 			},
+			'/posts': {
+				headers: {
+					'Cache-Control': isDev ? 'no-cache' : 'public, max-age=300, s-maxage=3600, stale-while-revalidate=86400',
+					'X-Content-Type-Options': 'nosniff',
+					'X-Frame-Options': 'DENY',
+					'X-XSS-Protection': '1; mode=block',
+					'Referrer-Policy': 'strict-origin-when-cross-origin',
+				}
+			},
+			'/posts/**': {
+				headers: {
+					'Cache-Control': isDev ? 'no-cache' : 'public, max-age=300, s-maxage=3600, stale-while-revalidate=86400',
+					'X-Content-Type-Options': 'nosniff',
+					'X-Frame-Options': 'DENY',
+					'X-XSS-Protection': '1; mode=block',
+					'Referrer-Policy': 'strict-origin-when-cross-origin',
+				}
+			},
 			// Динамические страницы категорий и проектов - SWR паттерн
 			'/portfolio/**': {
 				headers: {

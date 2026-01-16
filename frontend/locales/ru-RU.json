@@ -4,6 +4,7 @@
 
   "menu.main": "Главная",
   "menu.portfolio": "Портфолио",
+  "menu.posts": "Посты",
   "menu.reviews": "Отзывы",
   "menu.contacts": "Контакты",
 
@@ -20,5 +21,11 @@
   "project.adaptive_version_subtitle": "Adaptive version",
   "carousel.pull_to_side_to_see_more": "потяните вбок поле с окнами, чтобы посмотреть больше",
   "common.hour": "Часов | Час | Часа | Часов",
-  "common.error_{code}": "Ошибка {code}"
+  "common.error_{code}": "Ошибка {code}",
+  "posts.empty": "Пока нет постов",
+  "posts.description": "Коллекция постов о дизайне, UX/UI и опыте работы",
+  "posts.image_alt": "Изображение поста",
+  "posts.back_to_list": "Вернуться к списку постов",
+  "posts.view_on_linkedin": "Посмотреть на LinkedIn",
+  "posts.not_found": "Пост не найден"
 }

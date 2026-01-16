@@ -4,6 +4,7 @@
 
   "menu.main": "Inicio",
   "menu.portfolio": "Portafolio",
+  "menu.posts": "Publicaciones",
   "menu.reviews": "Reseñas",
   "menu.contacts": "Contactos",
 
@@ -20,5 +21,11 @@
   "project.adaptive_version_subtitle": "Versión adaptable",
   "carousel.pull_to_side_to_see_more": "arrastra la ventana hacia un lado para ver más",
   "common.hour": "Horas | Hora | Horas | Horas",
-  "common.error_{code}": "Error {code}"
+  "common.error_{code}": "Error {code}",
+  "posts.empty": "Aún no hay publicaciones",
+  "posts.description": "Colección de publicaciones sobre diseño, UX/UI y experiencia laboral",
+  "posts.image_alt": "Imagen de la publicación",
+  "posts.back_to_list": "Volver a la lista de publicaciones",
+  "posts.view_on_linkedin": "Ver en LinkedIn",
+  "posts.not_found": "Publicación no encontrada"
 }

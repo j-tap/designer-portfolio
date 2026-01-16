@@ -7,7 +7,9 @@ const baseURL = process.env.BASE_URL
 const isDev = process.env.NODE_ENV !== 'production'
 
 export default defineNuxtConfig({
-	// debug: isDev,
+	compatibilityDate: '2026-01-16',
+	mode: isDev ? 'development' : 'production',
+	debug: isDev,
 	devtools: { enabled: isDev },
 
 	build: {
@@ -16,7 +18,7 @@ export default defineNuxtConfig({
 
 	nitro: {
     preset: 'node-server',
-    compressPublicAssets: false,
+    compressPublicAssets: !isDev,
     publicAssets: [
       {
         baseURL: '/_nuxt/',

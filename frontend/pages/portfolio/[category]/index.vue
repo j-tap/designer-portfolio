@@ -18,6 +18,7 @@
 <script setup>
 import { ContentWrap } from '~/components/structure'
 import { PortfolioCategory } from '~/components/sections'
+import { updateProjectsPrlx } from '~/composables/useElemsParalax'
 
 const { t } = useI18n()
 const route = useRoute()
@@ -59,14 +60,31 @@ watch(category, async (val) => {
   }
 }, { deep: true })
 
-scrollHandler()
+if (process.client) {
+  let rafId = null
+  let scrollHandler = null
 
-function scrollHandler () {
-  if (window !== undefined && window.innerWidth >= 768 && projects.value?.length > 5) {
-    window.addEventListener('scroll', () => {
-      updateProjectsPrlx(projects.value, window.scrollY)
-    })
-  }
+  onMounted(() => {
+    if (window.innerWidth >= 768 && projects.value?.length > 5) {
+      scrollHandler = () => {
+        if (rafId) cancelAnimationFrame(rafId)
+        rafId = requestAnimationFrame(() => {
+          updateProjectsPrlx(projects.value, window.scrollY)
+          rafId = null
+        })
+      }
+      window.addEventListener('scroll', scrollHandler, { passive: true })
+    }
+  })
+
+  onBeforeUnmount(() => {
+    if (scrollHandler) {
+      window.removeEventListener('scroll', scrollHandler)
+    }
+    if (rafId) {
+      cancelAnimationFrame(rafId)
+    }
+  })
 }
 
 useHead(metaInfo({ title }))

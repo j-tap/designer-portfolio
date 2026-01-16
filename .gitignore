@@ -52,3 +52,4 @@ results
 node_modules
 .node_history
 .env
+codealike.json

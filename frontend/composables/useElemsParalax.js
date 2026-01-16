@@ -3,9 +3,10 @@ import { getElementViewportInfo } from '~/utils/check'
 export const elems = ref([])
 export const elemsStart = ref([])
 export function updateProjectsPrlx (list, scrl = 0) {
-  if (window !== undefined) {
+  if (process.client) {
     list.forEach((o, ind) => {
       const el = elems.value[ind]
+      if (!el) return
       const { isInViewport } = getElementViewportInfo(el)
 
       if (isInViewport) {

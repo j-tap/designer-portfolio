@@ -22,7 +22,7 @@ export const useLoadingStore = defineStore('loadingStore', {
       const newCnt = is ? cnt + 1 : Math.max(cnt - 1, 0)
 
       this.setCountLoading(newCnt)
-      this.setIsLoading(!!this.countLoading > 0)
+      this.setIsLoading(newCnt > 0)
     },
     resetLoading () {
       this.countLoading = 0

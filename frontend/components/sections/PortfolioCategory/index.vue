@@ -97,14 +97,31 @@ watch(props.category, async (val) => {
   }
 }, { deep: true })
 
-scrollHandler()
+if (process.client) {
+  let rafId = null
+  let scrollHandler = null
 
-function scrollHandler () {
-  if (window?.innerWidth >= 768) { //  && props.projects?.length > 5
-    window.addEventListener('scroll', () => {
-      updateProjectsPrlx(props.projects, window.scrollY)
-    })
-  }
+  onMounted(() => {
+    if (window.innerWidth >= 768) {
+      scrollHandler = () => {
+        if (rafId) cancelAnimationFrame(rafId)
+        rafId = requestAnimationFrame(() => {
+          updateProjectsPrlx(props.projects, window.scrollY)
+          rafId = null
+        })
+      }
+      window.addEventListener('scroll', scrollHandler, { passive: true })
+    }
+  })
+
+  onBeforeUnmount(() => {
+    if (scrollHandler) {
+      window.removeEventListener('scroll', scrollHandler)
+    }
+    if (rafId) {
+      cancelAnimationFrame(rafId)
+    }
+  })
 }
 
 function setProjectElems (el) {

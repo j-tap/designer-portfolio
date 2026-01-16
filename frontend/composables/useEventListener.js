@@ -5,7 +5,7 @@ export function useEventListener (target, event, handler){
         watch(target, (value, oldValue) => {
             oldValue?.removeEventListener(event, handler)
             value?.addEventListener(event, handler)
-        })
+        }, { immediate: true })
     }
     else {
         onMounted(() => {

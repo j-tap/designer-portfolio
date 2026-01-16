@@ -14,7 +14,15 @@ export function getMoreProjects (filters) {
     filters,
     pagination: { pageSize: 15 },
   }, [])
-  return computed(() => moreProjects.value.sort(() => 0.5 - Math.random()) || [])
+  return computed(() => {
+    if (!moreProjects.value?.length) return []
+    const shuffled = [...moreProjects.value]
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
+    }
+    return shuffled
+  })
 }
 
 export function getProjectData (slug, categorySlug, filters) {

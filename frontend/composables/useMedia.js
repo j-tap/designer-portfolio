@@ -10,11 +10,16 @@ const sizes = {
 }
 
 export function useMedia (size) {
-    if (window !== undefined) {
+    if (process.client) {
         const result = ref(sizes[size](window.outerWidth))
+        let rafId = null
 
         useEventListener(window, 'resize', () => {
-            result.value = sizes[size](window.outerWidth)
+            if (rafId) cancelAnimationFrame(rafId)
+            rafId = requestAnimationFrame(() => {
+                result.value = sizes[size](window.outerWidth)
+                rafId = null
+            })
         })
 
         return result

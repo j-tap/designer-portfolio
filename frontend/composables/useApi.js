@@ -85,7 +85,10 @@ export async function create (name, body) {
   const config = useRuntimeConfig()
   return await fetch(`${config.public.strapi.url}/api/${name}`, {
     method: 'post',
-    body,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(body),
   })
 }
 
@@ -130,12 +133,13 @@ async function sendRequest (name, params, method, cb) {
 }
 
 function updateLoading (isLoading) {
-  if (window !== undefined) {
+  if (process.client) {
     const loadingStore = useLoadingStore()
     loadingStore.updateLoading(isLoading)
   }
 }
 
 function toSimpleLocale (locale) {
+  if (!locale) return null
   return locale.split('-')[0]
 }

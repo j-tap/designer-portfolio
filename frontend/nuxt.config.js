@@ -32,6 +32,14 @@ export default defineNuxtConfig({
 			ignore: ['/card']
 		},
 		routeRules: {
+			// API роуты - исключаем из i18n
+			'/api/**': {
+				locale: false,
+				cors: true,
+				headers: {
+					'Cache-Control': 'no-cache, no-store, must-revalidate'
+				}
+			},
 			// Статические ассеты - долгое кеширование
 			'/_nuxt/**': {
 				headers: {

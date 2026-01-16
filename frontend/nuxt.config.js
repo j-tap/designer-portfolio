@@ -23,7 +23,7 @@ export default defineNuxtConfig({
       {
         baseURL: '/_nuxt/',
         dir: '.output/public/_nuxt',
-        maxAge: 60 * 60 * 24 * 365
+        maxAge: 60 * 60 * 24 * 365 // 1 год для статических ассетов
       }
     ],
 		prerender: {
@@ -32,9 +32,63 @@ export default defineNuxtConfig({
 			ignore: ['/card']
 		},
 		routeRules: {
+			// Статические ассеты - долгое кеширование
+			'/_nuxt/**': {
+				headers: {
+					'Cache-Control': 'public, max-age=31536000, immutable' // 1 год
+				}
+			},
+			'/favicon.ico': {
+				headers: {
+					'Cache-Control': 'public, max-age=31536000, immutable' // 1 год
+				}
+			},
+			'/robots.txt': {
+				headers: {
+					'Cache-Control': 'public, max-age=3600' // 1 час
+				}
+			},
+			'/sitemap.xml': {
+				headers: {
+					'Cache-Control': 'public, max-age=3600' // 1 час
+				}
+			},
+			// Статические страницы - ISR паттерн (через Cache-Control)
+			'/': {
+				prerender: true,
+				headers: {
+					'Cache-Control': isDev ? 'no-cache' : 'public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400',
+					'X-Content-Type-Options': 'nosniff',
+					'X-Frame-Options': 'DENY',
+					'X-XSS-Protection': '1; mode=block',
+					'Referrer-Policy': 'strict-origin-when-cross-origin',
+				}
+			},
+			'/portfolio': {
+				prerender: true,
+				headers: {
+					'Cache-Control': isDev ? 'no-cache' : 'public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400',
+					'X-Content-Type-Options': 'nosniff',
+					'X-Frame-Options': 'DENY',
+					'X-XSS-Protection': '1; mode=block',
+					'Referrer-Policy': 'strict-origin-when-cross-origin',
+				}
+			},
+			// Динамические страницы категорий и проектов - SWR паттерн
+			'/portfolio/**': {
+				headers: {
+					'Cache-Control': isDev ? 'no-cache, no-store, must-revalidate' : 'public, max-age=300, s-maxage=3600, stale-while-revalidate=86400',
+					'X-Content-Type-Options': 'nosniff',
+					'X-Frame-Options': 'DENY',
+					'X-XSS-Protection': '1; mode=block',
+					'Referrer-Policy': 'strict-origin-when-cross-origin',
+				}
+			},
+			// Остальные страницы
 			'/**': { 
 				streaming: false,
 				headers: {
+					'Cache-Control': isDev ? 'no-cache, no-store, must-revalidate' : 'public, max-age=0, must-revalidate',
 					'X-Content-Type-Options': 'nosniff',
 					'X-Frame-Options': 'DENY',
 					'X-XSS-Protection': '1; mode=block',
@@ -94,7 +148,6 @@ export default defineNuxtConfig({
 				{ name: 'msapplication-TileColor', content: '#000000' },
 				{ name: 'google-site-verification', content: process.env.GOOGLE_SITE_VERIFICATION },
 				{ name: 'yandex-verification', content: process.env.YANDEX_SITE_VERIFICATION },
-				{ 'http-equiv': 'Cache-Control', content: `max-age=${process.env.CACHE_TIME || '60'}, must-revalidate` },
 				{ 'http-equiv': 'X-UA-Compatible', content: 'IE=edge' },
 			]
 		},

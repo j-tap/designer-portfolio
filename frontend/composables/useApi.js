@@ -20,6 +20,8 @@ export function serverFetch (name, params = {}, defaultValue = [], fetchType = '
   const result = ref(defaultValue)
 
   useAsyncData(key, methods[fetchType], {
+    server: true,
+    default: () => defaultValue,
     getCachedData: key => nuxtApp.payload?.static?.[key] ?? nuxtApp.payload?.data?.[key],
   })
     .then(({ data }) => {

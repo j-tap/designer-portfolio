@@ -28,10 +28,14 @@ const classes = computed(() => {
 
 async function updateMeta () {
   const { data } = await useAsyncData('meta-info', () => find('meta-info'), {
+    server: true,
+    default: () => null,
     getCachedData: key => nuxtApp.payload?.static?.[key] ?? nuxtApp.payload?.data?.[key],
   })
 
-  metaStore.updateMetaInfo(data.value?.data)
+  if (data.value?.data) {
+    metaStore.updateMetaInfo(data.value.data)
+  }
 }
 </script>
 

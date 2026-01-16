@@ -24,6 +24,7 @@ const commonStore = useCommonStore()
 const menuMain = [
   { name: 'index', locale: 'menu.main' },
   { name: 'portfolio', locale: 'menu.portfolio' },
+  { name: 'posts', locale: 'menu.posts' },
   { name: 'reviews', locale: 'menu.reviews' },
   { name: 'contacts', locale: 'menu.contacts' },
 ]

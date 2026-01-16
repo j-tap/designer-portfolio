@@ -1,8 +1,17 @@
 <template>
   <div class="page-posts">
     <ContentWrap>
-      <TitleOutline class="page-posts__title">{{ t('menu.posts') }}</TitleOutline>
-      <PostsList :items="posts" />
+      <div class="page-posts__head page-posts-head">
+        <TitleOutline
+          class="page-posts-head__title"
+          tag="h1"
+        >
+          {{ t('menu.posts') }}
+        </TitleOutline>
+      </div>
+      <div class="page-posts__list">
+        <PostsList :items="posts" />
+      </div>
     </ContentWrap>
   </div>
 </template>
@@ -12,6 +21,7 @@ import { TitleOutline } from '~/components/common'
 import { ContentWrap } from '~/components/structure'
 import { PostsList } from '~/components/sections'
 import { metaInfo } from '~/composables/useMeta'
+import { getPostTitle, getPostImage } from '~/utils/post'
 
 const { t } = useI18n()
 const config = useRuntimeConfig()
@@ -67,60 +77,23 @@ const blogSchema = computed(() => {
     name: pageTitle.value,
     description: pageDescription.value,
     url: currentUrl.value,
-    blogPost: posts.value.slice(0, 10).map(post => ({
-      '@type': 'BlogPosting',
-      headline: post.text ? (post.text.length > 100 ? post.text.substring(0, 97) + '...' : post.text) : '',
-      datePublished: post.created_at,
-      author: {
-        '@type': 'Person',
-        name: post.author?.full_name || '',
-      },
-      image: getPostImage(post),
-      mainEntityOfPage: post.url ? {
-        '@type': 'WebPage',
-        '@id': post.url,
-      } : undefined,
-    })),
+      blogPost: posts.value.slice(0, 10).map(post => ({
+        '@type': 'BlogPosting',
+        headline: getPostTitle(post),
+        datePublished: post.created_at,
+        author: {
+          '@type': 'Person',
+          name: post.author?.full_name || '',
+        },
+        image: getPostImage(post) || undefined,
+        mainEntityOfPage: post.url ? {
+          '@type': 'WebPage',
+          '@id': post.url,
+        } : undefined,
+      })),
   }
 })
 
-function getPostImage(post) {
-  if (!post?.content?.images || !Array.isArray(post.content.images) || post.content.images.length === 0) {
-    return undefined
-  }
-
-  const firstImageSet = post.content.images[0]
-  if (!firstImageSet?.image || !Array.isArray(firstImageSet.image)) {
-    return undefined
-  }
-
-  const targetWidth = 1280
-  let bestImage = null
-  let bestWidth = 0
-
-  for (const img of firstImageSet.image) {
-    if (img.width && img.url) {
-      if (img.width === targetWidth) {
-        return img.url
-      }
-      if (img.width < targetWidth && img.width > bestWidth) {
-        bestWidth = img.width
-        bestImage = img.url
-      }
-    }
-  }
-
-  if (!bestImage) {
-    for (const img of firstImageSet.image) {
-      if (img.width && img.url && img.width > bestWidth) {
-        bestWidth = img.width
-        bestImage = img.url
-      }
-    }
-  }
-
-  return bestImage
-}
 
 watch(blogSchema, (schema) => {
   if (schema && posts.value.length > 0) {

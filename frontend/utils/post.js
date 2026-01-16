@@ -5,11 +5,21 @@ export function getPostTitle(post) {
   const sentenceEndRegex = /[.!?(≠'"]/
   const match = text.match(sentenceEndRegex)
   
+  let title = ''
   if (match && match.index !== undefined) {
-    return text.substring(0, match.index + 1).trim().replace(/[(≠'"]/g, '')
+    title = text.substring(0, match.index + 1).trim().replace(/[(≠'"]/g, '')
+  } else {
+    title = text
   }
   
-  return text.length > 100 ? text.substring(0, 97) + '...' : text
+  if (title.length > 150 && title.includes(',')) {
+    const commaIndex = title.indexOf(',')
+    title = title.substring(0, commaIndex).trim()
+  } else if (title.length > 150) {
+    title = title.substring(0, 147) + '...'
+  }
+  
+  return title
 }
 
 export function getPostImage(post) {

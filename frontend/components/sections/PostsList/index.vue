@@ -1,64 +1,40 @@
 <template>
-  <ul v-if="items?.length" class="posts-list">
+  <ul v-if="processedPosts?.length" class="posts-list">
     <li
-      v-for="post in items"
+      v-for="post in processedPosts"
       :key="post.id"
+      :id="`post-${post.id}`"
+      :ref="setPostElems"
       class="posts-list__item"
     >
       <article class="post" itemscope itemtype="https://schema.org/BlogPosting">
         <NuxtLink
-          v-if="showLinks"
-          :to="getPostUrl(post)"
+          :to="post.url"
           class="post__link"
         >
-          <div class="post__body">
+          <figure class="post__inner">
+            <div v-if="post.image" class="post__image">
+              <img
+                :src="post.image"
+                :alt="post.imageAlt"
+                itemprop="image"
+                loading="lazy"
+              />
+            </div>
+            <div v-else class="post__image post__image_empty"></div>
             <div class="post__content">
-              <h2 class="post__title" itemprop="headline">{{ getPostTitle(post) }}</h2>
-              <p class="post__text" itemprop="articleBody">{{ getPostPreview(post) }}</p>
+              <h2 class="post__title" itemprop="headline">{{ post.title }}</h2>
+              <p class="post__text" itemprop="articleBody">{{ post.preview }}</p>
               <time 
                 class="post__date" 
                 :datetime="post.created_at"
                 itemprop="datePublished"
               >
-                {{ dateFormat(post.created_at) }}
+                {{ post.formattedDate }}
               </time>
             </div>
-            
-            <div v-if="postImage(post)" class="post__image">
-              <img
-                :src="postImage(post)"
-                :alt="getPostImageAlt(post)"
-                itemprop="image"
-                loading="lazy"
-              />
-            </div>
-          </div>
+          </figure>
         </NuxtLink>
-        
-        <template v-else>
-          <div class="post__body">
-            <div class="post__content">
-              <h2 class="post__title" itemprop="headline">{{ getPostTitle(post) }}</h2>
-              <div class="post__text" itemprop="articleBody">{{ post.text }}</div>
-              <time 
-                class="post__date" 
-                :datetime="post.created_at"
-                itemprop="datePublished"
-              >
-                {{ dateFormat(post.created_at) }}
-              </time>
-            </div>
-            
-            <div v-if="postImage(post)" class="post__image">
-              <img
-                :src="postImage(post)"
-                :alt="getPostImageAlt(post)"
-                itemprop="image"
-                loading="lazy"
-              />
-            </div>
-          </div>
-        </template>
       </article>
     </li>
   </ul>
@@ -68,6 +44,11 @@
 <script setup>
 import { dateFormat } from '~/utils/formatDate'
 import { getPostTitle, getPostImage, getPostPreview } from '~/utils/post'
+import {
+  updateProjectsPrlx,
+  resetParalax,
+  elems as postElems,
+} from '~/composables/useElemsParalax'
 
 const { t } = useI18n()
 
@@ -76,25 +57,69 @@ const props = defineProps({
     type: Array,
     required: true,
   },
-  showLinks: {
-    type: Boolean,
-    default: true,
-  },
 })
 
 const localePath = useLocalePath()
 
-function postImage(post) {
-  return getPostImage(post)
+const processedPosts = computed(() => {
+  if (!props.items?.length) return []
+  
+  return props.items.map(post => {
+    const image = getPostImage(post)
+    const title = getPostTitle(post)
+    
+    return {
+      ...post,
+      image,
+      imageAlt: title || t('posts.image_alt'),
+      title,
+      preview: getPostPreview(post),
+      url: localePath(`/posts/${post.id}`),
+      formattedDate: dateFormat(post.created_at),
+    }
+  })
+})
+
+function setPostElems(el) {
+  if (el) {
+    postElems.value.push(el)
+  }
 }
 
-function getPostImageAlt(post) {
-  const title = getPostTitle(post)
-  return title || t('posts.image_alt')
-}
+if (process.client) {
+  let rafId = null
+  let scrollHandler = null
 
-function getPostUrl(post) {
-  return localePath(`/posts/${post.id}`)
+  onMounted(() => {
+    resetParalax()
+    postElems.value = []
+    
+    if (window.innerWidth >= 768) {
+      scrollHandler = () => {
+        if (rafId) cancelAnimationFrame(rafId)
+        rafId = requestAnimationFrame(() => {
+          updateProjectsPrlx(props.items, window.scrollY)
+          rafId = null
+        })
+      }
+      window.addEventListener('scroll', scrollHandler, { passive: true })
+
+      nextTick(() => {
+        updateProjectsPrlx(props.items, window.scrollY)
+      })
+    }
+  })
+
+  onBeforeUnmount(() => {
+    if (scrollHandler) {
+      window.removeEventListener('scroll', scrollHandler)
+    }
+    if (rafId) {
+      cancelAnimationFrame(rafId)
+    }
+    resetParalax()
+    postElems.value = []
+  })
 }
 </script>
 

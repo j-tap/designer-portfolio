@@ -3,37 +3,73 @@
     display: flex;
     flex-direction: column;
     gap: 30px;
-    max-width: 900px;
+    max-width: 1400px;
     margin: 0 auto;
 
-    &__header {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
+    &__back {
+      &:first-child {
+        padding-bottom: 1vw;
+      }
+      &:last-child {
+        padding-top: 6vw;
+      }
     }
 
-    &__back {
-      font-family: $font__default;
-      font-size: clamp(14px, 1vw, 16px);
-      color: rgba($color__white, 0.7);
-      text-decoration: none;
-      transition: opacity 0.3s ease;
+    &__body {
+      display: flex;
+      gap: 40px;
+      align-items: flex-start;
 
-      &:hover {
-        opacity: 0.8;
+      @include screen('sm') {
+        flex-direction: column;
+        gap: 30px;
       }
+
+      @include screen('md-up') {
+        flex-direction: row;
+      }
+    }
+
+    &__left {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+
+    &__right {
+      flex-shrink: 0;
+
+      @include screen('sm') {
+        width: 100%;
+        order: -1;
+      }
+
+      @include screen('md-up') {
+        width: 50%;
+        max-width: 600px;
+        position: sticky;
+        top: 20px;
+      }
+    }
+
+    &__head {
+      margin-bottom: 0;
+      display: flex;
+      flex-direction: column;
+      gap: clamp(15px, 2vw, 25px);
     }
 
     &__date {
       font-family: $font__default;
       font-size: clamp(14px, 1vw, 16px);
       color: rgba($color__white, 0.7);
+      margin-top: 0;
     }
 
     &__image {
-      max-width: 800px;
       width: 100%;
-      margin: 0 auto;
       overflow: hidden;
       border-radius: 4px;
 
@@ -52,10 +88,10 @@
     }
 
     &__title {
-      font-family: $font__decor;
-      font-size: clamp(24px, 2.5vw, 36px);
+      font-size: clamp(20px, 3vw, 30px);
+      text-transform: uppercase;
       font-weight: 700;
-      line-height: 1.3;
+      line-height: 1;
       margin: 0;
     }
 

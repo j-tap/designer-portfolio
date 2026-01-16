@@ -2,60 +2,81 @@
   <div class="page-post">
     <ContentWrap>
       <article v-if="post" class="post-full" itemscope itemtype="https://schema.org/BlogPosting">
-        <header class="post-full__header">
-          <NuxtLink :to="localePath('/posts')" class="post-full__back">
-            ← {{ t('posts.back_to_list') }}
-          </NuxtLink>
-          <time 
-            class="post-full__date" 
-            :datetime="post.created_at"
-            itemprop="datePublished"
-          >
-            {{ dateFormat(post.created_at) }}
-          </time>
-        </header>
+        <BackLink
+          :to="'/posts'"
+          class="post-full__back"
+        >
+          {{ t('posts.back_to_list') }}
+        </BackLink>
         
-        <div v-if="getPostImage(post)" class="post-full__image">
-          <img
-            :src="getPostImage(post)"
-            :alt="getPostImageAlt(post)"
-            itemprop="image"
-            loading="lazy"
-          />
-        </div>
-        
-        <div class="post-full__content" itemprop="articleBody">
-          <h1 class="post-full__title" itemprop="headline">{{ getPostTitle(post) }}</h1>
-          <div class="post-full__text">{{ post.text }}</div>
-        </div>
-        
-        <footer class="post-full__footer">
-          <div v-if="post.author" class="post-full__author" itemprop="author" itemscope itemtype="https://schema.org/Person">
-            <span itemprop="name">{{ post.author.full_name }}</span>
+        <div class="post-full__body">
+          <div class="post-full__left">
+            <header class="post-full__head">
+              <h1 class="post-full__title" itemprop="headline">{{ getPostTitle(post) }}</h1>
+              <time 
+                class="post-full__date" 
+                :datetime="post.created_at"
+                itemprop="datePublished"
+              >
+                {{ dateFormat(post.created_at) }}
+              </time>
+            </header>
+            
+            <div class="post-full__content" itemprop="articleBody">
+              <div class="post-full__text">{{ post.text }}</div>
+            </div>
+            
+            <footer class="post-full__footer">
+              <div v-if="post.author" class="post-full__author" itemprop="author" itemscope itemtype="https://schema.org/Person">
+                <span itemprop="name">{{ post.author.full_name }}</span>
+              </div>
+              <a 
+                v-if="post.url" 
+                :href="post.url" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                class="post-full__source"
+              >
+                {{ t('posts.view_on_linkedin') }}
+              </a>
+            </footer>
           </div>
-          <a 
-            v-if="post.url" 
-            :href="post.url" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            class="post-full__source"
-          >
-            {{ t('posts.view_on_linkedin') }}
-          </a>
-        </footer>
+          
+          <div v-if="getPostImage(post)" class="post-full__right">
+            <div class="post-full__image">
+              <img
+                :src="getPostImage(post)"
+                :alt="getPostImageAlt(post)"
+                itemprop="image"
+                loading="lazy"
+              />
+            </div>
+          </div>
+        </div>
+        
+        <BackLink
+          :to="'/posts'"
+          class="post-full__back"
+        >
+          {{ t('posts.back_to_list') }}
+        </BackLink>
       </article>
       
       <div v-else class="post-full__not-found">
         <p>{{ t('posts.not_found') }}</p>
-        <NuxtLink :to="localePath('/posts')" class="post-full__back">
+        <BackLink
+          :to="'/posts'"
+          class="post-full__back"
+        >
           {{ t('posts.back_to_list') }}
-        </NuxtLink>
+        </BackLink>
       </div>
     </ContentWrap>
   </div>
 </template>
 
 <script setup>
+import { BackLink } from '~/components/common'
 import { ContentWrap } from '~/components/structure'
 import { metaInfo } from '~/composables/useMeta'
 import { dateFormat } from '~/utils/formatDate'

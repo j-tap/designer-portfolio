@@ -1,12 +1,31 @@
 .page-posts {
-  max-width: 1200px;
+  &__head {
+    margin: 6.7vw 0 0 auto;
+
+    @include screen('sm') {
+      margin-bottom: 30px;
+    }
+    @include screen('md-up') {
+      max-width: 55%;
+    }
+  }
+
+  &__list {
+    @include screen('md-up') {
+      margin-top: -20.3vw;
+    }
+  }
+}
+
+.page-posts-head {
+  display: block;
+  position: relative;
 
   &__title {
-    font-weight: 700;
-    font-size: clamp(36px, 6vw, 100px);
+    font-size: clamp(35px, 5vw, 130px);
     text-transform: uppercase;
+    font-weight: 700;
     line-height: 1;
-    text-align: right;
-    margin: 1vw 0 0;
+    display: block;
   }
 }

@@ -43,16 +43,14 @@ watch(project, (val) => {
   }
 }, { deep: true })
 
-watch(projectMeta, (meta) => {
-  if (meta) {
-    useHead(metaInfo({
-      title: meta.title,
-      description: meta.description,
-      image: meta.img,
-      keywords: meta.keywords,
-    }))
-  }
-}, { immediate: true, deep: true })
+const headMeta = metaInfo({
+  title: computed(() => project.value?.title ? projectMeta.title.value : null),
+  description: computed(() => project.value?.title ? projectMeta.description.value : null),
+  image: computed(() => project.value?.title ? projectMeta.img.value : null),
+  keywords: computed(() => project.value?.title ? projectMeta.keywords.value : null),
+})
+
+useHead(headMeta)
 
 const breadcrumbs = computed(() => {
   if (!project.value || !project.value.title) return null

@@ -1,5 +1,5 @@
 <template>
-  <ul class="portfolio-categories">
+  <ul v-if="items && items.length > 0" class="portfolio-categories">
     <li
       v-for="item in items"
       :key="item.slug"

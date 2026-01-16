@@ -69,17 +69,34 @@ import { TitleOutline, MarqueeBlock, HtmlMarked } from '~/components/common'
 import { PortfolioCategories } from '~/components/sections'
 import { serverFetch } from '~/composables/useApi'
 import { metaInfo } from '~/composables/useMeta'
+import { useStructuredData } from '~/composables/useStructuredData'
 import { useMetaStore } from '~/stores/metaStore'
 
 const { t } = useI18n()
 const metaStore = useMetaStore()
 const meta = computed(() => metaStore.getMetaInfo)
-const home = serverFetch('home', {})
+const home = serverFetch('home', {}, {}, 'findOne')
 const categories = serverFetch('category-projects', {
   sort: [{ rank: 'asc' }],
 }, [])
 
 useHead(metaInfo())
+
+const { getStructuredData } = useStructuredData('home', {
+  includeOrganization: true,
+})
+
+watch(getStructuredData, (schemas) => {
+  if (schemas && schemas.length > 0) {
+    useHead({
+      script: schemas.map((schema, index) => ({
+        type: 'application/ld+json',
+        children: JSON.stringify(schema),
+        key: `structured-data-${index}`,
+      })),
+    })
+  }
+}, { immediate: true, deep: true })
 </script>
 
 <style lang="scss" scoped src="./style.scss"/>

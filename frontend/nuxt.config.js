@@ -32,7 +32,15 @@ export default defineNuxtConfig({
 			ignore: ['/card']
 		},
 		routeRules: {
-			'/**': { streaming: false }
+			'/**': { 
+				streaming: false,
+				headers: {
+					'X-Content-Type-Options': 'nosniff',
+					'X-Frame-Options': 'DENY',
+					'X-XSS-Protection': '1; mode=block',
+					'Referrer-Policy': 'strict-origin-when-cross-origin',
+				}
+			}
 		}
 	},
 
@@ -71,11 +79,23 @@ export default defineNuxtConfig({
 	app: {
 		head: {
 			charset: 'utf-8',
-			viewport: 'width=device-width, initial-scale=1.0',
+			viewport: 'width=device-width, initial-scale=1.0, viewport-fit=cover',
+			titleTemplate: '%s',
+			link: [
+				{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+				{ rel: 'apple-touch-icon', sizes: '180x180', href: '/apple-touch-icon.png' },
+				{ rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon-32x32.png' },
+				{ rel: 'icon', type: 'image/png', sizes: '16x16', href: '/favicon-16x16.png' },
+				{ rel: 'manifest', href: '/site.webmanifest' },
+			],
 			meta: [
+				{ name: 'format-detection', content: 'telephone=no' },
+				{ name: 'theme-color', content: '#000000' },
+				{ name: 'msapplication-TileColor', content: '#000000' },
 				{ name: 'google-site-verification', content: process.env.GOOGLE_SITE_VERIFICATION },
 				{ name: 'yandex-verification', content: process.env.YANDEX_SITE_VERIFICATION },
-				{ 'http-equiv': 'Cache-Control', content: `max-age=${process.env.CACHE_TIME || '60'}, must-revalidate` }
+				{ 'http-equiv': 'Cache-Control', content: `max-age=${process.env.CACHE_TIME || '60'}, must-revalidate` },
+				{ 'http-equiv': 'X-UA-Compatible', content: 'IE=edge' },
 			]
 		},
 		pageTransition: { name: 'page', mode: 'out-in' },

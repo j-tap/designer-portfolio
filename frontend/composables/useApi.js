@@ -1,9 +1,8 @@
 import qs from 'qs'
 import { useLoadingStore } from '~/stores/loadingStore'
 
-export function serverFetch (name, params = {}, defaultValue = {}, fetchType = 'find') {
+export function serverFetch (name, params = {}, defaultValue = [], fetchType = 'find') {
   const nuxtApp = useNuxtApp()
-  const result = ref(defaultValue)
   const key = `${name}-${JSON.stringify(params)}`
   let slug = null
 
@@ -15,13 +14,18 @@ export function serverFetch (name, params = {}, defaultValue = {}, fetchType = '
   const methods = {
     find: () => find(name, params),
     findBySlug: () => findBySlug(name, slug, params),
+    findOne: () => findOne(name, params),
   }
+
+  const result = ref(defaultValue)
 
   useAsyncData(key, methods[fetchType], {
     getCachedData: key => nuxtApp.payload?.static?.[key] ?? nuxtApp.payload?.data?.[key],
   })
     .then(({ data }) => {
-      result.value = data.value?.data
+      if (data.value?.data !== undefined) {
+        result.value = data.value.data
+      }
     })
 
   return result

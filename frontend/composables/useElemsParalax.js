@@ -2,6 +2,12 @@ import { getElementViewportInfo } from '~/utils/check'
 
 export const elems = ref([])
 export const elemsStart = ref([])
+
+export function resetParalax () {
+  elems.value = []
+  elemsStart.value = []
+}
+
 export function updateProjectsPrlx (list, scrl = 0) {
   if (process.client) {
     list.forEach((o, ind) => {

@@ -58,6 +58,7 @@ import { ContentWrap } from '~/components/structure'
 import { ProjectPreview, PortfolioSubcategoriesNav } from '~/components/sections'
 import {
   updateProjectsPrlx,
+  resetParalax,
   elems as projectElems,
 } from '~/composables/useElemsParalax'
 import { display404 } from '~/composables/useErrorContent'
@@ -102,6 +103,9 @@ if (process.client) {
   let scrollHandler = null
 
   onMounted(() => {
+    resetParalax()
+    projectElems.value = []
+    
     if (window.innerWidth >= 768) {
       scrollHandler = () => {
         if (rafId) cancelAnimationFrame(rafId)
@@ -111,6 +115,10 @@ if (process.client) {
         })
       }
       window.addEventListener('scroll', scrollHandler, { passive: true })
+
+      nextTick(() => {
+        updateProjectsPrlx(props.projects, window.scrollY)
+      })
     }
   })
 
@@ -121,12 +129,13 @@ if (process.client) {
     if (rafId) {
       cancelAnimationFrame(rafId)
     }
+    resetParalax()
+    projectElems.value = []
   })
 }
 
 function setProjectElems (el) {
   if (el) {
-    // TODO: Need clean after updated
     projectElems.value.push(el)
   }
 }

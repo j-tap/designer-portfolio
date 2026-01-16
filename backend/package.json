@@ -11,23 +11,23 @@
   },
   "dependencies": {
     "@retikolo/drag-drop-content-types": "^1.6.0",
-    "@strapi/plugin-color-picker": "^4.25.3",
-    "@strapi/plugin-email": "^4.25.3",
-    "@strapi/plugin-i18n": "^4.25.3",
-    "@strapi/plugin-users-permissions": "^4.25.3",
-    "@strapi/strapi": "^4.25.4",
-    "better-sqlite3": "^11.9.1",
-    "pg": "^8.14.1",
+    "@strapi/plugin-color-picker": "^4.26.1",
+    "@strapi/plugin-email": "^4.26.1",
+    "@strapi/plugin-i18n": "^4.26.1",
+    "@strapi/plugin-users-permissions": "^4.26.1",
+    "@strapi/strapi": "^4.26.1",
+    "better-sqlite3": "^12.6.0",
+    "pg": "^8.17.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^5.2.0",
+    "react-router-dom": "^5.3.4",
     "strapi-blurhash": "1.1.1",
     "strapi-plugin-multi-select": "^1.2.3",
     "strapi-plugin-populate-deep": "^3.0.1",
     "strapi-plugin-slugify": "^2.3.8",
     "strapi-plugin-transformer": "^3.1.2",
     "strapi-provider-email-smtp": "^1.0.3",
-    "styled-components": "^5.2.1"
+    "styled-components": "^5.3.11"
   },
   "author": {
     "name": "j-tap"

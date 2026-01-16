@@ -1,8 +1,6 @@
 import { defineStore } from 'pinia'
 
-export const useErrorsStore = defineStore({
-  id: 'errorsStore',
-
+export const useErrorsStore = defineStore('errorsStore', {
   state: () => ({
     displayContent404: false,
   }),

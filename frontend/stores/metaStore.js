@@ -1,9 +1,7 @@
 import { defineStore } from 'pinia'
 import { find } from '~/composables/useApi'
 
-export const useMetaStore = defineStore({
-  id: 'metaStore',
-
+export const useMetaStore = defineStore('metaStore', {
   state: () => ({
     title: null,
     description: null,

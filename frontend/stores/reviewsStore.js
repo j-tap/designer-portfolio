@@ -1,13 +1,11 @@
 import { defineStore } from 'pinia'
+import { ref } from 'vue'
 import { useStorage } from '@vueuse/core'
 
-const id = 'reviewsStore'
 const key = 'canSendReview'
 const canSendReview = useStorage(key, true)
 
-export const useReviewsStore = defineStore({
-  id,
-
+export const useReviewsStore = defineStore('reviewsStore', {
   state: () => ({
     canSendReview: ref(true),
   }),

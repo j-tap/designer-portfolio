@@ -1,8 +1,6 @@
 import { defineStore } from 'pinia'
 
-export const useCommonStore = defineStore({
-  id: 'commonStore',
-
+export const useCommonStore = defineStore('commonStore', {
   state: () => ({
     displayMobileMenu: false,
   }),

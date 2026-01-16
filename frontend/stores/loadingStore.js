@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia'
 
-export const useLoadingStore = defineStore({
-  id: 'loadingStore',
+export const useLoadingStore = defineStore('loadingStore', {
   state: () => ({
     isLoading: false,
     countLoading: 0,

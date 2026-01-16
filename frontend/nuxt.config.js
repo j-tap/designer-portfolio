@@ -61,6 +61,11 @@ export default defineNuxtConfig({
 					'Cache-Control': 'public, max-age=3600' // 1 час
 				}
 			},
+			'/rss.xml': {
+				headers: {
+					'Cache-Control': 'public, max-age=3600' // 1 час
+				}
+			},
 			// Статические страницы - ISR паттерн (через Cache-Control)
 			'/': {
 				prerender: true,

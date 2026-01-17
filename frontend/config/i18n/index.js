@@ -12,7 +12,7 @@ export default {
     cookieKey: 'i18n_redirected',
     redirectOn: 'root',
     alwaysRedirect: false,
-    fallbackLocale: 'en',
+    fallbackLocale: defaultLocale,
   },
   locales: [
     {

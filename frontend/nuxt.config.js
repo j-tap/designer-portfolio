@@ -67,8 +67,8 @@ export default defineNuxtConfig({
 				}
 			},
 			// Статические страницы - ISR паттерн (через Cache-Control)
+			// Корень не пререндерим, чтобы работал detectBrowserLanguage
 			'/': {
-				prerender: true,
 				headers: {
 					'Cache-Control': isDev ? 'no-cache' : 'public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400',
 					'X-Content-Type-Options': 'nosniff',

@@ -24,6 +24,8 @@ services:
   nuxt:
     environment:
       NODE_ENV: production
+      LINKEDIN_USER_URN: ${LINKEDIN_USER_URN}
+      RAPIDAPI_KEY: ${RAPIDAPI_KEY}
     ports: []
     restart: unless-stopped
     build:

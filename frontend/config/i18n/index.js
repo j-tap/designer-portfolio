@@ -8,7 +8,11 @@ export default {
   globalInjection: false,
   vueI18nLoader: true,
   detectBrowserLanguage: {
-    useCookie: false,
+    useCookie: true,
+    cookieKey: 'i18n_redirected',
+    redirectOn: 'root',
+    alwaysRedirect: false,
+    fallbackLocale: 'en',
   },
   locales: [
     {
@@ -22,7 +26,7 @@ export default {
       code: 'en',
       name: 'English',
       dir: 'ltr',
-      iso: 'ru-RU',
+      iso: 'en-US',
       file: 'en-US.json',
     },
     {

@@ -27,5 +27,7 @@
   "posts.image_alt": "Imagen de la publicación",
   "posts.back_to_list": "Volver a la lista de publicaciones",
   "posts.view_on_linkedin": "Ver en LinkedIn",
-  "posts.not_found": "Publicación no encontrada"
+  "posts.not_found": "Publicación no encontrada",
+  "posts.prev": "Anterior",
+  "posts.next": "Siguiente"
 }

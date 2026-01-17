@@ -27,5 +27,7 @@
   "posts.image_alt": "Post image",
   "posts.back_to_list": "Back to posts list",
   "posts.view_on_linkedin": "View on LinkedIn",
-  "posts.not_found": "Post not found"
+  "posts.not_found": "Post not found",
+  "posts.prev": "Previous",
+  "posts.next": "Next"
 }

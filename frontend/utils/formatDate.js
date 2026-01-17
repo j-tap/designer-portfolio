@@ -23,8 +23,7 @@ export function datesDiff (startDate, endDate, unit) {
   return Math.abs(Math.ceil(result))
 }
 
-export function dateFormat (d, options = {}) {
-  const i18n = useI18n()
+export function dateFormat (d, options = {}, locale = 'ru') {
   const date = new Date(d)
   const opt = {
     day: 'numeric',
@@ -34,7 +33,7 @@ export function dateFormat (d, options = {}) {
   }
 
   return new Intl
-    .DateTimeFormat(i18n.locale.value, opt)
+    .DateTimeFormat(locale, opt)
     .format(date)
 }
 

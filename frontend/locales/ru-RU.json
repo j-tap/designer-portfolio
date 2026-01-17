@@ -27,5 +27,7 @@
   "posts.image_alt": "Изображение поста",
   "posts.back_to_list": "Вернуться к списку постов",
   "posts.view_on_linkedin": "Посмотреть на LinkedIn",
-  "posts.not_found": "Пост не найден"
+  "posts.not_found": "Пост не найден",
+  "posts.prev": "Назад",
+  "posts.next": "Вперёд"
 }

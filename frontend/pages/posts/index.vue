@@ -10,7 +10,36 @@
         </TitleOutline>
       </div>
       <div class="page-posts__list">
-        <PostsList :items="posts" />
+        <PostsList :items="posts" :pending="pending" />
+      </div>
+      <div v-if="hasPrev || hasNext" class="page-posts__pagination">
+        <NuxtLink
+          v-if="hasPrev"
+          :to="prevLink"
+          class="page-posts__pagination-btn"
+        >
+          {{ t('posts.prev') }}
+        </NuxtLink>
+        <span
+          v-else
+          class="page-posts__pagination-btn page-posts__pagination-btn_disabled"
+        >
+          {{ t('posts.prev') }}
+        </span>
+        <span class="page-posts__pagination-page">{{ currentPage }}</span>
+        <NuxtLink
+          v-if="hasNext"
+          :to="nextLink"
+          class="page-posts__pagination-btn"
+        >
+          {{ t('posts.next') }}
+        </NuxtLink>
+        <span
+          v-else
+          class="page-posts__pagination-btn page-posts__pagination-btn_disabled"
+        >
+          {{ t('posts.next') }}
+        </span>
       </div>
     </ContentWrap>
   </div>
@@ -31,26 +60,43 @@ definePageMeta({
   key: route => route.fullPath
 })
 
-const { data: postsData, error } = await useFetch('/api/posts', {
+const currentPage = computed(() => {
+  const page = route.query.page
+  return Math.max(1, parseInt(page) || 1)
+})
+
+const { data: postsData, error, pending } = await useFetch('/api/posts', {
+  query: computed(() => ({ page: currentPage.value })),
+  key: computed(() => `posts-page-${currentPage.value}`),
   server: true,
-  default: () => ({ data: [] }),
-  getCachedData: (key) => {
-    const nuxtApp = useNuxtApp()
-    return nuxtApp.payload?.data?.[key] ?? nuxtApp.payload?.static?.[key]
-  },
+  default: () => ({ data: [], hasMore: false }),
+  watch: [currentPage],
 })
 
 if (error.value) {
   console.error('Ошибка загрузки постов:', error.value)
 }
 
-const POSTS_PER_PAGE = 15
-
 const posts = computed(() => {
   if (!postsData.value?.data || !Array.isArray(postsData.value.data)) {
     return []
   }
-  return postsData.value.data.slice(0, POSTS_PER_PAGE)
+  return postsData.value.data
+})
+
+const hasNext = computed(() => postsData.value?.hasMore === true)
+const hasPrev = computed(() => currentPage.value > 1)
+
+const nextLink = computed(() => {
+  if (!hasNext.value) return null
+  const nextPage = currentPage.value + 1
+  return `?page=${nextPage}`
+})
+
+const prevLink = computed(() => {
+  if (!hasPrev.value) return null
+  const prevPage = currentPage.value - 1
+  return prevPage > 1 ? `?page=${prevPage}` : route.path
 })
 
 const pageTitle = computed(() => t('menu.posts'))

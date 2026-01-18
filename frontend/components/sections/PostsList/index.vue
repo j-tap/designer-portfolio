@@ -1,50 +1,50 @@
 <template>
   <div class="posts-list-wrap">
-    <ul v-if="processedPosts?.length" class="posts-list">
-      <li
-        v-for="post in processedPosts"
-        :key="post.id"
-        :id="`post-${post.id}`"
-        :ref="setPostElems"
-        class="posts-list__item"
-      >
-        <article class="post" itemscope itemtype="https://schema.org/BlogPosting">
-          <NuxtLink
-            :to="post.url"
-            class="post__link"
-          >
-            <figure class="post__inner">
-              <div v-if="post.image" class="post__image">
-                <img
-                  :src="post.image"
-                  :alt="post.imageAlt"
-                  itemprop="image"
-                  loading="lazy"
-                />
-              </div>
-              <div v-else class="post__image post__image_empty"></div>
-              <div class="post__content">
-                <h2 class="post__title" itemprop="headline">{{ post.title }}</h2>
-                <p class="post__text" itemprop="articleBody">{{ post.preview }}</p>
-                <time 
-                  class="post__date" 
-                  :datetime="post.created_at"
-                  itemprop="datePublished"
-                >
-                  {{ post.formattedDate }}
-                </time>
-              </div>
-            </figure>
-          </NuxtLink>
-        </article>
-      </li>
-    </ul>
-    <p v-else class="posts-list__empty">{{ t('posts.empty') }}</p>
+  <ul v-if="processedPosts?.length" class="posts-list">
+    <li
+      v-for="post in processedPosts"
+      :key="post.id"
+      :id="`post-${post.id}`"
+      :ref="setPostElems"
+      class="posts-list__item"
+    >
+      <article class="post" itemscope itemtype="https://schema.org/BlogPosting">
+        <NuxtLink
+          :to="post.url"
+          class="post__link"
+        >
+          <figure class="post__inner">
+            <div v-if="post.image" class="post__image">
+              <img
+                :src="post.image"
+                :alt="post.imageAlt"
+                itemprop="image"
+                loading="lazy"
+              />
+            </div>
+            <div v-else class="post__image post__image_empty"></div>
+            <div class="post__content">
+              <h2 class="post__title" itemprop="headline">{{ post.title }}</h2>
+              <p class="post__text" itemprop="articleBody">{{ post.preview }}</p>
+              <time 
+                class="post__date" 
+                :datetime="post.created_at"
+                itemprop="datePublished"
+              >
+                {{ post.formattedDate }}
+              </time>
+            </div>
+          </figure>
+        </NuxtLink>
+      </article>
+    </li>
+  </ul>
+  <p v-else class="posts-list__empty">{{ t('posts.empty') }}</p>
   </div>
 </template>
 
 <script setup>
-import { dateFormat } from '~/utils/formatDate'
+import { dateFormat, formatRelativeDate } from '~/utils/formatDate'
 import { getPostTitle, getPostImage, getPostPreview } from '~/utils/post'
 import {
   updateProjectsPrlx,
@@ -70,6 +70,18 @@ const processedPosts = computed(() => {
     const image = getPostImage(post)
     const title = getPostTitle(post)
     
+    // Используем относительную дату из API, если есть, иначе форматируем created_at
+    let formattedDate = ''
+    if (post.date_value !== undefined && post.date_unit) {
+      formattedDate = formatRelativeDate({
+        value: post.date_value,
+        unit: post.date_unit,
+        raw: post.date_raw,
+      }, t)
+    } else if (post.created_at) {
+      formattedDate = dateFormat(post.created_at, {}, locale.value)
+    }
+    
     return {
       ...post,
       image,
@@ -77,7 +89,7 @@ const processedPosts = computed(() => {
       title,
       preview: getPostPreview(post),
       url: localePath(`/posts/${post.id}`),
-      formattedDate: dateFormat(post.created_at, {}, locale.value),
+      formattedDate,
     }
   })
 })

@@ -23,6 +23,11 @@ export function getPostTitle(post) {
 }
 
 export function getPostImage(post) {
+  // Fallback на простое поле image
+  if (post?.image) {
+    return post.image
+  }
+
   if (!post?.content?.images || !Array.isArray(post.content.images) || post.content.images.length === 0) {
     return null
   }

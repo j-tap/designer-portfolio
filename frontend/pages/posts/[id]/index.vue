@@ -18,7 +18,12 @@
                 :datetime="post.created_at"
                 itemprop="datePublished"
               >
-                {{ dateFormat(post.created_at) }}
+                <template v-if="post.date_value !== undefined && post.date_unit">
+                  {{ formatRelativeDate({ value: post.date_value, unit: post.date_unit, raw: post.date_raw }, t) }}
+                </template>
+                <template v-else-if="post.created_at">
+                  {{ dateFormat(post.created_at, {}, locale) }}
+                </template>
               </time>
             </header>
             
@@ -27,9 +32,7 @@
             </div>
             
             <footer class="post-full__footer">
-              <div v-if="post.author" class="post-full__author" itemprop="author" itemscope itemtype="https://schema.org/Person">
-                <span itemprop="name">{{ post.author.full_name }}</span>
-              </div>
+
               <a 
                 v-if="post.url" 
                 :href="post.url" 
@@ -79,10 +82,10 @@
 import { BackLink } from '~/components/common'
 import { ContentWrap } from '~/components/structure'
 import { metaInfo } from '~/composables/useMeta'
-import { dateFormat } from '~/utils/formatDate'
+import { dateFormat, formatRelativeDate } from '~/utils/formatDate'
 import { getPostTitle, getPostImage } from '~/utils/post'
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const config = useRuntimeConfig()
 const route = useRoute()
 const localePath = useLocalePath()
@@ -93,20 +96,14 @@ definePageMeta({
 
 const postId = computed(() => route.params.id)
 
-const { data: postsData, error } = await useFetch('/api/posts', {
+const { data: postData, error } = await useFetch(`/api/posts/${postId.value}`, {
   server: true,
-  default: () => ({ data: [] }),
-  getCachedData: (key) => {
-    const nuxtApp = useNuxtApp()
-    return nuxtApp.payload?.data?.[key] ?? nuxtApp.payload?.static?.[key]
-  },
+  default: () => ({ data: null }),
+  key: `post-${postId.value}`,
 })
 
 const post = computed(() => {
-  if (!postsData.value?.data || !Array.isArray(postsData.value.data)) {
-    return null
-  }
-  return postsData.value.data.find(p => p.id === postId.value) || null
+  return postData.value?.data || null
 })
 
 const pageTitle = computed(() => {
@@ -177,10 +174,10 @@ watch(blogPostSchema, (schema) => {
   }
 }, { immediate: true, deep: true })
 
-if (process.client && !post.value && postsData.value?.data) {
+if (error.value) {
   throw createError({
-    statusCode: 404,
-    statusMessage: 'Post not found'
+    statusCode: error.value.statusCode || 404,
+    statusMessage: error.value.statusMessage || 'Post not found'
   })
 }
 </script>

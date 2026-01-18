@@ -1,15 +1,20 @@
 // https://vr9.pro/api/services/linkedin/posts
 
-import { fetchAllPosts, clearPostsCache, getCachedPosts, isCacheValid } from '~/server/utils/postsCache'
-
-const POSTS_PER_PAGE = 15
+import { fetchAllPosts, clearPostsCache, getPostById, isCacheValid } from '~/server/utils/postsCache'
 
 export default defineEventHandler(async (event) => {
   setHeader(event, 'Content-Type', 'application/json; charset=utf-8')
   
+  const postId = getRouterParam(event, 'id')
+  if (!postId) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: 'Post ID is required',
+    })
+  }
+
   const query = getQuery(event)
   const shouldUpdate = query.update === 'true' || query.update === true
-  const page = Math.max(1, parseInt(query.page) || 1)
 
   if (shouldUpdate) {
     clearPostsCache()
@@ -17,21 +22,20 @@ export default defineEventHandler(async (event) => {
 
   try {
     // Загружаем все посты (из кеша или с API)
-    const cache = await fetchAllPosts(shouldUpdate)
-    const allPosts = cache.data
-
-    // Пагинация на стороне сервера
-    const start = (page - 1) * POSTS_PER_PAGE
-    const end = start + POSTS_PER_PAGE
-    const posts = allPosts.slice(start, end)
-    const hasMore = end < allPosts.length
+    await fetchAllPosts(shouldUpdate)
+    
+    // Ищем пост по ID
+    const post = getPostById(postId)
+    
+    if (!post) {
+      throw createError({
+        statusCode: 404,
+        statusMessage: 'Post not found',
+      })
+    }
 
     const result = {
-      data: posts,
-      page,
-      hasMore,
-      total: allPosts.length,
-      username: cache.username,
+      data: post,
       fromCache: isCacheValid() && !shouldUpdate,
     }
 
@@ -39,10 +43,13 @@ export default defineEventHandler(async (event) => {
     return result
   }
   catch (error) {
+    if (error.statusCode === 404) {
+      throw error
+    }
     console.error(`[POSTS API] Error:`, error?.message || error)
     throw createError({
       statusCode: error?.status || error?.statusCode || 500,
-      statusMessage: error?.data?.message || error?.message || 'Failed to fetch posts',
+      statusMessage: error?.data?.message || error?.message || 'Failed to fetch post',
     })
   }
 })

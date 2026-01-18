@@ -51,3 +51,44 @@ export function getWeekendsDays (startDate, endDate) {
 
   return results
 }
+
+/**
+ * Форматирует относительную дату на основе данных из API
+ * @param {Object} dateData - Объект с полями value, unit, raw
+ * @param {Function} t - Функция перевода i18n
+ * @returns {string} Отформатированная дата
+ */
+export function formatRelativeDate (dateData, t) {
+  if (!dateData || typeof dateData.value !== 'number' || !dateData.unit) {
+    return dateData?.raw || ''
+  }
+
+  const value = dateData.value
+  const unit = dateData.unit.toLowerCase()
+
+  const unitMap = {
+    'minute': 'common.minute',
+    'minutes': 'common.minute',
+    'hour': 'common.hour',
+    'hours': 'common.hour',
+    'day': 'common.day',
+    'days': 'common.day',
+    'week': 'common.week',
+    'weeks': 'common.week',
+    'month': 'common.month',
+    'months': 'common.month',
+    'year': 'common.year',
+    'years': 'common.year',
+  }
+
+  const translationKey = unitMap[unit]
+
+  if (!translationKey) {
+    return dateData.raw || ''
+  }
+
+  const translated = t(translationKey, value)
+  const ago = t('common.ago')
+  
+  return `${value} ${translated} ${ago}`
+}

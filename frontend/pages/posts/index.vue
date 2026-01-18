@@ -56,10 +56,6 @@ const { t } = useI18n()
 const config = useRuntimeConfig()
 const route = useRoute()
 
-definePageMeta({
-  key: route => route.fullPath
-})
-
 const currentPage = computed(() => {
   const page = route.query.page
   return Math.max(1, parseInt(page) || 1)
@@ -152,6 +148,21 @@ watch(blogSchema, (schema) => {
     })
   }
 }, { immediate: true, deep: true })
+
+if (process.client) {
+  watch(currentPage, (newPage, oldPage) => {
+    if (oldPage !== undefined && newPage !== oldPage) {
+      nextTick(() => {
+        setTimeout(() => {
+          window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+          })
+        }, 100)
+      })
+    }
+  })
+}
 </script>
 
 <style lang="scss" scoped src="./style.scss"/>

@@ -47,8 +47,8 @@
       padding: 20px 0;
     }
 
-    &.router-link-active,
     &.router-link-exact-active,
+    &_active,
     &:hover {
       color: $color__blue;
     }

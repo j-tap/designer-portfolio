@@ -3,11 +3,11 @@
     <li
       class="menu__item"
       v-for="item in items"
-      :key="item.name"
+      :key="item.path"
     >
       <NuxtLink
-        class="menu__link"
-        :to="localePath({ name: item.name })"
+        :class="['menu__link', { 'menu__link_active': isActive(item) }]"
+        :to="localePath(item.path)"
         @click.native="onClickItem(item)"
       >
         <TitleOutline class="menu__link-text_sm">{{ t(item.locale) }}</TitleOutline>
@@ -21,6 +21,9 @@
 import { TitleOutline } from '~/components/common'
 
 const { t } = useI18n()
+const route = useRoute()
+const localePath = useLocalePath()
+
 const props = defineProps({
   items: {
     type: Array,
@@ -32,6 +35,17 @@ const emit = defineEmits(['click-item'])
 
 function onClickItem (item) {
   emit('click-item', item)
+}
+
+function isActive(item) {
+  const currentPath = route.path
+  const pathWithoutLocale = currentPath.replace(/^\/[a-z]{2}(\/|$)/, '/')
+
+  if (item.path === '/') {
+    return pathWithoutLocale === '/'
+  }
+
+  return pathWithoutLocale === item.path || pathWithoutLocale.startsWith(item.path + '/')
 }
 </script>
 

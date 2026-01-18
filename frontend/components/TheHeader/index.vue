@@ -22,11 +22,11 @@ import { useCommonStore } from '~/stores/commonStore'
 
 const commonStore = useCommonStore()
 const menuMain = [
-  { name: 'index', locale: 'menu.main' },
-  { name: 'portfolio', locale: 'menu.portfolio' },
-  { name: 'posts', locale: 'menu.posts' },
-  { name: 'reviews', locale: 'menu.reviews' },
-  { name: 'contacts', locale: 'menu.contacts' },
+  { path: '/', locale: 'menu.main' },
+  { path: '/portfolio', locale: 'menu.portfolio' },
+  { path: '/posts', locale: 'menu.posts' },
+  { path: '/reviews', locale: 'menu.reviews' },
+  { path: '/contacts', locale: 'menu.contacts' },
 ]
 const openMenu = ref(false);
 

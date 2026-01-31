@@ -1,3 +1,49 @@
+<script setup>
+import {
+  ProjectTimes,
+  ProjectSteps,
+  ProjectTypeMobile,
+  ProjectTypeUiUx,
+  ProjectTypeWeb,
+  ProjectTypeIdentity,
+  ProjectPresentation,
+  ProjectMore,
+  ProjectBack,
+} from '~/components/sections'
+
+const props = defineProps({
+  project: {
+    type: Object,
+    required: true,
+  },
+  moreProjects: {
+    type: Array,
+    default: () => [],
+  },
+  categorySlug: {
+    type: String,
+    default: null,
+  },
+})
+const categoryToComponent = {
+  'mobile-development': ProjectTypeMobile,
+  'ui-ux-design': ProjectTypeUiUx,
+  'web-design': ProjectTypeWeb,
+  'identity': ProjectTypeIdentity,
+}
+
+const projectComponentName = computed(() => categoryToComponent[props.categorySlug])
+const title = computed(() => `${props.project?.title} / ${props.project?.categories?.find(o => o.slug === props.categorySlug)?.title}`)
+
+const presentationImages = computed(() => {
+  const project = props.project
+  const p = project?.presentation
+  if (!p) return []
+  if (Array.isArray(p)) return p
+  return []
+})
+</script>
+
 <template>
   <div class="portfolio-project" itemscope itemtype="https://schema.org/Product">
     <ul
@@ -61,8 +107,9 @@
 
     <div class="portfolio-project__content">
       <ProjectPresentation
-        v-if="project.presentation"
-        :images="project.presentation"
+        v-if="presentationImages?.length"
+        :images="presentationImages"
+        :key="presentationImages?.length"
       />
       <Component
         v-else
@@ -84,42 +131,5 @@
     />
   </div>
 </template>
-
-<script setup>
-import {
-  ProjectTimes,
-  ProjectSteps,
-  ProjectTypeMobile,
-  ProjectTypeUiUx,
-  ProjectTypeWeb,
-  ProjectTypeIdentity,
-  ProjectPresentation,
-  ProjectMore,
-  ProjectBack,
-} from '~/components/sections'
-
-const props = defineProps({
-  project: {
-    type: Object,
-    required: true,
-  },
-  moreProjects: {
-    type: Array,
-    default: () => [],
-  },
-  categorySlug: {
-    type: String,
-    default: null,
-  },
-})
-const categoryToComponent = {
-  'mobile-development': ProjectTypeMobile,
-  'ui-ux-design': ProjectTypeUiUx,
-  'web-design': ProjectTypeWeb,
-  'identity': ProjectTypeIdentity,
-}
-const projectComponentName = computed(() => categoryToComponent[props.categorySlug])
-const title = computed(() => `${projectData.value?.title} / ${projectData.value?.categories?.find(o => o.slug === props.categorySlug)?.title}`)
-</script>
 
 <style lang="scss" src="./style.scss" scoped/>

@@ -17,20 +17,13 @@ export function serverFetch (name, params = {}, defaultValue = [], fetchType = '
     findOne: () => findOne(name, params),
   }
 
-  const result = ref(defaultValue)
-
-  useAsyncData(key, methods[fetchType], {
+  const { data } = useAsyncData(key, methods[fetchType], {
     server: true,
     default: () => defaultValue,
     getCachedData: key => nuxtApp.payload?.static?.[key] ?? nuxtApp.payload?.data?.[key],
   })
-    .then(({ data }) => {
-      if (data.value?.data !== undefined) {
-        result.value = data.value.data
-      }
-    })
 
-  return result
+  return computed(() => (data.value?.data !== undefined ? data.value.data : defaultValue))
 }
 
 export async function serverCreate (name, data = {}) {

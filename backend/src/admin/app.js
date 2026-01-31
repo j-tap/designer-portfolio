@@ -19,13 +19,13 @@ export default {
     translations: {
       ru: {
         "app.components.LeftMenu.navbrand.title": "Portfolio dashboard",
-        "app.components.LeftMenu.navbrand.workplace": "diana.vr9.ru",
+        "app.components.LeftMenu.navbrand.workplace": "konoiko.design",
         "app.components.HomePage.welcome.again": "Hi 👋",
         "app.components.HomePage.welcomeBlock.content.again": "Welcome to the system",
       },
       en: {
         "app.components.LeftMenu.navbrand.title": "Portfolio dashboard",
-        "app.components.LeftMenu.navbrand.workplace": "diana.vr9.ru",
+        "app.components.LeftMenu.navbrand.workplace": "konoiko.design",
         "app.components.HomePage.welcome.again": "Привет 👋",
         "app.components.HomePage.welcomeBlock.content.again": "Добро пожаловать в систему",
       },

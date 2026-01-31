@@ -29,6 +29,10 @@ export function getProjectData (slug, categorySlug, filters) {
   const data = serverFetch('projects', {
     slug: slug.value,
     filters,
+    populate: {
+      presentation: true,
+      deep: true,
+    },
   }, {}, 'findBySlug')
   return computed(() => {
     const result = { ...data.value }

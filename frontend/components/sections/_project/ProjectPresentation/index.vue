@@ -1,26 +1,31 @@
+<script setup>
+import { ImgBlock } from '~/components/common'
+
+const props = defineProps({
+  images: Array,
+})
+
+const sortedImages = computed(() => {
+  const list = props.images ?? []
+  return [...list].sort((a, b) => (a.id ?? 0) - (b.id ?? 0))
+})
+</script>
+
 <template>
   <div class="project-presentation">
     <ImgBlock
-      v-for="img in images"
+      v-for="img in sortedImages"
       :key="img.id"
       :src="urlFile(img.url)"
-      :src-lite="urlFile(img.formats.large.url)"
+      :src-lite="urlFile(img.formats?.large?.url || img.url)"
       :blurhash="img.blurhash"
       :width="img.width"
       :height="img.height"
-      :alt="img.slug"
+      :alt="img.slug || img.name"
       class="project-presentation__img"
       itemprop
     />
   </div>
 </template>
-
-<script setup>
-import { ImgBlock } from '~/components/common'
-
-defineProps({
-  images: Array,
-})
-</script>
 
 <style lang="scss" src="./style.scss" scoped />

@@ -36,6 +36,7 @@ export async function serverCreate (name, data = {}) {
 }
 
 export function urlFile (urlFile) {
+  if (!urlFile) return null
   const config = useRuntimeConfig()
   return `${config.public.strapi.url}${urlFile}`
 }

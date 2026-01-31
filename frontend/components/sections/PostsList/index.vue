@@ -2,10 +2,11 @@
   <div class="posts-list-wrap">
   <ul v-if="processedPosts?.length" class="posts-list">
     <li
-      v-for="post in processedPosts"
+      v-for="(post, index) in processedPosts"
       :key="post.id"
       :id="`post-${post.id}`"
       :ref="setPostElems"
+      :style="{ zIndex: processedPosts.length - index }"
       class="posts-list__item"
     >
       <article class="post" itemscope itemtype="https://schema.org/BlogPosting">

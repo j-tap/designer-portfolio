@@ -15,15 +15,16 @@
           class="post__link"
         >
           <figure class="post__inner">
-            <div v-if="post.image" class="post__image">
+            <div class="post__image" :class="{ 'post__image_empty': !post.image || imageErrors[post.id] }">
               <img
+                v-if="post.image && !imageErrors[post.id]"
                 :src="post.image"
                 :alt="post.imageAlt"
                 itemprop="image"
                 loading="lazy"
+                @error="onImageError(post.id)"
               />
             </div>
-            <div v-else class="post__image post__image_empty"></div>
             <div class="post__content">
               <h2 class="post__title" itemprop="headline">{{ post.title }}</h2>
               <p class="post__text" itemprop="articleBody">{{ post.preview }}</p>
@@ -50,6 +51,7 @@ import { getPostTitle, getPostImage, getPostPreview } from '~/utils/post'
 import {
   updateProjectsPrlx,
   resetParalax,
+  initPositions,
   elems as postElems,
 } from '~/composables/useElemsParalax'
 
@@ -63,6 +65,11 @@ const props = defineProps({
 })
 
 const localePath = useLocalePath()
+const imageErrors = ref({})
+
+function onImageError(postId) {
+  imageErrors.value[postId] = true
+}
 
 const processedPosts = computed(() => {
   if (!props.items?.length) return []
@@ -70,8 +77,7 @@ const processedPosts = computed(() => {
   return props.items.map(post => {
     const image = getPostImage(post)
     const title = getPostTitle(post)
-    
-    // Используем относительную дату из API, если есть, иначе форматируем created_at
+
     let formattedDate = ''
     if (post.date_value !== undefined && post.date_unit) {
       formattedDate = formatRelativeDate({
@@ -110,6 +116,11 @@ if (process.client) {
     postElems.value = []
     
     if (window.innerWidth >= 768) {
+      nextTick(() => {
+        initPositions()
+        updateProjectsPrlx(props.items, window.scrollY)
+      })
+
       scrollHandler = () => {
         if (rafId) cancelAnimationFrame(rafId)
         rafId = requestAnimationFrame(() => {
@@ -118,10 +129,6 @@ if (process.client) {
         })
       }
       window.addEventListener('scroll', scrollHandler, { passive: true })
-
-      nextTick(() => {
-        updateProjectsPrlx(props.items, window.scrollY)
-      })
     }
   })
 

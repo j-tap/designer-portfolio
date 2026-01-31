@@ -59,6 +59,7 @@ import { ProjectPreview, PortfolioSubcategoriesNav } from '~/components/sections
 import {
   updateProjectsPrlx,
   resetParalax,
+  initPositions,
   elems as projectElems,
 } from '~/composables/useElemsParalax'
 import { display404 } from '~/composables/useErrorContent'
@@ -107,6 +108,11 @@ if (process.client) {
     projectElems.value = []
     
     if (window.innerWidth >= 768) {
+      nextTick(() => {
+        initPositions()
+        updateProjectsPrlx(props.projects, window.scrollY)
+      })
+
       scrollHandler = () => {
         if (rafId) cancelAnimationFrame(rafId)
         rafId = requestAnimationFrame(() => {
@@ -115,10 +121,6 @@ if (process.client) {
         })
       }
       window.addEventListener('scroll', scrollHandler, { passive: true })
-
-      nextTick(() => {
-        updateProjectsPrlx(props.projects, window.scrollY)
-      })
     }
   })
 

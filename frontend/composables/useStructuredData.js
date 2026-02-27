@@ -56,19 +56,28 @@ export function useStructuredData(type = 'website', additionalData = {}) {
     logo: defMeta.image ? `${config.public.strapi.url}${defMeta.image}` : undefined,
   }))
 
-  // BreadcrumbList
+  // BreadcrumbList — для Google обязательны name или item.name в каждом itemListElement
   const breadcrumbSchema = computed(() => {
     const breadcrumbs = unref(additionalData.breadcrumbs)
     if (!breadcrumbs || !Array.isArray(breadcrumbs)) {
       return null
     }
 
-    const items = breadcrumbs.map((crumb, index) => ({
-      '@type': 'ListItem',
-      position: index + 1,
-      name: crumb.name,
-      item: crumb.url ? `${baseUrl}${crumb.url}` : currentUrl.value,
-    }))
+    const items = breadcrumbs.map((crumb, index) => {
+      const url = crumb.url ? `${baseUrl}${crumb.url}` : currentUrl.value
+      const name = (crumb.name && String(crumb.name).trim()) ? String(crumb.name).trim() : (crumb.url || `Item ${index + 1}`)
+      return {
+        '@type': 'ListItem',
+        position: index + 1,
+        name,
+        item: {
+          '@type': 'WebPage',
+          '@id': url,
+          name,
+          url,
+        },
+      }
+    })
 
     return {
       '@context': 'https://schema.org',

@@ -11,11 +11,11 @@
   },
   "dependencies": {
     "@retikolo/drag-drop-content-types": "^1.6.0",
-    "@strapi/plugin-color-picker": "^4.26.1",
-    "@strapi/plugin-email": "^4.26.1",
-    "@strapi/plugin-i18n": "^4.26.1",
-    "@strapi/plugin-users-permissions": "^4.26.1",
-    "@strapi/strapi": "^4.26.1",
+    "@strapi/plugin-color-picker": "^4.26.2",
+    "@strapi/plugin-email": "^4.26.2",
+    "@strapi/plugin-i18n": "^4.26.2",
+    "@strapi/plugin-users-permissions": "^4.26.2",
+    "@strapi/strapi": "^4.26.2",
     "better-sqlite3": "^12.6.0",
     "pg": "^8.17.1",
     "react": "^18.3.1",
@@ -36,7 +36,7 @@
     "uuid": "f92252c5-2d0c-4ca1-95c9-a242418b85a6"
   },
   "engines": {
-    "node": ">=14.19.1 <=18.x.x",
+    "node": ">=18.0.0 <=20.x.x",
     "npm": ">=6.0.0"
   },
   "license": "MIT",

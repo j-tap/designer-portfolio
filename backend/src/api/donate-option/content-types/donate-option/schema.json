@@ -1,10 +1,16 @@
 {
-  "collectionName": "components_donate_options",
+  "kind": "collectionType",
+  "collectionName": "donate_options",
   "info": {
+    "singularName": "donate-option",
+    "pluralName": "donate-options",
     "displayName": "Способ доната",
     "description": ""
   },
-  "options": {},
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
   "attributes": {
     "title": {
       "type": "string",
@@ -32,6 +38,10 @@
     "copyable": {
       "type": "boolean",
       "default": true
+    },
+    "order": {
+      "type": "integer",
+      "default": 0
     }
   }
 }

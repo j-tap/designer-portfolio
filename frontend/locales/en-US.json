@@ -37,6 +37,7 @@
   "posts.prev": "Previous",
   "posts.next": "Next",
   "donate.title": "Donate",
+  "donate.description": "Thank you for supporting the project! Pick whichever option works best for you.",
   "donate.empty": "No donation options available yet",
   "donate.copy": "Copy",
   "donate.copied": "Copied"

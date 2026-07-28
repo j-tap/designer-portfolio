@@ -23,7 +23,6 @@
             class="donate-item__value"
           >{{ item.value }}</component>
           <button
-            v-if="item.copyable !== false"
             type="button"
             class="donate-item__copy"
             @click="copy(item)"

@@ -35,10 +35,6 @@
         "images"
       ]
     },
-    "copyable": {
-      "type": "boolean",
-      "default": true
-    },
     "order": {
       "type": "integer",
       "default": 0

@@ -30,6 +30,7 @@ const options = computed(() => (donateOptionsData.value || []).map(item => ({
 useHead(metaInfo({
   title,
   description,
+  noindex: true,
 }))
 </script>
 

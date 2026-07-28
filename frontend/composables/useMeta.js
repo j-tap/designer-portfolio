@@ -91,7 +91,7 @@ export function metaInfo(info = {}) {
       { name: 'description', content: description.value },
       { name: 'keywords', content: keywords.value },
       { name: 'author', content: author.value },
-      { name: 'robots', content: 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1' },
+      { name: 'robots', content: info.noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1' },
       
       // Open Graph
       { property: 'og:type', content: type },

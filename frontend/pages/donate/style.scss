@@ -1,6 +1,11 @@
 .page-donate {
   &__title {
-    margin-bottom: clamp(20px, 2.1vw, 40px);
+    font-weight: 700;
+    font-size: clamp(36px, 6vw, 100px);
+    text-transform: uppercase;
+    line-height: 1;
+    text-align: right;
+    margin: 1vw 0 0;
   }
 
   &__description {
@@ -8,7 +13,7 @@
     font-weight: 300;
     line-height: 1.6;
     max-width: 720px;
-    margin: 0 0 clamp(30px, 3.4vw, 60px);
+    margin: clamp(20px, 2.1vw, 40px) 0 clamp(30px, 3.4vw, 60px);
 
     @include screen('sm') {
       padding-left: $content__indent-x_sm;

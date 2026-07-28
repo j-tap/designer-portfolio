@@ -1,7 +1,7 @@
 <template>
   <div class="page-donate">
     <ContentWrap>
-      <TitlePage class="page-donate__title">{{ title }}</TitlePage>
+      <TitleOutline class="page-donate__title">{{ title }}</TitleOutline>
       <p v-if="description" class="page-donate__description">{{ description }}</p>
       <DonateList :items="options" class="page-donate__list" />
     </ContentWrap>
@@ -9,7 +9,7 @@
 </template>
 
 <script setup>
-import { TitlePage } from '~/components/common'
+import { TitleOutline } from '~/components/common'
 import { ContentWrap } from '~/components/structure'
 import { DonateList } from '~/components/sections'
 import { getDonateOptions } from '~/composables/useDonate'

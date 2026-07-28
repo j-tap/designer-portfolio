@@ -35,5 +35,9 @@
   "posts.view_on_linkedin": "Посмотреть на LinkedIn",
   "posts.not_found": "Пост не найден",
   "posts.prev": "Назад",
-  "posts.next": "Вперёд"
+  "posts.next": "Вперёд",
+  "donate.title": "Донат",
+  "donate.empty": "Пока нет доступных способов доната",
+  "donate.copy": "Скопировать",
+  "donate.copied": "Скопировано"
 }

@@ -35,5 +35,9 @@
   "posts.view_on_linkedin": "View on LinkedIn",
   "posts.not_found": "Post not found",
   "posts.prev": "Previous",
-  "posts.next": "Next"
+  "posts.next": "Next",
+  "donate.title": "Donate",
+  "donate.empty": "No donation options available yet",
+  "donate.copy": "Copy",
+  "donate.copied": "Copied"
 }

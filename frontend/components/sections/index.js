@@ -8,6 +8,7 @@ export { default as PostsList } from './PostsList'
 export { default as ReviewsList } from './_reviews/ReviewsList'
 export { default as ReviewForm } from './_reviews/ReviewForm'
 export { default as Error404 } from './Error404'
+export { default as DonateList } from './DonateList'
 
 export { default as ProjectBack } from './_project/ProjectBack'
 export { default as ProjectTimes } from './_project/ProjectTimes'

@@ -1,0 +1,37 @@
+{
+  "collectionName": "components_donate_options",
+  "info": {
+    "displayName": "Способ доната",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true,
+      "minLength": 2
+    },
+    "value": {
+      "type": "string",
+      "required": true
+    },
+    "link": {
+      "type": "string",
+      "regex": "(^(https?):\\/\\/[^\\s$.?#].[^\\s]*$)"
+    },
+    "description": {
+      "type": "text"
+    },
+    "icon": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "copyable": {
+      "type": "boolean",
+      "default": true
+    }
+  }
+}

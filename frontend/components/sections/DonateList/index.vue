@@ -14,21 +14,34 @@
       <div class="donate-item__body">
         <h2 class="donate-item__title">{{ item.title }}</h2>
         <p v-if="item.description" class="donate-item__description">{{ item.description }}</p>
-        <div class="donate-item__value-row">
-          <component
-            :is="item.link ? 'a' : 'span'"
-            :href="item.link || undefined"
-            :target="item.link ? '_blank' : undefined"
-            :rel="item.link ? 'noopener' : undefined"
-            class="donate-item__value"
-          >{{ item.value }}</component>
-          <button
-            type="button"
-            class="donate-item__copy"
-            @click="copy(item)"
-          >{{ copiedId === item.id ? t('donate.copied') : t('donate.copy') }}</button>
+        <div v-if="item.requisites?.length" class="donate-item__values">
+          <div
+            v-for="(requisite, index) in item.requisites"
+            :key="requisite.id ?? index"
+            class="donate-item__value-row"
+          >
+            <component
+              :is="requisite.link ? 'a' : 'span'"
+              :href="requisite.link || undefined"
+              :target="requisite.link ? '_blank' : undefined"
+              :rel="requisite.link ? 'noopener' : undefined"
+              class="donate-item__value"
+            >{{ requisite.value }}</component>
+            <button
+              type="button"
+              class="donate-item__copy"
+              @click="copy(item, requisite, index)"
+            >{{ copiedKey === keyOf(item, requisite, index) ? t('donate.copied') : t('donate.copy') }}</button>
+          </div>
         </div>
       </div>
+      <img
+        v-if="item.qr?.url"
+        :src="item.qr.url"
+        :alt="t('donate.qr_{title}', { title: item.title })"
+        class="donate-item__qr"
+        loading="lazy"
+      >
     </li>
   </ul>
   <p v-else class="donate-list__empty">{{ t('donate.empty') }}</p>
@@ -43,16 +56,20 @@ const props = defineProps({
 })
 
 const { t } = useI18n()
-const copiedId = ref(null)
+const copiedKey = ref(null)
 let timer = null
 
-async function copy (item) {
+function keyOf (item, requisite, index) {
+  return `${item.id}-${requisite.id ?? index}`
+}
+
+async function copy (item, requisite, index) {
   try {
-    await navigator.clipboard.writeText(item.value)
-    copiedId.value = item.id
+    await navigator.clipboard.writeText(requisite.value)
+    copiedKey.value = keyOf(item, requisite, index)
     clearTimeout(timer)
     timer = setTimeout(() => {
-      copiedId.value = null
+      copiedKey.value = null
     }, 2000)
   }
   catch (error) {

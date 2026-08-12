@@ -25,6 +25,8 @@ const description = computed(() => t('donate.description'))
 const options = computed(() => (donateOptionsData.value || []).map(item => ({
   ...item,
   icon: item.icon ? { ...item.icon, url: urlFile(item.icon.url) } : null,
+  qr: item.qr ? { ...item.qr, url: urlFile(item.qr.url) } : null,
+  requisites: (item.requisites || []).filter(requisite => requisite?.value),
 })))
 
 useHead(metaInfo({

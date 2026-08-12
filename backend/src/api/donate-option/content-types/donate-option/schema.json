@@ -17,13 +17,12 @@
       "required": true,
       "minLength": 2
     },
-    "value": {
-      "type": "string",
-      "required": true
-    },
-    "link": {
-      "type": "string",
-      "regex": "(^(https?):\\/\\/[^\\s$.?#].[^\\s]*$)"
+    "requisites": {
+      "type": "component",
+      "repeatable": true,
+      "component": "donate.requisite",
+      "required": true,
+      "min": 1
     },
     "description": {
       "type": "text"
@@ -31,6 +30,14 @@
     "icon": {
       "type": "media",
       "multiple": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "qr": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
       "allowedTypes": [
         "images"
       ]

@@ -40,5 +40,6 @@
   "donate.description": "Thank you for supporting the project! Pick whichever option works best for you.",
   "donate.empty": "No donation options available yet",
   "donate.copy": "Copy",
-  "donate.copied": "Copied"
+  "donate.copied": "Copied",
+  "donate.qr_{title}": "QR code for payment: {title}"
 }

@@ -6,6 +6,14 @@
   flex-direction: column;
   gap: clamp(20px, 2.1vw, 40px);
 
+  // На больших экранах одна колонка растягивается на всю ширину — раскладываем в две
+  @include screen('xl') {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    // Карточки без QR-кода не должны растягиваться под высоту соседней
+    align-items: start;
+  }
+
   &__empty {
     font-weight: 300;
   }

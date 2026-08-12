@@ -18,20 +18,23 @@
           <div
             v-for="(requisite, index) in item.requisites"
             :key="requisite.id ?? index"
-            class="donate-item__value-row"
+            class="donate-item__requisite"
           >
-            <component
-              :is="requisite.link ? 'a' : 'span'"
-              :href="requisite.link || undefined"
-              :target="requisite.link ? '_blank' : undefined"
-              :rel="requisite.link ? 'noopener' : undefined"
-              class="donate-item__value"
-            >{{ requisite.value }}</component>
-            <button
-              type="button"
-              class="donate-item__copy"
-              @click="copy(item, requisite, index)"
-            >{{ copiedKey === keyOf(item, requisite, index) ? t('donate.copied') : t('donate.copy') }}</button>
+            <span v-if="requisite.label" class="donate-item__label">{{ requisite.label }}</span>
+            <div class="donate-item__value-row">
+              <component
+                :is="requisite.link ? 'a' : 'span'"
+                :href="requisite.link || undefined"
+                :target="requisite.link ? '_blank' : undefined"
+                :rel="requisite.link ? 'noopener' : undefined"
+                class="donate-item__value"
+              >{{ requisite.value }}</component>
+              <button
+                type="button"
+                class="donate-item__copy"
+                @click="copy(item, requisite, index)"
+              >{{ copiedKey === keyOf(item, requisite, index) ? t('donate.copied') : t('donate.copy') }}</button>
+            </div>
           </div>
         </div>
       </div>

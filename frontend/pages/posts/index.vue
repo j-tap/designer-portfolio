@@ -49,7 +49,7 @@
 import { TitleOutline } from '~/components/common'
 import { ContentWrap } from '~/components/structure'
 import { PostsList } from '~/components/sections'
-import { metaInfo } from '~/composables/useMeta'
+import { metaInfo, normalizeUrlPath } from '~/composables/useMeta'
 import { getPostTitle, getPostImage } from '~/utils/post'
 
 const { t } = useI18n()
@@ -101,16 +101,19 @@ const pageDescription = computed(() => {
   return t('posts.description', { count }) || `${pageTitle.value} - ${t('app.name')}`
 })
 
+// Страницы пагинации канонизируем сами на себя, чтобы не терять посты со 2+ страницы
+const canonicalPath = computed(() => (
+  currentPage.value > 1 ? `${route.path}?page=${currentPage.value}` : route.path
+))
+
 useHead(metaInfo({
   title: pageTitle,
   description: pageDescription,
+  canonical: canonicalPath,
 }))
 
 const baseUrl = config.public.baseURL
-const currentUrl = computed(() => {
-  const path = route.path.replace(/^\/[a-z]{2}(\/|$)/, '/')
-  return `${baseUrl}${path}`
-})
+const currentUrl = computed(() => `${baseUrl}${normalizeUrlPath(canonicalPath.value)}`)
 
 const blogSchema = computed(() => {
   return {

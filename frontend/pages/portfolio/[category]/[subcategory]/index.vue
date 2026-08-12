@@ -21,6 +21,7 @@ import { metaInfo } from '~/composables/useMeta'
 import { serverFetch } from '~/composables/useApi'
 import { PortfolioCategory } from '~/components/sections'
 import { display404 } from '~/composables/useErrorContent'
+import { useStructuredData } from '~/composables/useStructuredData'
 
 const { t } = useI18n()
 const route = useRoute()
@@ -52,5 +53,49 @@ definePageMeta({
   key: route => route.fullPath
 })
 
-useHead(metaInfo({ title }))
+// В title выносим подкатегорию: иначе все подкатегории одной категории
+// получают одинаковый заголовок в выдаче
+const metaTitle = computed(() => {
+  if (!subcategory.value?.title) return title.value
+  if (!category.value?.title) return subcategory.value.title
+  return `${subcategory.value.title} — ${category.value.title}`
+})
+
+useHead(metaInfo({ title: metaTitle }))
+
+const breadcrumbs = computed(() => {
+  if (!subcategory.value?.title || !category.value) return null
+
+  return [
+    { name: t('menu.portfolio') || 'Portfolio', url: '/portfolio' },
+    { name: category.value.title, url: `/portfolio/${category.value.slug}` },
+    { name: subcategory.value.title, url: route.path },
+  ]
+})
+
+const collectionData = computed(() => subcategory.value?.title ? {
+  title: metaTitle.value,
+  description: subcategory.value.description || subcategory.value.title,
+  items: (projects.value || []).map(project => ({
+    title: project.title,
+    url: `/portfolio/${category.value?.slug}/${subcategorySlug.value}/${project.slug}`,
+  })),
+} : null)
+
+const { getStructuredData } = useStructuredData('collection', {
+  collection: collectionData,
+  breadcrumbs: breadcrumbs,
+})
+
+watch(getStructuredData, (schemas) => {
+  if (schemas && schemas.length > 0) {
+    useHead({
+      script: schemas.map((schema, index) => ({
+        type: 'application/ld+json',
+        children: JSON.stringify(schema),
+        key: `structured-data-${index}`,
+      })),
+    })
+  }
+}, { immediate: true, deep: true })
 </script>

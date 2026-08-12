@@ -1,20 +1,32 @@
 import { useMetaStore } from '~/stores/metaStore'
+import { normalizeUrlPath } from '~/composables/useMeta'
 
 /**
  * Генерирует структурированные данные JSON-LD для SEO
  */
 export function useStructuredData(type = 'website', additionalData = {}) {
-  const { t, locale } = useI18n()
+  const { t, locale, locales } = useI18n()
   const route = useRoute()
   const config = useRuntimeConfig()
   const metaStore = useMetaStore()
+  const localePath = useLocalePath()
   const defMeta = metaStore.getMetaInfo
   const baseUrl = config.public.baseURL
 
-  const currentUrl = computed(() => {
-    const path = route.path.replace(/^\/[a-z]{2}(\/|$)/, '/')
-    return `${baseUrl}${path}`
-  })
+  // Все адреса в разметке — реально существующие, с префиксом локали
+  const currentUrl = computed(() => `${baseUrl}${normalizeUrlPath(route.path)}`)
+  const localeCodes = computed(() => locales.value.map(loc => (typeof loc === 'string' ? loc : loc.code)))
+
+  const localeUrl = (path) => {
+    if (!path) return currentUrl.value
+    if (/^https?:\/\//.test(path)) return path
+
+    const hasLocalePrefix = localeCodes.value.some(code => path === `/${code}` || path.startsWith(`/${code}/`))
+    const localized = hasLocalePrefix ? path : (localePath(path) || path)
+    return `${baseUrl}${normalizeUrlPath(localized)}`
+  }
+
+  const homeUrl = computed(() => localeUrl('/'))
 
   const siteName = computed(() => t('app.name') || defMeta.title || 'Portfolio')
 
@@ -23,17 +35,9 @@ export function useStructuredData(type = 'website', additionalData = {}) {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     name: siteName.value,
-    url: baseUrl,
+    url: homeUrl.value,
     description: defMeta.description,
     inLanguage: locale.value,
-    potentialAction: {
-      '@type': 'SearchAction',
-      target: {
-        '@type': 'EntryPoint',
-        urlTemplate: `${baseUrl}/?q={search_term_string}`,
-      },
-      'query-input': 'required name=search_term_string',
-    },
   }))
 
   // Person
@@ -43,8 +47,9 @@ export function useStructuredData(type = 'website', additionalData = {}) {
     name: `${defMeta.first_name || ''} ${defMeta.last_name || ''}`.trim(),
     jobTitle: defMeta.specialization,
     description: defMeta.description,
-    url: baseUrl,
+    url: homeUrl.value,
     image: defMeta.image ? `${config.public.strapi.url}${defMeta.image}` : undefined,
+    sameAs: unref(additionalData.sameAs)?.length ? unref(additionalData.sameAs) : undefined,
   }))
 
   // Organization (optional)
@@ -52,7 +57,7 @@ export function useStructuredData(type = 'website', additionalData = {}) {
     '@context': 'https://schema.org',
     '@type': 'Organization',
     name: siteName.value,
-    url: baseUrl,
+    url: homeUrl.value,
     logo: defMeta.image ? `${config.public.strapi.url}${defMeta.image}` : undefined,
   }))
 
@@ -64,7 +69,7 @@ export function useStructuredData(type = 'website', additionalData = {}) {
     }
 
     const items = breadcrumbs.map((crumb, index) => {
-      const url = crumb.url ? `${baseUrl}${crumb.url}` : currentUrl.value
+      const url = crumb.url ? localeUrl(crumb.url) : currentUrl.value
       const name = (crumb.name && String(crumb.name).trim()) ? String(crumb.name).trim() : (crumb.url || `Item ${index + 1}`)
       return {
         '@type': 'ListItem',
@@ -146,7 +151,7 @@ export function useStructuredData(type = 'website', additionalData = {}) {
           item: {
             '@type': 'CreativeWork',
             name: item.title || item.name,
-            url: item.url ? `${baseUrl}${item.url}` : undefined,
+            url: item.url ? localeUrl(item.url) : undefined,
           },
         })),
       },

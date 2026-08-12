@@ -40,7 +40,8 @@ function mapLink (link) {
   }
 }
 
-useHead(metaInfo({ title }))
+// Визитка — служебная страница, дублирует контакты: из индекса убираем
+useHead(metaInfo({ title, noindex: true }))
 </script>
 
 <style lang="scss" scoped src="./style.scss"/>

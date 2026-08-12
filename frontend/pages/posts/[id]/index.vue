@@ -81,7 +81,7 @@
 <script setup>
 import { BackLink } from '~/components/common'
 import { ContentWrap } from '~/components/structure'
-import { metaInfo } from '~/composables/useMeta'
+import { metaInfo, normalizeUrlPath } from '~/composables/useMeta'
 import { dateFormat, formatRelativeDate } from '~/utils/formatDate'
 import { getPostTitle, getPostImage } from '~/utils/post'
 
@@ -126,13 +126,11 @@ useHead(metaInfo({
   title: pageTitle,
   description: pageDescription,
   image: pageImage,
+  type: 'article',
 }))
 
 const baseUrl = config.public.baseURL
-const currentUrl = computed(() => {
-  const path = route.path.replace(/^\/[a-z]{2}(\/|$)/, '/')
-  return `${baseUrl}${path}`
-})
+const currentUrl = computed(() => `${baseUrl}${normalizeUrlPath(route.path)}`)
 
 const blogPostSchema = computed(() => {
   if (!post.value) return null

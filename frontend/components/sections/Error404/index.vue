@@ -14,6 +14,7 @@ const { t } = useI18n()
 useHead(metaInfo({
   title: '404',
   description: t('common.error_{code}', { code: 404 }),
+  noindex: true,
 }))
 </script>
 

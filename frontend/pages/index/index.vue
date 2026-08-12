@@ -79,11 +79,18 @@ const home = serverFetch('home', {}, {}, 'findOne')
 const categories = serverFetch('category-projects', {
   sort: [{ rank: 'asc' }],
 }, [])
+const contactsData = serverFetch('contact', {}, [])
 
 useHead(metaInfo())
 
+// sameAs связывает страницу с профилями автора — помогает поисковикам склеить сущность
+const sameAs = computed(() => (contactsData.value?.contact || [])
+  .map(item => item.link)
+  .filter(link => typeof link === 'string' && link.startsWith('http')))
+
 const { getStructuredData } = useStructuredData('home', {
   includeOrganization: true,
+  sameAs,
 })
 
 watch(getStructuredData, (schemas) => {

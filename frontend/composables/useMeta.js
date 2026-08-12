@@ -1,25 +1,41 @@
 import { useMetaStore } from '~/stores/metaStore'
+import i18nConfig, { defaultLocale } from '~/config/i18n'
+
+// og:locale ждёт формат ru_RU, а useI18n().locales отдаёт только коды
+const localeIsoMap = i18nConfig.locales.reduce((acc, loc) => {
+  acc[loc.code] = (loc.iso || loc.code).replace('-', '_')
+  return acc
+}, {})
+
+export function normalizeUrlPath (path) {
+  if (!path) return '/'
+  const [pathname, query] = String(path).split('?')
+  const clean = pathname.replace(/\/+$/, '') || '/'
+  return query ? `${clean}?${query}` : clean
+}
 
 export function metaInfo(info = {}) {
   const { t, locale, locales } = useI18n()
   const route = useRoute()
   const config = useRuntimeConfig()
   const metaStore = useMetaStore()
+  const switchLocalePath = useSwitchLocalePath()
   const defMeta = metaStore.getMetaInfo
   const apiUrl = config.public.strapi.url
   const baseUrl = config.public.baseURL
 
-  const type = 'website'
   const twcard = 'summary_large_image'
   const author = ref(defMeta.author)
   const siteName = computed(() => t('app.name') || defMeta.title || 'Portfolio')
-  const lang = computed(() => locale.value)
+  const type = computed(() => unref(info.type) || 'website')
+  const localeIso = computed(() => localeIsoMap[locale.value] || locale.value)
+  // Каноническая ссылка всегда указывает на текущую локализованную страницу:
+  // путь уже содержит префикс локали (стратегия i18n — prefix)
   const currentUrl = computed(() => {
-    const path = route.path
-    const cleanPath = path.replace(/^\/[a-z]{2}(\/|$)/, '/')
-    return `${baseUrl}${cleanPath}`
+    const path = unref(info.canonical) || route.path
+    return `${baseUrl}${normalizeUrlPath(path)}`
   })
-  
+
   const title = computed(() => {
     let tl = info.title?.value || defMeta.title || t('app.name')
     if (route.name !== 'index') {
@@ -27,7 +43,7 @@ export function metaInfo(info = {}) {
     }
     return tl
   })
-  
+
   const image = computed(() => {
     let img = info.image?.value || defMeta.image || '/og-image.png'
     if (info.image?.value) {
@@ -41,7 +57,7 @@ export function metaInfo(info = {}) {
     }
     return img
   })
-  
+
   const description = computed(() => {
     const desc = info.description?.value || defMeta.description
     if (desc && desc.length > 160) {
@@ -49,26 +65,33 @@ export function metaInfo(info = {}) {
     }
     return desc
   })
-  
+
   const keywords = computed(() => info.keywords?.value || defMeta.keywords)
+
+  // Ссылки на языковые версии текущего маршрута (с префиксом локали)
+  const localeAlternates = computed(() => {
+    return locales.value.reduce((acc, loc) => {
+      const code = typeof loc === 'string' ? loc : loc.code
+      const path = switchLocalePath(code)
+
+      if (path) {
+        acc.push({ code, iso: localeIsoMap[code] || code, url: `${baseUrl}${normalizeUrlPath(path)}` })
+      }
+      return acc
+    }, [])
+  })
 
   const hreflangLinks = computed(() => {
     const links = []
-    const currentPath = route.path.replace(/^\/[a-z]{2}(\/|$)/, '/')
-    
-    locales.value.forEach((loc) => {
-      const localeCode = typeof loc === 'string' ? loc : loc.code
-      const isoCode = typeof loc === 'object' && loc.iso ? loc.iso : localeCode
-      const path = localeCode === 'en' ? currentPath : `/${localeCode}${currentPath}`
-      const url = `${baseUrl}${path}`
-      
+
+    localeAlternates.value.forEach(({ code, url }) => {
       links.push({
         rel: 'alternate',
-        hreflang: localeCode,
+        hreflang: code,
         href: url,
       })
 
-      if (localeCode === 'en') {
+      if (code === defaultLocale) {
         links.push({
           rel: 'alternate',
           hreflang: 'x-default',
@@ -76,8 +99,14 @@ export function metaInfo(info = {}) {
         })
       }
     })
-    
+
     return links
+  })
+
+  const localeAlternateMeta = computed(() => {
+    return localeAlternates.value
+      .filter(({ code }) => code !== locale.value)
+      .map(({ iso }) => ({ property: 'og:locale:alternate', content: iso }))
   })
 
   return computed(() => ({
@@ -92,9 +121,9 @@ export function metaInfo(info = {}) {
       { name: 'keywords', content: keywords.value },
       { name: 'author', content: author.value },
       { name: 'robots', content: info.noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1' },
-      
+
       // Open Graph
-      { property: 'og:type', content: type },
+      { property: 'og:type', content: type.value },
       { property: 'og:url', content: currentUrl.value },
       { property: 'og:title', content: title.value },
       { property: 'og:description', content: description.value },
@@ -102,9 +131,10 @@ export function metaInfo(info = {}) {
       { property: 'og:image:width', content: '1200' },
       { property: 'og:image:height', content: '630' },
       { property: 'og:image:alt', content: title.value },
-      { property: 'og:locale', content: lang.value },
+      { property: 'og:locale', content: localeIso.value },
+      ...localeAlternateMeta.value,
       { property: 'og:site_name', content: siteName.value },
-      
+
       // Twitter Card
       { name: 'twitter:card', content: twcard },
       { name: 'twitter:url', content: currentUrl.value },
@@ -117,7 +147,7 @@ export function metaInfo(info = {}) {
       class: '',
     },
     htmlAttrs: {
-      lang: lang.value,
+      lang: locale.value,
     },
   }))
 }

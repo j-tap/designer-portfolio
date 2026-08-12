@@ -14,8 +14,9 @@ const sortedImages = computed(() => {
 <template>
   <div class="project-presentation">
     <ImgBlock
-      v-for="img in sortedImages"
+      v-for="(img, index) in sortedImages"
       :key="img.id"
+      :eager="index === 0"
       :src="urlFile(img.url)"
       :src-lite="urlFile(img.formats?.large?.url || img.url)"
       :blurhash="img.blurhash"

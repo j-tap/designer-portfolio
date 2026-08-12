@@ -26,7 +26,7 @@
 
       <ul class="page-category__projects projects-list">
         <li
-          v-for="project in projects"
+          v-for="(project, index) in projects"
           :key="project.slug"
           :id="`project-${project.id}`"
           :ref="setProjectElems"
@@ -35,6 +35,7 @@
           <ProjectPreview
             :data="project"
             :to="getTo(project)"
+            :eager="index === 0"
             title-tag="h2"
             class="projects-list__item-preview"
           />

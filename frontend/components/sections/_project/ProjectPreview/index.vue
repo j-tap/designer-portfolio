@@ -12,7 +12,8 @@
         :blurhash="data.preview.blurhash"
         :width="data.preview.width"
         :height="data.preview.height"
-        :alt="data.slug"
+        :alt="data.title || data.slug"
+        :eager="eager"
         itemprop
       />
       <component :is="titleTag" class="project-preview__title">
@@ -32,7 +33,8 @@
         :blurhash="data.preview.blurhash"
         :width="data.preview.width"
         :height="data.preview.height"
-        :alt="data.slug"
+        :alt="data.title || data.slug"
+        :eager="eager"
         itemprop
       />
       <component :is="titleTag" class="project-preview__title">
@@ -54,7 +56,8 @@ defineProps({
   titleTag: {
     type: String,
     default: 'figcaption',
-  }
+  },
+  eager: Boolean,
 })
 </script>
 

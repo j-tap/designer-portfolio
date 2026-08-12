@@ -91,7 +91,9 @@ if (process.client) {
   })
 }
 
-useHead(metaInfo({ title }))
+const description = computed(() => category.value?.description || null)
+
+useHead(metaInfo({ title, description }))
 
 const breadcrumbs = computed(() => {
   if (!category.value) return null

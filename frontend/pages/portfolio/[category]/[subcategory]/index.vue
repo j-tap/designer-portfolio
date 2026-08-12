@@ -61,7 +61,9 @@ const metaTitle = computed(() => {
   return `${subcategory.value.title} — ${category.value.title}`
 })
 
-useHead(metaInfo({ title: metaTitle }))
+const metaDescription = computed(() => subcategory.value?.description || category.value?.description || null)
+
+useHead(metaInfo({ title: metaTitle, description: metaDescription }))
 
 const breadcrumbs = computed(() => {
   if (!subcategory.value?.title || !category.value) return null

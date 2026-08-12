@@ -14,13 +14,15 @@
         media="(max-width:1023px)"
       >
       <img
+        ref="imgElem"
         class="img-block__img"
-        :src="src"
+        :src="props.src"
         :alt="props.alt"
         :width="size.width"
         :height="size.height"
         :itemprop="itemprop ? 'image' : undefined"
-        loading="lazy"
+        :loading="props.eager ? 'eager' : 'lazy'"
+        :fetchpriority="props.eager ? 'high' : undefined"
         @load="onLoadImg"
         @error="onError"
       >
@@ -66,13 +68,21 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  // Для первого экрана: грузим сразу и с высоким приоритетом (LCP)
+  eager: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 const isLoaded = ref(false)
-const src = ref(null)
+const imgElem = ref(null)
 
 onMounted(() => {
-  src.value = props.src
+  // Картинка отдаётся в SSR-разметке и может загрузиться до гидрации — события load тогда не будет
+  if (imgElem.value?.complete) {
+    isLoaded.value = true
+  }
 })
 
 const classes = computed(() => [

@@ -32,4 +32,4 @@ build: check_env generate_traefik
 clean:
 	docker compose -f docker-compose.yml -f docker-compose.dev.yml down || true
 	rm -rf frontend/.output frontend/.nuxt frontend/.vite frontend/.turbo
-	rm -rf backend/.cache backend/build backend/.tmp/*.lock
+	rm -rf backend/.cache backend/build backend/.strapi backend/.tmp/*.lock

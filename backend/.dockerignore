@@ -11,6 +11,7 @@ package-lock.json
 tmp
 public/uploads
 build
+.strapi
 yarn-cache
 .DS_Store
 

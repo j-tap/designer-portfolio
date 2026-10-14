@@ -1,3 +1,5 @@
+const { siteUrl, mailFrom } = require('../../../../utils/urls');
+
 function escapeHtml(value) {
   return String(value ?? '')
     .replace(/&/g, '&amp;')
@@ -15,9 +17,9 @@ module.exports = {
 
   async afterCreate(event) {
     const { result } = event;
-    const domain = process.env.DOMAIN || 'localhost';
-    const site = `https://${domain}`;
-    const adminUrl = `${site}/strapi/admin/content-manager/collection-types/api::review.review/${result.id}`;
+    const site = siteUrl();
+    const domain = new URL(site).host;
+    const adminUrl = `${strapi.config.get('server.url')}/admin/content-manager/collection-types/api::review.review/${result.id}`;
 
     // Поля отзыва пишет кто угодно: без экранирования в письмо админу можно вставить
     // свою разметку и ссылки, и оно уйдёт с нашего SMTP как доверенное
@@ -28,8 +30,8 @@ module.exports = {
     // Без await ошибка SMTP становится необработанным отклонением промиса и роняет процесс
     try {
       await strapi.plugins['email'].services.email.send({
-        to: process.env.ADMIN_EMAIL,
-        from: `Diana UI/UX <noreply@${process.env.SMTP_FROM}>`,
+        to: process.env.NOTIFY_EMAIL,
+        from: mailFrom(),
         subject: `Новый отзыв на сайте ${domain}`,
         text: `Новый отзыв на сайте ${domain}\n\n${result.text || ''}\n\nОценка: ${result.rating}\n— ${result.name}, ${result.company}\n\nПерейти к просмотру: ${adminUrl}`,
         html: `

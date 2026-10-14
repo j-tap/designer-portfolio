@@ -1,3 +1,5 @@
+const { mailFrom } = require('../src/utils/urls');
+
 module.exports = ({ env }) => ({
   'drag-drop-content-types': {
     enabled: true,
@@ -55,7 +57,7 @@ module.exports = ({ env }) => ({
       provider: 'strapi-provider-email-smtp',
       providerOptions: {
         host: env('SMTP_HOST'),
-        port: env('SMTP_PORT'),
+        port: env.int('SMTP_PORT', 465),
         secure: true,
         username: env('SMTP_USERNAME'),
         password: env('SMTP_PASSWORD'),
@@ -64,8 +66,8 @@ module.exports = ({ env }) => ({
         connectionTimeout: 1,
       },
       settings: {
-        defaultFrom: `Diana UI/UX <noreply@${env('SMTP_FROM')}>`,
-        defaultReplyTo: `Diana UI/UX <noreply@${env('SMTP_FROM')}>`,
+        defaultFrom: mailFrom(),
+        defaultReplyTo: mailFrom(),
       },
     },
   },

@@ -1,13 +1,14 @@
-module.exports = ({ env }) => [
+const { siteUrl } = require('../src/utils/urls');
+
+module.exports = () => [
   'strapi::errors',
   'strapi::security',
   'strapi::poweredBy',
   {
     name: 'strapi::cors',
     config: {
-      // Список доменов сайта через запятую, например https://example.com.
-      // Без переменной (или с пустой) CORS открыт для всех, как было раньше
-      origin: env('CORS_ORIGINS') || '*',
+      // API вызывается только с самого сайта (админка Strapi открыта на том же домене)
+      origin: siteUrl(),
     },
   },
   'strapi::logger',

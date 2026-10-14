@@ -18,8 +18,9 @@ RUN yarn install --immutable
 COPY . .
 
 # Variables come from the root .env through docker-compose.yml, not from a file in the image.
-# `strapi build` needs only the public URL, which it bakes into the admin panel.
-ARG PUBLIC_URL
+# `strapi build` needs only Strapi's public URL (derived from these), which it bakes into the admin panel.
+ARG SITE_URL
+ARG STRAPI_PUBLIC_URL
 
 RUN yarn build
 

@@ -3,6 +3,8 @@ services:
   strapi:
     environment:
       NODE_ENV: production
+      # Behind Traefik: take client IPs (rate limit of reviews) from X-Forwarded-For
+      PROXY: "true"
     restart: unless-stopped
     build:
       args:

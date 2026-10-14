@@ -12,8 +12,12 @@ check_env:
 
 # Only the variables the template needs are read: sourcing the whole .env would make
 # the shell try to run parts of values with spaces (such as an SMTP app password) as commands.
+# The domain for Traefik routing and the HTTPS certificate is the host of SITE_URL.
 generate_traefik: check_env
-	@set -a; eval "$$(grep -E '^(TRAEFIK_DOMAIN|PORT_BACKEND|PORT_FRONTEND)=' .env)"; set +a; \
+	@set -a; eval "$$(grep -E '^(SITE_URL|PORT_BACKEND|PORT_FRONTEND)=' .env)"; set +a; \
+	TRAEFIK_DOMAIN=$$(printf '%s' "$$SITE_URL" | sed -E 's#^[a-zA-Z]+://##; s#[/:?].*$$##'); \
+	test -n "$$TRAEFIK_DOMAIN" || { echo "generate_traefik: set SITE_URL in .env" >&2; exit 1; }; \
+	export TRAEFIK_DOMAIN PORT_BACKEND="$${PORT_BACKEND:-1337}" PORT_FRONTEND="$${PORT_FRONTEND:-3000}"; \
 	envsubst '$${TRAEFIK_DOMAIN} $${PORT_BACKEND} $${PORT_FRONTEND}' < docker-compose.traefik.template.yml > docker-compose.traefik.yml
 
 dev: clean check_env

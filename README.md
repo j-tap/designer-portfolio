@@ -15,6 +15,8 @@ All settings live in **one `.env` file in the project root** — there are no `.
 cp .env.example .env
 ```
 
+- The main setting is `SITE_URL`: the domain for Traefik and HTTPS, Strapi's address
+  (`SITE_URL/strapi`), links in emails and RSS and the allowed CORS origin are derived from it.
 - **Docker** (`make dev`, `make prod`): `docker-compose.yml` reads the root `.env` and passes each
   service only the variables it needs, so Strapi's secrets never reach the Nuxt container.
   A new variable must also be added to `docker-compose.yml`.

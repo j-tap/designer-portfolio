@@ -19,9 +19,9 @@ ENV NODE_ENV=${MODE}
 
 # Variables come from the root .env through docker-compose.yml, not from a file in the image.
 # nuxt.config reads these at build time (runtime values are passed as environment).
-ARG BASE_URL
+ARG SITE_URL
+ARG STRAPI_PUBLIC_URL
 ARG STRAPI_URL
-ARG NUXT_PUBLIC_STRAPI_URL
 ARG YANDEX_METRIKA_ID
 ARG GOOGLE_SITE_VERIFICATION
 ARG YANDEX_SITE_VERIFICATION

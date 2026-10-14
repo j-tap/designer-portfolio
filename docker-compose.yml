@@ -5,54 +5,55 @@
 # Every value comes from the single .env in the project root (see .env.example).
 # Each service gets only the variables it needs, so Strapi's signing keys and the SMTP
 # password never reach the Nuxt container. A new variable has to be added here as well.
+# Site and Strapi addresses are derived from SITE_URL inside the apps
+# (backend/src/utils/urls.js, frontend/config/site.js).
 #
 # ${VAR:?...} stops compose with an error when a required value is missing, instead of
-# starting Strapi with empty keys. Optional values get an explicit default: an empty
-# string is not "unset" for Strapi's env() and would override its own default.
+# starting Strapi with empty keys.
 
 services:
   strapi:
     build:
       context: ./backend
       args:
-        # `strapi build` bakes the public URL into the admin panel
-        PUBLIC_URL: ${PUBLIC_URL:?set PUBLIC_URL in .env}
+        # `strapi build` bakes Strapi's public URL into the admin panel
+        SITE_URL: ${SITE_URL:?set SITE_URL in .env}
+        STRAPI_PUBLIC_URL: ${STRAPI_PUBLIC_URL:-}
     environment:
       HOST: 0.0.0.0
-      PORT_BACKEND: ${PORT_BACKEND:?set PORT_BACKEND in .env}
-      PUBLIC_URL: ${PUBLIC_URL:?set PUBLIC_URL in .env}
-      DOMAIN: ${DOMAIN:?set DOMAIN in .env}
-      PROXY: ${PROXY:-false}
-      CORS_ORIGINS: ${CORS_ORIGINS:-*}
+      PORT_BACKEND: ${PORT_BACKEND:-1337}
+      SITE_URL: ${SITE_URL:?set SITE_URL in .env}
+      STRAPI_PUBLIC_URL: ${STRAPI_PUBLIC_URL:-}
       APP_KEYS: ${APP_KEYS:?set APP_KEYS in .env}
       JWT_SECRET: ${JWT_SECRET:?set JWT_SECRET in .env}
       ADMIN_JWT_SECRET: ${ADMIN_JWT_SECRET:?set ADMIN_JWT_SECRET in .env}
       API_TOKEN_SALT: ${API_TOKEN_SALT:?set API_TOKEN_SALT in .env}
-      ADMIN_EMAIL: ${ADMIN_EMAIL:-}
-      SMTP_HOST: ${SMTP_HOST:-}
+      SMTP_HOST: ${SMTP_HOST:?set SMTP_HOST in .env}
       SMTP_PORT: ${SMTP_PORT:-465}
-      SMTP_USERNAME: ${SMTP_USERNAME:-}
-      SMTP_PASSWORD: ${SMTP_PASSWORD:-}
+      SMTP_USERNAME: ${SMTP_USERNAME:?set SMTP_USERNAME in .env}
+      SMTP_PASSWORD: ${SMTP_PASSWORD:?set SMTP_PASSWORD in .env}
       SMTP_FROM: ${SMTP_FROM:-}
+      NOTIFY_EMAIL: ${NOTIFY_EMAIL:?set NOTIFY_EMAIL in .env}
 
   nuxt:
     build:
       context: ./frontend
       args:
         # nuxt.config reads these at build time
-        BASE_URL: ${BASE_URL:?set BASE_URL in .env}
-        STRAPI_URL: ${STRAPI_URL:?set STRAPI_URL in .env}
-        NUXT_PUBLIC_STRAPI_URL: ${NUXT_PUBLIC_STRAPI_URL:?set NUXT_PUBLIC_STRAPI_URL in .env}
+        SITE_URL: ${SITE_URL:?set SITE_URL in .env}
+        STRAPI_PUBLIC_URL: ${STRAPI_PUBLIC_URL:-}
+        STRAPI_URL: http://strapi:${PORT_BACKEND:-1337}
         YANDEX_METRIKA_ID: ${YANDEX_METRIKA_ID:-}
         GOOGLE_SITE_VERIFICATION: ${GOOGLE_SITE_VERIFICATION:-}
         YANDEX_SITE_VERIFICATION: ${YANDEX_SITE_VERIFICATION:-}
     environment:
       # Nitro (production server) listens on PORT, the dev server reads PORT_FRONTEND
-      PORT: ${PORT_FRONTEND:?set PORT_FRONTEND in .env}
-      PORT_FRONTEND: ${PORT_FRONTEND:?set PORT_FRONTEND in .env}
-      BASE_URL: ${BASE_URL:?set BASE_URL in .env}
-      STRAPI_URL: ${STRAPI_URL:?set STRAPI_URL in .env}
-      NUXT_PUBLIC_STRAPI_URL: ${NUXT_PUBLIC_STRAPI_URL:?set NUXT_PUBLIC_STRAPI_URL in .env}
+      PORT: ${PORT_FRONTEND:-3000}
+      PORT_FRONTEND: ${PORT_FRONTEND:-3000}
+      SITE_URL: ${SITE_URL:?set SITE_URL in .env}
+      STRAPI_PUBLIC_URL: ${STRAPI_PUBLIC_URL:-}
+      # Server-side requests go straight to the Strapi container
+      STRAPI_URL: http://strapi:${PORT_BACKEND:-1337}
       YANDEX_METRIKA_ID: ${YANDEX_METRIKA_ID:-}
       GOOGLE_SITE_VERIFICATION: ${GOOGLE_SITE_VERIFICATION:-}
       YANDEX_SITE_VERIFICATION: ${YANDEX_SITE_VERIFICATION:-}

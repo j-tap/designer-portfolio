@@ -14,7 +14,7 @@ services:
 
   strapi:
     ports:
-      - "${PORT_BACKEND}:${PORT_BACKEND}"
+      - "${PORT_BACKEND:-1337}:${PORT_BACKEND:-1337}"
     command: "yarn develop"
     volumes:
       - ./backend/.tmp:/app/.tmp
@@ -28,7 +28,7 @@ services:
 
   nuxt:
     ports:
-      - "${PORT_FRONTEND}:${PORT_FRONTEND}"
+      - "${PORT_FRONTEND:-3000}:${PORT_FRONTEND:-3000}"
     command: "yarn dev"
     volumes:
       - ./frontend/public:/app/public:ro

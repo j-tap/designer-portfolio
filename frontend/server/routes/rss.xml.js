@@ -1,7 +1,6 @@
 import { getPostTitle, getPostImage } from '~/utils/post'
 import { safeUrl } from '~/utils/url'
 
-const BASE_URL = process.env.BASE_URL
 const DEFAULT_LOCALE = 'ru'
 
 function escapeXml(unsafe) {
@@ -35,6 +34,8 @@ function formatRssDate(dateString) {
 }
 
 export default defineEventHandler(async (event) => {
+  // Адрес сайта зашит в сборку (nuxt.config → runtimeConfig.public.baseURL)
+  const BASE_URL = useRuntimeConfig().public.baseURL
   setHeader(event, 'Content-Type', 'application/rss+xml; charset=utf-8')
   setHeader(event, 'Cache-Control', 'public, max-age=3600')
 

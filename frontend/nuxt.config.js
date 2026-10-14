@@ -2,8 +2,9 @@
 import i18n from './config/i18n/'
 import strapi from './config/strapi'
 import sitemap from './config/sitemap'
+import { siteUrl } from './config/site'
 
-const baseURL = process.env.BASE_URL
+const baseURL = siteUrl
 const isDev = process.env.NODE_ENV !== 'production'
 
 export default defineNuxtConfig({

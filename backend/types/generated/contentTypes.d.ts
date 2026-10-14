@@ -387,6 +387,15 @@ export interface ApiCategoryProjectCategoryProject
       'admin::user'
     > &
       Attribute.Private;
+    description: Attribute.Text &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Attribute.SetMinMaxLength<{
+        maxLength: 300;
+      }>;
     locale: Attribute.String;
     localizations: Attribute.Relation<
       'api::category-project.category-project',
@@ -455,6 +464,52 @@ export interface ApiContactContact extends Schema.SingleType {
     updatedAt: Attribute.DateTime;
     updatedBy: Attribute.Relation<
       'api::contact.contact',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiDonateOptionDonateOption extends Schema.CollectionType {
+  collectionName: 'donate_options';
+  info: {
+    description: '';
+    displayName: '\u0421\u043F\u043E\u0441\u043E\u0431 \u0434\u043E\u043D\u0430\u0442\u0430';
+    pluralName: 'donate-options';
+    singularName: 'donate-option';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    createdAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::donate-option.donate-option',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    description: Attribute.Text;
+    icon: Attribute.Media<'images'>;
+    order: Attribute.Integer & Attribute.DefaultTo<0>;
+    qr: Attribute.Media<'images'>;
+    requisites: Attribute.Component<'donate.requisite', true> &
+      Attribute.Required &
+      Attribute.SetMinMax<
+        {
+          min: 1;
+        },
+        number
+      >;
+    title: Attribute.String &
+      Attribute.Required &
+      Attribute.SetMinMaxLength<{
+        minLength: 2;
+      }>;
+    updatedAt: Attribute.DateTime;
+    updatedBy: Attribute.Relation<
+      'api::donate-option.donate-option',
       'oneToOne',
       'admin::user'
     > &
@@ -549,6 +604,21 @@ export interface ApiMetaInfoMetaInfo extends Schema.SingleType {
         };
       }> &
       Attribute.DefaultTo<'Diana'>;
+    career_start_year: Attribute.Integer &
+      Attribute.Required &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }> &
+      Attribute.SetMinMax<
+        {
+          max: 2100;
+          min: 1990;
+        },
+        number
+      > &
+      Attribute.DefaultTo<2019>;
     createdAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
       'api::meta-info.meta-info',
@@ -822,7 +892,7 @@ export interface ApiReviewReview extends Schema.CollectionType {
       'oneToMany',
       'api::reviews-development.reviews-development'
     >;
-    files: Attribute.Media<'images' | 'files' | 'videos', true>;
+    files: Attribute.Media<'images' | 'files', true>;
     link: Attribute.String;
     name: Attribute.String & Attribute.Required;
     publishedAt: Attribute.DateTime;
@@ -1031,6 +1101,15 @@ export interface ApiSubcategoryProjectSubcategoryProject
       'admin::user'
     > &
       Attribute.Private;
+    description: Attribute.Text &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Attribute.SetMinMaxLength<{
+        maxLength: 300;
+      }>;
     locale: Attribute.String;
     localizations: Attribute.Relation<
       'api::subcategory-project.subcategory-project',
@@ -1548,6 +1627,7 @@ declare module '@strapi/types' {
       'admin::user': AdminUser;
       'api::category-project.category-project': ApiCategoryProjectCategoryProject;
       'api::contact.contact': ApiContactContact;
+      'api::donate-option.donate-option': ApiDonateOptionDonateOption;
       'api::home.home': ApiHomeHome;
       'api::meta-info.meta-info': ApiMetaInfoMetaInfo;
       'api::project.project': ApiProjectProject;

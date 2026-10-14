@@ -12,6 +12,19 @@ export interface CommonMeta extends Schema.Component {
   };
 }
 
+export interface DonateRequisite extends Schema.Component {
+  collectionName: 'components_donate_requisites';
+  info: {
+    description: '';
+    displayName: '\u0420\u0435\u043A\u0432\u0438\u0437\u0438\u0442';
+  };
+  attributes: {
+    label: Attribute.String;
+    link: Attribute.String;
+    value: Attribute.String & Attribute.Required;
+  };
+}
+
 export interface PageContact extends Schema.Component {
   collectionName: 'components_page_contacts';
   info: {
@@ -200,6 +213,7 @@ declare module '@strapi/types' {
   export module Shared {
     export interface Components {
       'common.meta': CommonMeta;
+      'donate.requisite': DonateRequisite;
       'page.contact': PageContact;
       'page.home-experience': PageHomeExperience;
       'page.home-important': PageHomeImportant;

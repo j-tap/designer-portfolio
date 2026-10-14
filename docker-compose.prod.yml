@@ -26,6 +26,7 @@ services:
       NODE_ENV: production
       VR9_API_KEY: ${VR9_API_KEY}
       LINKEDIN_USER_NAME: ${LINKEDIN_USER_NAME}
+      POSTS_UPDATE_TOKEN: ${POSTS_UPDATE_TOKEN:-}
     ports: []
     restart: unless-stopped
     build:

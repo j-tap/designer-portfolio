@@ -2,7 +2,10 @@
 const CACHE_TTL = 24 * 60 * 60 * 1000
 const LINKEDIN_USER_NAME = process.env.LINKEDIN_USER_NAME
 const VR9_API_KEY = process.env.VR9_API_KEY
+const POSTS_UPDATE_TOKEN = process.env.POSTS_UPDATE_TOKEN
 const BASE_URL_API = 'https://vr9.pro/api/services/linkedin/posts'
+
+let pendingFetch = null
 
 let allPostsCache = {
   data: [],
@@ -19,6 +22,21 @@ export function isCacheValid() {
   return allPostsCache.data.length > 0 && 
          allPostsCache.timestamp && 
          (now - allPostsCache.timestamp) < CACHE_TTL
+}
+
+/**
+ * Принудительное обновление (?update=true) тратит квоту платного API, поэтому
+ * разрешено только с токеном из POSTS_UPDATE_TOKEN: ?update=true&token=...
+ * Без заданного токена параметр игнорируется.
+ */
+export function canForceUpdate(query) {
+  const wantsUpdate = query.update === 'true' || query.update === true
+  return Boolean(wantsUpdate && POSTS_UPDATE_TOKEN && query.token === POSTS_UPDATE_TOKEN)
+}
+
+// В тексте ошибки ofetch есть полный URL запроса, а в нём ключ API
+function redact(message) {
+  return VR9_API_KEY ? String(message).replaceAll(VR9_API_KEY, '***') : message
 }
 
 export function getCachedPosts() {
@@ -62,6 +80,15 @@ export async function fetchAllPosts(forceUpdate = false) {
     return allPostsCache
   }
 
+  // Параллельные запросы при пустом кеше ждут одну загрузку, а не запускают по своей
+  pendingFetch ??= loadAllPosts().finally(() => {
+    pendingFetch = null
+  })
+
+  return pendingFetch
+}
+
+async function loadAllPosts() {
   const allPosts = []
   let page = 1
   const limit = 50 // Запрашиваем больше за раз для эффективности
@@ -70,7 +97,7 @@ export async function fetchAllPosts(forceUpdate = false) {
 
   while (hasMore && page <= 10) { // Максимум 10 страниц = 500 постов
     const offset = (page - 1) * limit
-    const url = `${BASE_URL_API}?key=${VR9_API_KEY}&username=${LINKEDIN_USER_NAME}&limit=${limit}&offset=${offset}`
+    const url = `${BASE_URL_API}?key=${encodeURIComponent(VR9_API_KEY)}&username=${encodeURIComponent(LINKEDIN_USER_NAME)}&limit=${limit}&offset=${offset}`
 
     try {
       const response = await $fetch(url, { method: 'GET' })
@@ -86,9 +113,16 @@ export async function fetchAllPosts(forceUpdate = false) {
       hasMore = posts.length === limit
       page++
     } catch (error) {
-      console.error(`[POSTS CACHE] Error fetching page ${page}:`, error?.message)
+      console.error(`[POSTS CACHE] Error fetching page ${page}:`, redact(error?.message))
       break
     }
+  }
+
+  // Если API не ответил, оставляем то, что уже было: иначе раздел постов опустеет,
+  // а пустой кеш считается невалидным, и каждый запрос снова пойдёт во внешний API
+  if (!allPosts.length && allPostsCache.data.length) {
+    allPostsCache.timestamp = Date.now()
+    return allPostsCache
   }
 
   allPostsCache = {

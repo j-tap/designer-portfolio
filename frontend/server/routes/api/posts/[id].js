@@ -1,6 +1,6 @@
 // https://vr9.pro/api/services/linkedin/posts
 
-import { fetchAllPosts, clearPostsCache, getPostById, isCacheValid } from '~/server/utils/postsCache'
+import { fetchAllPosts, canForceUpdate, getPostById, isCacheValid } from '~/server/utils/postsCache'
 
 export default defineEventHandler(async (event) => {
   setHeader(event, 'Content-Type', 'application/json; charset=utf-8')
@@ -14,11 +14,7 @@ export default defineEventHandler(async (event) => {
   }
 
   const query = getQuery(event)
-  const shouldUpdate = query.update === 'true' || query.update === true
-
-  if (shouldUpdate) {
-    clearPostsCache()
-  }
+  const shouldUpdate = canForceUpdate(query)
 
   try {
     // Загружаем все посты (из кеша или с API)

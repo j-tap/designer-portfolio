@@ -67,7 +67,15 @@
 
     <FilesUpload v-model="form.files" editable />
 
-    <button class="btn" type="submit">Отправить</button>
+    <!-- Ловушка для ботов: человек это поле не видит, бот заполнит -->
+    <label class="review-form__trap" aria-hidden="true">
+      Website
+      <input v-model="form.website" type="text" name="website" tabindex="-1" autocomplete="off" />
+    </label>
+
+    <p v-if="error" class="review-form__error" role="alert">{{ error }}</p>
+
+    <button class="btn" type="submit" :disabled="sending">{{ sending ? 'Отправка…' : 'Отправить' }}</button>
   </form>
 </template>
 
@@ -84,6 +92,14 @@ const props = defineProps({
   data: {
     type: Object,
     required: true,
+  },
+  error: {
+    type: String,
+    default: null,
+  },
+  sending: {
+    type: Boolean,
+    default: false,
   },
 })
 

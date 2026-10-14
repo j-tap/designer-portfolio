@@ -19,6 +19,8 @@
             v-if="canSendReview"
             :form="form"
             :data="data"
+            :error="formError"
+            :sending="sending"
             @send="sendForm"
           />
           <div v-else class="page-reviews__form-success">
@@ -36,7 +38,7 @@
 import { TitleOutline } from '~/components/common'
 import { ReviewsList, ReviewForm } from '~/components/sections'
 import { metaInfo } from '~/composables/useMeta'
-import { serverFetch, serverCreate } from '~/composables/useApi'
+import { serverFetch, serverCreate, fetchJson } from '~/composables/useApi'
 import { useReviewsStore } from '~/stores/reviewsStore'
 import { useMedia } from '~/composables/useMedia'
 
@@ -73,9 +75,25 @@ const form = reactive({
   cooperations: [],
   text: null,
   files: [],
+  website: '',
 })
+const formToken = ref(null)
+const formError = ref(null)
+const sending = ref(false)
+
+// Токен выдаётся сервером при открытии формы: без него отзыв не примут (защита от ботов)
+async function loadFormToken () {
+  try {
+    const { token } = await fetchJson('reviews/form-token')
+    formToken.value = token
+  }
+  catch (error) {
+    console.error('Error loading review form token:', error)
+  }
+}
 
 onMounted(() => {
+  loadFormToken()
   window.addEventListener('scroll', handleScroll)
   window.addEventListener('resize', handleScroll)
   handleScroll()
@@ -104,7 +122,7 @@ function handleScroll () {
 }
 
 async function sendForm (form) {
-  const data = {}
+  const data = { formToken: formToken.value }
   const formData = new FormData()
 
   Object.keys(form).forEach(key => {
@@ -120,10 +138,20 @@ async function sendForm (form) {
 
   formData.append('data', JSON.stringify(data))
 
-  const { ok } = await serverCreate('reviews', formData)
+  sending.value = true
+  formError.value = null
+
+  const { ok, error } = await serverCreate('reviews', formData)
+
+  sending.value = false
 
   if (ok) {
     reviewsStore.setCanSendReview(false)
+  }
+  else {
+    formError.value = error || 'Не удалось отправить отзыв, попробуйте ещё раз'
+    // Токен мог устареть: берём новый, чтобы повторная отправка прошла
+    loadFormToken()
   }
 }
 

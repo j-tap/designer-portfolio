@@ -28,10 +28,17 @@ export function serverFetch (name, params = {}, defaultValue = [], fetchType = '
 
 export async function serverCreate (name, data = {}) {
   try {
-    return await create(name, data)
+    const response = await create(name, data)
+    const body = await response.json().catch(() => null)
+
+    return {
+      ok: response.ok,
+      error: response.ok ? null : body?.error?.message || null,
+    }
   }
   catch (error) {
     console.error('Error api serverCreate:', error)
+    return { ok: false, error: null }
   }
 }
 
@@ -83,13 +90,22 @@ export async function findOne (name, params = {}) {
 
 export async function create (name, body) {
   const config = useRuntimeConfig()
+  // FormData (форма с файлами) отправляется как есть: браузер сам выставит multipart с boundary,
+  // а JSON.stringify(FormData) дал бы пустой объект "{}"
+  const isFormData = body instanceof FormData
+
   return await fetch(`${config.public.strapi.url}/api/${name}`, {
     method: 'post',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(body),
+    headers: isFormData ? {} : { 'Content-Type': 'application/json' },
+    body: isFormData ? body : JSON.stringify(body),
   })
+}
+
+export async function fetchJson (name) {
+  const config = useRuntimeConfig()
+  const response = await fetch(`${config.public.strapi.url}/api/${name}`)
+  if (!response.ok) throw new Error(`Request ${name} failed: ${response.status}`)
+  return await response.json()
 }
 
 async function sendRequest (name, params, method, cb) {

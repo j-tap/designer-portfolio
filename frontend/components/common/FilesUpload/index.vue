@@ -1,7 +1,7 @@
 <template>
   <div class="files-upload">
     <label class="btn btn_sm" for="formInputFile">Загрузите файлы, которыми хотите поделиться</label>
-    <input type="file" id="formInputFile" multiple @change="onFileUpload">
+    <input type="file" id="formInputFile" multiple :accept="accept" @change="onFileUpload">
     <FilesList class="files-upload__list" :items="modelValue" :editable="editable" @remove="removeFile" />
   </div>
 </template>
@@ -11,6 +11,9 @@
 import { FilesList } from '~/components/common'
 
 const emit = defineEmits(['update:modelValue'])
+
+// Те же типы, что принимает сервер (backend/src/api/review/utils/files.js)
+const accept = 'image/jpeg,image/png,image/gif,image/webp,image/avif,application/pdf'
 
 const props = defineProps({
   modelValue: {

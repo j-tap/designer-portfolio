@@ -4261,6 +4261,7 @@ __metadata:
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
     react-router-dom: "npm:^5.3.4"
+    sharp: "npm:0.32.6"
     strapi-blurhash: "npm:1.1.1"
     strapi-plugin-multi-select: "npm:^1.2.3"
     strapi-plugin-populate-deep: "npm:^3.0.1"

@@ -112,11 +112,6 @@ async function prepareReviewFiles(ctx) {
   return files;
 }
 
-async function removeUploaded(ctx) {
-  await Promise.all(listUploaded(ctx).map(file => fs.rm(file.filepath, { force: true })));
-}
-
 module.exports = {
   prepareReviewFiles,
-  removeUploaded,
 };

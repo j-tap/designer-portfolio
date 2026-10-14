@@ -9,7 +9,7 @@ const { createCoreController } = require('@strapi/strapi').factories;
 // с текстом в error.message — его и показывает форма на сайте
 const { errors: { ValidationError, RateLimitError } } = require('@strapi/utils');
 const { issueFormToken, checkFormToken, hitRateLimit } = require('../utils/antispam');
-const { prepareReviewFiles, removeUploaded } = require('../utils/files');
+const { prepareReviewFiles } = require('../utils/files');
 const { notifyNewReview } = require('../utils/notify');
 
 const UID = 'api::review.review';
@@ -152,51 +152,46 @@ module.exports = createCoreController(UID, () => ({
     ctx.body = { token: issueFormToken() };
   },
 
+  // Временные файлы запроса удаляет middleware cleanup-uploads
   async create(ctx) {
-    try {
-      const data = readData(ctx);
+    const data = readData(ctx);
 
-      // Скрытое поле: человек его не видит и не заполняет, а боты заполняют все поля подряд.
-      // Отвечаем так же, как на успех, чтобы бот не понял, что его отсеяли
-      if (data.website) {
-        ctx.body = SUCCESS;
-        return;
-      }
-
-      if (!checkFormToken(data.formToken)) {
-        throw new ValidationError('Форма устарела, обновите страницу и попробуйте ещё раз');
-      }
-
-      const review = await sanitizeReview(data);
-
-      // Попытку засчитываем только за заполненную форму (исправление опечаток лимит не тратит),
-      // но до обработки файлов: перекодирование картинок — самая тяжёлая часть запроса
-      if (hitRateLimit(ctx.request.ip)) {
-        throw new RateLimitError('Слишком много отзывов, попробуйте позже');
-      }
-
-      const uploaded = await uploadFiles(await prepareReviewFiles(ctx));
-
-      try {
-        // Без status документ создаётся черновиком и ждёт модерации в админке
-        const document = await strapi.documents(UID).create({
-          data: { ...review, files: uploaded.map(({ id }) => id) },
-        });
-
-        // Не ждём SMTP: письмо не должно задерживать ответ, а его ошибки notifyNewReview логирует сама
-        notifyNewReview(document);
-      }
-      catch (error) {
-        // Отзыв не сохранился — его файлы в медиатеке ни к чему не привязаны
-        await removeFiles(uploaded);
-        throw error;
-      }
-
+    // Скрытое поле: человек его не видит и не заполняет, а боты заполняют все поля подряд.
+    // Отвечаем так же, как на успех, чтобы бот не понял, что его отсеяли
+    if (data.website) {
       ctx.body = SUCCESS;
+      return;
     }
-    finally {
-      // Временные файлы formidable в /tmp сами не удаляются
-      await removeUploaded(ctx);
+
+    if (!checkFormToken(data.formToken)) {
+      throw new ValidationError('Форма устарела, обновите страницу и попробуйте ещё раз');
     }
+
+    const review = await sanitizeReview(data);
+
+    // Попытку засчитываем только за заполненную форму (исправление опечаток лимит не тратит),
+    // но до обработки файлов: перекодирование картинок — самая тяжёлая часть запроса
+    if (hitRateLimit(ctx.request.ip)) {
+      throw new RateLimitError('Слишком много отзывов, попробуйте позже');
+    }
+
+    const uploaded = await uploadFiles(await prepareReviewFiles(ctx));
+
+    try {
+      // Без status документ создаётся черновиком и ждёт модерации в админке
+      const document = await strapi.documents(UID).create({
+        data: { ...review, files: uploaded.map(({ id }) => id) },
+      });
+
+      // Не ждём SMTP: письмо не должно задерживать ответ, а его ошибки notifyNewReview логирует сама
+      notifyNewReview(document);
+    }
+    catch (error) {
+      // Отзыв не сохранился — его файлы в медиатеке ни к чему не привязаны
+      await removeFiles(uploaded);
+      throw error;
+    }
+
+    ctx.body = SUCCESS;
   },
 }));

@@ -1,9 +1,9 @@
 const { siteUrl } = require('../src/utils/urls');
 
 module.exports = () => [
+  'strapi::logger',
   'strapi::errors',
   'strapi::security',
-  'strapi::poweredBy',
   {
     name: 'strapi::cors',
     config: {
@@ -11,12 +11,12 @@ module.exports = () => [
       origin: siteUrl(),
     },
   },
-  'strapi::logger',
+  'strapi::poweredBy',
   'strapi::query',
   'strapi::body',
   'strapi::session',
   'strapi::favicon',
   'strapi::public',
-  {name: 'global::redirector'},
-  { name: 'global::logRequest' },
+  { name: 'global::redirector' },
+  { name: 'global::populate-deep' },
 ];

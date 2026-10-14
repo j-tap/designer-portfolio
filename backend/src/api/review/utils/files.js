@@ -31,6 +31,7 @@ class FileError extends Error {}
 
 /**
  * formidable отдаёт либо один файл, либо массив — приводим к массиву.
+ * Поля файла (formidable 2): filepath, originalFilename, mimetype, size.
  */
 function listUploaded(ctx) {
   return Object.values(ctx.request.files || {}).flat().filter(Boolean);
@@ -58,17 +59,18 @@ function safeBaseName(name) {
  */
 async function compressImage(file, type) {
   const output = await RESIZABLE[type.mime](
-    sharp(file.path)
+    sharp(file.filepath)
       .rotate()
       .resize({ width: MAX_IMAGE_SIDE, height: MAX_IMAGE_SIDE, fit: 'inside', withoutEnlargement: true })
   ).toBuffer();
 
-  await fs.writeFile(file.path, output);
+  await fs.writeFile(file.filepath, output);
   file.size = output.length;
 }
 
 /**
- * Проверяет и подготавливает файлы отзыва к сохранению. Бросает FileError с текстом для пользователя.
+ * Проверяет и подготавливает файлы отзыва к сохранению. Возвращает их список для загрузки
+ * в медиатеку. Бросает FileError с текстом для пользователя.
  */
 async function prepareReviewFiles(ctx) {
   const keys = Object.keys(ctx.request.files || {});
@@ -83,13 +85,13 @@ async function prepareReviewFiles(ctx) {
 
   for (const file of files) {
     if (file.size > MAX_FILE_SIZE) {
-      throw new FileError(`Файл «${file.name}» больше ${MAX_FILE_SIZE / 1024 / 1024} МБ`);
+      throw new FileError(`Файл «${file.originalFilename}» больше ${MAX_FILE_SIZE / 1024 / 1024} МБ`);
     }
 
-    const head = await readHead(file.path);
+    const head = await readHead(file.filepath);
     const type = SIGNATURES.find(({ test }) => test(head));
     if (!type) {
-      throw new FileError(`Файл «${file.name}»: поддерживаются только изображения (JPG, PNG, GIF, WebP, AVIF) и PDF`);
+      throw new FileError(`Файл «${file.originalFilename}»: поддерживаются только изображения (JPG, PNG, GIF, WebP, AVIF) и PDF`);
     }
 
     if (RESIZABLE[type.mime]) {
@@ -97,18 +99,20 @@ async function prepareReviewFiles(ctx) {
         await compressImage(file, type);
       }
       catch {
-        throw new FileError(`Не удалось обработать изображение «${file.name}»`);
+        throw new FileError(`Не удалось обработать изображение «${file.originalFilename}»`);
       }
     }
 
     // Имя и MIME, с которыми файл сохранится и будет отдаваться, берём из проверенного типа
-    file.name = `${safeBaseName(file.name)}${type.ext}`;
-    file.type = type.mime;
+    file.originalFilename = `${safeBaseName(file.originalFilename)}${type.ext}`;
+    file.mimetype = type.mime;
   }
+
+  return files;
 }
 
 async function removeUploaded(ctx) {
-  await Promise.all(listUploaded(ctx).map(file => fs.rm(file.path, { force: true })));
+  await Promise.all(listUploaded(ctx).map(file => fs.rm(file.filepath, { force: true })));
 }
 
 module.exports = {

@@ -8,5 +8,8 @@ module.exports = ({ env }) => ({
   },
   url: strapiPublicUrl(),
   // В проде Strapi стоит за Traefik (docker-compose.prod.yml), и IP клиента берётся из X-Forwarded-For
-  proxy: env.bool('PROXY', false)
+  proxy: env.bool('PROXY', false),
+  webhooks: {
+    populateRelations: false,
+  },
 });

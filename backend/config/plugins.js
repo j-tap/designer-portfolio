@@ -8,67 +8,28 @@ module.exports = ({ env }) => {
     enabled: true,
   },
 
-  slugify: {
-    enabled: true,
-    config: {
-      contentTypes: {
-        'category-project': {
-          field: 'slug',
-          references: 'title',
-        },
-        'subcategory-project': {
-          field: 'slug',
-          references: 'title',
-        },
-        'project': {
-          field: 'slug',
-          references: 'title',
-        },
-      },
-    },
-  },
-
-  'transformer': {
-    enabled: true,
-    config: {
-      responseTransforms: {
-        removeAttributesKey: true,
-        removeDataKey: true,
-      }
-    }
-  },
-
-  'strapi-plugin-populate-deep': {
-    enabled: true,
-  },
-
   'multi-select': {
     enabled: true,
   },
 
-  'strapi-blurhash': {
-    enabled: true,
-  },
-
-  'relations-select': {
-    enabled: true,
-    resolve: './src/plugins/relations-select',
-  },
-
   email: {
     config: {
-      provider: 'strapi-provider-email-smtp',
+      provider: 'nodemailer',
       providerOptions: {
         host: env('SMTP_HOST'),
         port: smtpPort,
         // 465 — TLS сразу при подключении; 587 и другие — обычное подключение,
         // которое requireTLS обязывает перевести в TLS через STARTTLS
         secure: smtpPort === 465,
-        username: env('SMTP_USERNAME'),
-        password: env('SMTP_PASSWORD'),
-        rejectUnauthorized: true,
         requireTLS: true,
-        connectionTimeout: 1,
+        auth: {
+          user: env('SMTP_USERNAME'),
+          pass: env('SMTP_PASSWORD'),
+        },
+        tls: {
+          rejectUnauthorized: true,
+        },
+        connectionTimeout: 60 * 1000,
       },
       settings: {
         defaultFrom: mailFrom(),

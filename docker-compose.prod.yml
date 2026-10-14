@@ -13,8 +13,8 @@ services:
       - traefik
     volumes:
       - ./backend/.tmp:/app/.tmp
-      - ./backend/src:/app/src
-      - ./backend/config:/app/config
+      - ./backend/src:/app/src:ro
+      - ./backend/config:/app/config:ro
       - ./backend/public:/app/public
       - ./backend/tmp:/tmp
       - ./backend/yarn-cache:/root/.yarn

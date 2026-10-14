@@ -4,7 +4,7 @@ export default {
   url: strapiServerUrl,
   publicUrl: strapiPublicUrl,
   prefix: '/api',
-  version: 'v4',
+  version: 'v5',
   cookie: {},
   cookieName: 'strapi_jwt',
 }

@@ -1,10 +1,12 @@
 ## Personal site-portfolio for UI/UX designer
 
 #### Used:
-- Nuxt 3
-- I18n
+- Node 24, Yarn 4
+- Nuxt 4, @nuxtjs/i18n 10
 - SCSS
-- Strapi
+- Strapi 5
+
+The upgrade from Strapi 4 / Nuxt 3 and how to roll it out: [docs/UPGRADE.md](docs/UPGRADE.md).
 
 ### Configuration
 

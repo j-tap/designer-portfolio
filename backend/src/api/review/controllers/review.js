@@ -7,6 +7,9 @@
 const { createCoreController } = require('@strapi/strapi').factories;
 const { issueFormToken, checkFormToken, hitRateLimit } = require('../utils/antispam');
 const { FileError, prepareReviewFiles, removeUploaded } = require('../utils/files');
+const { notifyNewReview } = require('../utils/notify');
+
+const UID = 'api::review.review';
 
 const LIMITS = {
   name: 100,
@@ -55,17 +58,41 @@ function link(value) {
   throw new ValidationError('Ссылка должна начинаться с http:// или https://');
 }
 
-function ids(value) {
+async function resolveLocale(value) {
+  const locales = strapi.plugin('i18n').service('locales');
+  const codes = (await locales.find()).map(({ code }) => code);
+  return codes.includes(value) ? value : locales.getDefaultLocale();
+}
+
+/**
+ * Направления разработки и сотрудничества приходят как documentId записей на языке страницы.
+ * Отзыв не локализован, поэтому связь указывает на конкретную языковую версию — ту, что
+ * видел автор. Несуществующие id отбрасываются, а не роняют сохранение.
+ */
+async function relation(uid, value, locale) {
   if (!Array.isArray(value)) return [];
-  return value.map(Number).filter(id => Number.isInteger(id) && id > 0).slice(0, 20);
+
+  const documentIds = value
+    .filter(id => typeof id === 'string' && /^[a-z0-9]{1,64}$/.test(id))
+    .slice(0, 20);
+  if (!documentIds.length) return [];
+
+  const found = await strapi.documents(uid).findMany({
+    filters: { documentId: { $in: documentIds } },
+    fields: ['documentId'],
+    locale,
+  });
+
+  return found.map(({ documentId }) => ({ documentId, locale }));
 }
 
 /**
  * Из формы принимаем только известные поля: остальное (publishedAt, createdBy и т.п.)
  * отбрасываем, чтобы отправитель не мог влиять на модерацию и служебные данные.
  */
-function sanitizeReview(data) {
+async function sanitizeReview(data) {
   const rating = Number(data.rating);
+  const locale = await resolveLocale(data.locale);
 
   return {
     name: text(data.name, 'name', { required: true }),
@@ -73,17 +100,33 @@ function sanitizeReview(data) {
     link: link(data.link),
     rating: Number.isInteger(rating) && rating >= 1 && rating <= 5 ? rating : 5,
     text: text(data.text, 'text'),
-    developments: ids(data.developments),
-    cooperations: ids(data.cooperations),
+    developments: { connect: await relation('api::reviews-development.reviews-development', data.developments, locale) },
+    cooperations: { connect: await relation('api::reviews-cooperation.reviews-cooperation', data.cooperations, locale) },
   };
 }
 
-// Черновики (отзывы на модерации) наружу не отдаём, даже если в запросе publicationState=preview
-function onlyPublished(ctx) {
-  ctx.query = { ...ctx.query, publicationState: 'live' };
+/**
+ * Файлы попадают в медиатеку, в папку «API Uploads» — туда же их клал Strapi 4, когда
+ * файлы прикреплялись прямо к создаваемой записи (в Strapi 5 так больше нельзя).
+ */
+async function uploadFiles(files) {
+  if (!files.length) return [];
+
+  const folder = await strapi.plugin('upload').service('api-upload-folder').getAPIUploadFolder();
+  const uploaded = await strapi.plugin('upload').service('upload').upload({
+    data: { fileInfo: files.map(() => ({ folder: folder.id })) },
+    files,
+  });
+
+  return uploaded.map(({ id }) => id);
 }
 
-module.exports = createCoreController('api::review.review', () => ({
+// Черновики (отзывы на модерации) наружу не отдаём, даже если в запросе status=draft
+function onlyPublished(ctx) {
+  ctx.query = { ...ctx.query, status: 'published' };
+}
+
+module.exports = createCoreController(UID, () => ({
   async find(ctx) {
     onlyPublished(ctx);
     return super.find(ctx);
@@ -119,14 +162,15 @@ module.exports = createCoreController('api::review.review', () => ({
         return ctx.tooManyRequests('Слишком много отзывов, попробуйте позже');
       }
 
-      const review = sanitizeReview(data);
-      await prepareReviewFiles(ctx);
+      const review = await sanitizeReview(data);
+      const files = await uploadFiles(await prepareReviewFiles(ctx));
 
-      ctx.request.body.data = ctx.is('multipart') ? JSON.stringify(review) : review;
-      // populate и прочие параметры от клиента при создании не нужны
-      ctx.query = {};
+      // Без status документ создаётся черновиком и ждёт модерации в админке
+      const document = await strapi.documents(UID).create({
+        data: { ...review, files },
+      });
 
-      await super.create(ctx);
+      await notifyNewReview(document);
       ctx.body = { data: { ok: true } };
     }
     catch (error) {
@@ -136,8 +180,7 @@ module.exports = createCoreController('api::review.review', () => ({
       throw error;
     }
     finally {
-      // strapi::body удаляет только файлы медиатеки (ключ files), а временные файлы
-      // загрузок в записи (files.<поле>) оставлял бы в /tmp навсегда
+      // Временные файлы formidable в /tmp сами не удаляются
       await removeUploaded(ctx);
     }
   },

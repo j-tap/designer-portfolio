@@ -11,6 +11,8 @@ import {
   ProjectBack,
 } from '~/components/sections'
 
+const localePath = useLocalePath()
+
 const props = defineProps({
   project: {
     type: Object,

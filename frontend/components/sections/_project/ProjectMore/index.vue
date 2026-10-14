@@ -26,6 +26,8 @@
 import { ScrollBlock } from '~/components/common'
 import { ProjectPreview } from '~/components/sections'
 
+const localePath = useLocalePath()
+
 const { t } = useI18n()
 const route = useRoute()
 const props = defineProps({

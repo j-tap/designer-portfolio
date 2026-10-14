@@ -12,6 +12,8 @@
 <script setup>
 import { IconBase } from '~/components/common'
 
+const localePath = useLocalePath()
+
 const props = defineProps({
   to: Object,
 })

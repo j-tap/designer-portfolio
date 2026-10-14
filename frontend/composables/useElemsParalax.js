@@ -20,7 +20,7 @@ function getParallaxFactor (ind) {
 }
 
 export function updateProjectsPrlx (list, scrl = 0) {
-  if (!process.client) return
+  if (!import.meta.client) return
 
   const viewportHeight = window.innerHeight
 

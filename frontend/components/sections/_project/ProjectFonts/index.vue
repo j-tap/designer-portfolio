@@ -27,7 +27,7 @@ props.items.map(o => {
   fontStyles.value = {
     id: `style-${name}`,
     type: 'text/css',
-    children: `@font-face { font-family: ${name}; src: url(${url}) format('woff'); }`,
+    innerHTML: `@font-face { font-family: ${name}; src: url(${url}) format('woff'); }`,
   }
 })
 

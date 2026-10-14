@@ -32,9 +32,9 @@
           "localized": false
         }
       },
-      "type": "string",
+      "type": "uid",
       "required": false,
-      "unique": false
+      "targetField": "title"
     },
     "pages": {
       "type": "component",

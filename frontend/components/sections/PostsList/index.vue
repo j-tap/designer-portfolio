@@ -107,7 +107,7 @@ function setPostElems(el) {
   }
 }
 
-if (process.client) {
+if (import.meta.client) {
   let rafId = null
   let scrollHandler = null
 

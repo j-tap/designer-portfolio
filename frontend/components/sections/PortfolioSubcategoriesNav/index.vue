@@ -29,6 +29,8 @@
 </template>
 
 <script setup>
+const localePath = useLocalePath()
+
 const props = defineProps({
   items: {
     type: Array,

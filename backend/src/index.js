@@ -1,20 +1,22 @@
 'use strict';
 
-module.exports = {
-  /**
-   * An asynchronous register function that runs before
-   * your application is initialized.
-   *
-   * This gives you an opportunity to extend code.
-   */
-  register(/*{ strapi }*/) {},
+const { addBlurhash } = require('./utils/blurhash');
 
-  /**
-   * An asynchronous bootstrap function that runs before
-   * your application gets started.
-   *
-   * This gives you an opportunity to set up your data model,
-   * run jobs, or perform some special logic.
-   */
-  bootstrap(/*{ strapi }*/) {},
+module.exports = {
+  register({ strapi }) {
+    // Колонка blurhash у файлов досталась от плагина strapi-blurhash. Без атрибута в схеме
+    // Strapi при запуске удалил бы её вместе с уже посчитанными хешами
+    strapi.contentType('plugin::upload.file').attributes.blurhash = {
+      type: 'text',
+    };
+  },
+
+  bootstrap({ strapi }) {
+    // beforeUpdate — для замены файла в медиатеке: тогда в данных приходят новые url и mime
+    strapi.db.lifecycles.subscribe({
+      models: ['plugin::upload.file'],
+      beforeCreate: addBlurhash,
+      beforeUpdate: addBlurhash,
+    });
+  },
 };

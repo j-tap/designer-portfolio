@@ -1,12 +1,10 @@
 export const defaultLocale = 'en'
 
+// Файлы переводов — в i18n/locales, настройки vue-i18n — в i18n/i18n.config.js
+// (@nuxtjs/i18n 10 ищет их в каталоге i18n/)
 export default {
   defaultLocale,
-  debug: false,
   strategy: 'prefix',
-  langDir: 'locales',
-  globalInjection: false,
-  vueI18nLoader: true,
   detectBrowserLanguage: {
     useCookie: true,
     cookieKey: 'i18n_redirected',
@@ -19,23 +17,22 @@ export default {
       code: 'ru',
       name: 'Русский',
       dir: 'ltr',
-      iso: 'ru-RU',
+      language: 'ru-RU',
       file: 'ru-RU.json',
     },
     {
       code: 'en',
       name: 'English',
       dir: 'ltr',
-      iso: 'en-US',
+      language: 'en-US',
       file: 'en-US.json',
     },
     {
       code: 'es',
       name: 'Español',
       dir: 'ltr',
-      iso: 'es-ES',
+      language: 'es-ES',
       file: 'es-ES.json',
     },
   ],
-  vueI18n: 'config/i18n/i18n.config.js', // path relative to nuxt.config
 }

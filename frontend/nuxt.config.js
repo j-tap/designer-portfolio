@@ -8,8 +8,7 @@ const baseURL = siteUrl
 const isDev = process.env.NODE_ENV !== 'production'
 
 export default defineNuxtConfig({
-	compatibilityDate: '2026-01-16',
-	mode: isDev ? 'development' : 'production',
+	compatibilityDate: '2025-07-15',
 	debug: isDev,
 	devtools: { enabled: isDev },
 
@@ -20,13 +19,6 @@ export default defineNuxtConfig({
 	nitro: {
     preset: 'node-server',
     compressPublicAssets: !isDev,
-    publicAssets: [
-      {
-        baseURL: '/_nuxt/',
-        dir: '.output/public/_nuxt',
-        maxAge: 60 * 60 * 24 * 365 // 1 год для статических ассетов
-      }
-    ],
 		prerender: {
 			// crawlLinks: true,
 			// routes: ['/', 'sitemap.xml'],
@@ -78,8 +70,9 @@ export default defineNuxtConfig({
 					'Referrer-Policy': 'strict-origin-when-cross-origin',
 				}
 			},
+			// Не пререндерим: при стратегии i18n prefix страница живёт по адресам /<locale>/portfolio,
+			// а без префикса Nuxt 3 сохранял в статику страницу 404. Данных Strapi при сборке в Docker тоже нет
 			'/portfolio': {
-				prerender: true,
 				headers: {
 					'Cache-Control': isDev ? 'no-cache' : 'public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400',
 					'X-Content-Type-Options': 'nosniff',
@@ -196,7 +189,6 @@ export default defineNuxtConfig({
 	},
 
 	modules: [
-		'@nuxt/devtools',
 		'@nuxtjs/i18n',
 		'@nuxtjs/sitemap',
 		'@nuxtjs/strapi',
@@ -206,5 +198,4 @@ export default defineNuxtConfig({
 	strapi,
 	i18n,
 	sitemap,
-	compatibilityDate: '2024-07-17'
 })

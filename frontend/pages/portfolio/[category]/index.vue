@@ -64,7 +64,7 @@ watch(category, async (val) => {
   }
 }, { deep: true })
 
-if (process.client) {
+if (import.meta.client) {
   let rafId = null
   let scrollHandler = null
 
@@ -123,7 +123,7 @@ watch(getStructuredData, (schemas) => {
     useHead({
       script: schemas.map((schema, index) => ({
         type: 'application/ld+json',
-        children: JSON.stringify(schema),
+        innerHTML: JSON.stringify(schema),
         key: `structured-data-${index}`,
       })),
     })

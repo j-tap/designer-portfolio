@@ -34,10 +34,10 @@
         class="checkbox-row"
       >
         <CheckboxField
-          :checked="form.cooperations.includes(item.id)"
-          :value="item.id"
+          :checked="form.cooperations.includes(item.documentId)"
+          :value="item.documentId"
           required
-          @change="onChangeCheck(item.id, 'cooperations')"
+          @change="onChangeCheck(item.documentId, 'cooperations')"
         />
         {{ item?.title }}
       </label>
@@ -51,10 +51,10 @@
         class="checkbox-row"
       >
         <CheckboxField
-          :checked="form.developments.includes(item.id)"
-          :value="item.id"
+          :checked="form.developments.includes(item.documentId)"
+          :value="item.documentId"
           required
-          @change="onChangeCheck(item.id, 'developments')"
+          @change="onChangeCheck(item.documentId, 'developments')"
         />
         {{ item?.title }}
       </label>

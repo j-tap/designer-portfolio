@@ -1,12 +1,12 @@
-FROM node:20-alpine AS build
+FROM node:24-alpine AS build
 
 WORKDIR /app
 
 RUN mkdir -p .yarn/releases
-COPY .yarn/releases/yarn-4.9.1.cjs .yarn/releases/
+COPY .yarn/releases/yarn-4.18.1.cjs .yarn/releases/
 COPY .yarnrc.yml ./
 
-RUN corepack enable && corepack prepare yarn@4.9.1 --activate
+RUN corepack enable && corepack prepare yarn@4.18.1 --activate
 
 COPY package.json yarn.lock ./
 

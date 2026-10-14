@@ -27,7 +27,7 @@ const blurClasses = computed(() => [
   { 'blur-backdrop_display': commonStore.getDisplayMobileMenu },
 ])
 
-if (process.client) {
+if (import.meta.client) {
   onMounted(() => {
     isLoaded.value = true
   })

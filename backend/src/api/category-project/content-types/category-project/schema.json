@@ -42,9 +42,9 @@
           "localized": false
         }
       },
-      "type": "string",
+      "type": "uid",
       "required": true,
-      "unique": false
+      "targetField": "title"
     },
     "rank": {
       "pluginOptions": {

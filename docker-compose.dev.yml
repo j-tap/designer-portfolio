@@ -1,3 +1,4 @@
+# Development overrides for docker-compose.yml (variables are defined there).
 services:
 #  postgres:
 #    image: postgres:15
@@ -12,8 +13,6 @@ services:
 #      - "${DB_PORT}:${DB_PORT}"
 
   strapi:
-    build:
-      context: ./backend
     ports:
       - "${PORT_BACKEND}:${PORT_BACKEND}"
     command: "yarn develop"
@@ -28,8 +27,6 @@ services:
 #      - postgres
 
   nuxt:
-    build:
-      context: ./frontend
     ports:
       - "${PORT_FRONTEND}:${PORT_FRONTEND}"
     command: "yarn dev"

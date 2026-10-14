@@ -4,10 +4,10 @@
   "version": "1.1.0",
   "description": "Strapi admin panel",
   "scripts": {
-    "develop": "node node_modules/@strapi/strapi/bin/strapi.js develop",
-    "start": "node node_modules/@strapi/strapi/bin/strapi.js start",
-    "build": "node node_modules/@strapi/strapi/bin/strapi.js build",
-    "strapi": "strapi"
+    "develop": "ENV_PATH=../.env node node_modules/@strapi/strapi/bin/strapi.js develop",
+    "start": "ENV_PATH=../.env node node_modules/@strapi/strapi/bin/strapi.js start",
+    "build": "ENV_PATH=../.env node node_modules/@strapi/strapi/bin/strapi.js build",
+    "strapi": "ENV_PATH=../.env strapi"
   },
   "dependencies": {
     "@retikolo/drag-drop-content-types": "^1.6.0",

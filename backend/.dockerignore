@@ -7,10 +7,15 @@ package-lock.json
 # Data and build artefacts: in production they are bind-mounted (.tmp, public, tmp)
 # or rebuilt in the image (build), so copying them only bloats the build context
 # and bakes the SQLite DB and user uploads into image layers.
-# .env is kept on purpose: `strapi build` reads PUBLIC_URL from it for the admin path.
 .tmp
 tmp
 public/uploads
 build
 yarn-cache
 .DS_Store
+
+# Configuration comes from the root .env via docker-compose.yml. A stray local .env
+# must not be baked into the image: it would hold secrets and could silently
+# supply values that compose does not pass.
+.env
+.env.*

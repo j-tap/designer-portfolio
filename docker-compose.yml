@@ -1,0 +1,61 @@
+# Common part of the dev and prod setups; combine it with one of them:
+#   docker compose -f docker-compose.yml -f docker-compose.dev.yml ...
+#   docker compose -f docker-compose.yml -f docker-compose.prod.yml -f docker-compose.traefik.yml ...
+#
+# Every value comes from the single .env in the project root (see .env.example).
+# Each service gets only the variables it needs, so Strapi's signing keys and the SMTP
+# password never reach the Nuxt container. A new variable has to be added here as well.
+#
+# ${VAR:?...} stops compose with an error when a required value is missing, instead of
+# starting Strapi with empty keys. Optional values get an explicit default: an empty
+# string is not "unset" for Strapi's env() and would override its own default.
+
+services:
+  strapi:
+    build:
+      context: ./backend
+      args:
+        # `strapi build` bakes the public URL into the admin panel
+        PUBLIC_URL: ${PUBLIC_URL:?set PUBLIC_URL in .env}
+    environment:
+      HOST: 0.0.0.0
+      PORT_BACKEND: ${PORT_BACKEND:?set PORT_BACKEND in .env}
+      PUBLIC_URL: ${PUBLIC_URL:?set PUBLIC_URL in .env}
+      DOMAIN: ${DOMAIN:?set DOMAIN in .env}
+      PROXY: ${PROXY:-false}
+      CORS_ORIGINS: ${CORS_ORIGINS:-*}
+      APP_KEYS: ${APP_KEYS:?set APP_KEYS in .env}
+      JWT_SECRET: ${JWT_SECRET:?set JWT_SECRET in .env}
+      ADMIN_JWT_SECRET: ${ADMIN_JWT_SECRET:?set ADMIN_JWT_SECRET in .env}
+      API_TOKEN_SALT: ${API_TOKEN_SALT:?set API_TOKEN_SALT in .env}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-}
+      SMTP_HOST: ${SMTP_HOST:-}
+      SMTP_PORT: ${SMTP_PORT:-465}
+      SMTP_USERNAME: ${SMTP_USERNAME:-}
+      SMTP_PASSWORD: ${SMTP_PASSWORD:-}
+      SMTP_FROM: ${SMTP_FROM:-}
+
+  nuxt:
+    build:
+      context: ./frontend
+      args:
+        # nuxt.config reads these at build time
+        BASE_URL: ${BASE_URL:?set BASE_URL in .env}
+        STRAPI_URL: ${STRAPI_URL:?set STRAPI_URL in .env}
+        NUXT_PUBLIC_STRAPI_URL: ${NUXT_PUBLIC_STRAPI_URL:?set NUXT_PUBLIC_STRAPI_URL in .env}
+        YANDEX_METRIKA_ID: ${YANDEX_METRIKA_ID:-}
+        GOOGLE_SITE_VERIFICATION: ${GOOGLE_SITE_VERIFICATION:-}
+        YANDEX_SITE_VERIFICATION: ${YANDEX_SITE_VERIFICATION:-}
+    environment:
+      # Nitro (production server) listens on PORT, the dev server reads PORT_FRONTEND
+      PORT: ${PORT_FRONTEND:?set PORT_FRONTEND in .env}
+      PORT_FRONTEND: ${PORT_FRONTEND:?set PORT_FRONTEND in .env}
+      BASE_URL: ${BASE_URL:?set BASE_URL in .env}
+      STRAPI_URL: ${STRAPI_URL:?set STRAPI_URL in .env}
+      NUXT_PUBLIC_STRAPI_URL: ${NUXT_PUBLIC_STRAPI_URL:?set NUXT_PUBLIC_STRAPI_URL in .env}
+      YANDEX_METRIKA_ID: ${YANDEX_METRIKA_ID:-}
+      GOOGLE_SITE_VERIFICATION: ${GOOGLE_SITE_VERIFICATION:-}
+      YANDEX_SITE_VERIFICATION: ${YANDEX_SITE_VERIFICATION:-}
+      LINKEDIN_USER_NAME: ${LINKEDIN_USER_NAME:-}
+      VR9_API_KEY: ${VR9_API_KEY:-}
+      POSTS_UPDATE_TOKEN: ${POSTS_UPDATE_TOKEN:-}

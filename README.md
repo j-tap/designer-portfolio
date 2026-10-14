@@ -6,22 +6,33 @@
 - SCSS
 - Strapi
 
-### Secrets
+### Configuration
 
-`backend/.env`, `frontend/.env` and the root `.env` hold Strapi's `APP_KEYS`, `JWT_SECRET`,
-`ADMIN_JWT_SECRET`, `API_TOKEN_SALT` and the SMTP password. **All three must be `600`** —
-readable only by the account that owns them, never by every user on the host.
-
-`merge_env.sh`, which `make dev` and `make prod` run to build the root `.env` from the two
-service files, sets `umask 077` and applies `chmod 600` to all three, so the permissions
-survive a redeploy instead of having to be re-applied by hand.
-
-Check them with:
+All settings live in **one `.env` file in the project root** — there are no `.env` files in
+`backend/` or `frontend/`. Start from the template:
 
 ```sh
-stat -c '%a %n' .env backend/.env frontend/.env    # Linux
-stat -f '%Lp %N' .env backend/.env frontend/.env   # macOS
+cp .env.example .env
 ```
 
-Every line should read `600`. Docker Compose reads these files as the user running the
-deploy, so `600` does not stop the containers from getting their environment.
+- **Docker** (`make dev`, `make prod`): `docker-compose.yml` reads the root `.env` and passes each
+  service only the variables it needs, so Strapi's secrets never reach the Nuxt container.
+  A new variable must also be added to `docker-compose.yml`.
+- **Without Docker**: `yarn develop` in `backend/` and `yarn dev` in `frontend/` load `../.env`.
+
+### Secrets
+
+The root `.env` holds Strapi's `APP_KEYS`, `JWT_SECRET`, `ADMIN_JWT_SECRET`, `API_TOKEN_SALT` and
+the SMTP password. **It must be `600`** — readable only by the account that owns it, never by every
+user on the host. `make dev` and `make prod` apply `chmod 600 .env` on every run, so the permission
+survives a redeploy instead of having to be re-applied by hand.
+
+Check it with:
+
+```sh
+stat -c '%a %n' .env    # Linux
+stat -f '%Lp %N' .env   # macOS
+```
+
+It should read `600`. Docker Compose reads the file as the user running the deploy, so `600` does
+not stop the containers from getting their environment.

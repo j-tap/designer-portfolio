@@ -7,8 +7,8 @@
         :subcategories="subcategories"
         :title="title"
         :back="{
-          to: { name: 'portfolio-category', params: { category: category.slug } },
-          title: t('portfolio.back_to_{category}', { category: category.title }),
+          to: { name: 'portfolio-category', params: { category: route.params.category } },
+          title: t('portfolio.back_to_{category}', { category: category?.title }),
         }"
       />
     </ContentWrap>
@@ -20,7 +20,6 @@ import { ContentWrap } from '~/components/structure'
 import { metaInfo } from '~/composables/useMeta'
 import { serverFetch } from '~/composables/useApi'
 import { PortfolioCategory } from '~/components/sections'
-import { display404 } from '~/composables/useErrorContent'
 import { useStructuredData } from '~/composables/useStructuredData'
 
 const { t } = useI18n()
@@ -43,14 +42,9 @@ const projects = serverFetch('projects', {
 const subcategories = computed(() => category.value?.subcategories?.sort((a, b) => a.rank - b.rank) || [])
 const title = computed(() => category.value?.title)
 
-watch(subcategory, async (val) => {
-  if (!val?.id) {
-    display404()
-  }
-})
-
 definePageMeta({
-  key: route => route.fullPath
+  key: route => route.fullPath,
+  middleware: 'portfolio',
 })
 
 // В title выносим подкатегорию: иначе все подкатегории одной категории

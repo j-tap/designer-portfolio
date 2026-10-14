@@ -30,7 +30,8 @@ const localePath = useLocalePath()
 const categorySlug = computed(() => route.params.category)
 
 definePageMeta({
-  key: route => route.fullPath
+  key: route => route.fullPath,
+  middleware: 'portfolio',
 })
 
 const projects = serverFetch('projects', {
@@ -58,9 +59,6 @@ watch(category, async (val) => {
         subcategory: subcategories.value[0].slug,
       },
     }))
-  }
-  if (!val?.id) {
-    display404()
   }
 }, { deep: true })
 

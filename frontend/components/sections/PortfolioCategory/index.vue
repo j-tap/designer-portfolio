@@ -63,7 +63,6 @@ import {
   initPositions,
   elems as projectElems,
 } from '~/composables/useElemsParalax'
-import { display404 } from '~/composables/useErrorContent'
 import { detailExclude } from '~/config/portfolio'
 
 const props = defineProps({
@@ -93,12 +92,6 @@ const localePath = useLocalePath()
 const route = useRoute()
 const categorySlug = computed(() => route.params.category)
 const subcategorySlug = computed(() => route.params.subcategory)
-
-watch(props.category, async (val) => {
-  if (!val?.id) {
-    display404()
-  }
-}, { deep: true })
 
 if (import.meta.client) {
   let rafId = null

@@ -1,5 +1,9 @@
 <template>
-  <div>
+  <!-- 404 (например, из middleware/portfolio.js) — та же страница, что и для неизвестного адреса -->
+  <NuxtLayout v-if="is404">
+    <Error404 />
+  </NuxtLayout>
+  <div v-else>
     <ContentWrap class="server-error">
       <div>
         <TitleOutline class="server-error__text" tag="h1">Sorry, unknown error</TitleOutline>
@@ -19,19 +23,23 @@
 <script setup>
 import { ContentWrap } from '~/components/structure'
 import { TitleOutline } from '~/components/common'
+import { Error404 } from '~/components/sections'
 import { metaInfo } from '~/composables/useMeta'
 
 const props = defineProps({
   error: Object
 })
 
+const is404 = computed(() => props.error?.statusCode === 404)
 const handleError = () => clearError({ redirect: '/' })
 const runtimeConfig = useRuntimeConfig()
 const isDev = computed(() => runtimeConfig.public.NODE_ENV !== 'production')
 
-useHead(metaInfo({
-  title: 'Error. Sorry, unknown error',
-}))
+if (!is404.value) {
+  useHead(metaInfo({
+    title: 'Error. Sorry, unknown error',
+  }))
+}
 </script>
 
 <style lang="scss">

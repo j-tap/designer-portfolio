@@ -19,10 +19,12 @@ import { metaInfo } from '~/composables/useMeta'
 import { useStructuredData } from '~/composables/useStructuredData'
 import { getMoreProjects, getProjectData, getProjectMeta } from '~/composables/useProject'
 
+definePageMeta({
+  middleware: 'portfolio',
+})
+
 const route = useRoute()
-const router = useRouter()
 const { t } = useI18n()
-const localePath = useLocalePath()
 const categorySlug = computed(() => route.params.category)
 const subcategorySlug = computed(() => route.params.subcategory)
 const projectSlug = computed(() => route.params.project)
@@ -35,15 +37,6 @@ const moreProjectsList = getMoreProjects({
   subcategories: { slug: { $in: subcategorySlug.value } },
 })
 const projectMeta = getProjectMeta(project, categorySlug)
-
-watch(project, (val) => {
-  if (!val.id) {
-    router.push(localePath({
-      name: 'portfolio-category-subcategory',
-      params: { category: categorySlug.value, subcategory: projectSlug.value },
-    }))
-  }
-}, { deep: true })
 
 const headMeta = metaInfo({
   title: computed(() => project.value?.title ? projectMeta.title.value : null),

@@ -1,26 +1,27 @@
 <template>
-  <Component :is="props.tag" ref="elem" :class="classes">
+  <Component
+    :is="tag"
+    :class="[
+      'title-outline',
+      {
+        // Заливка при наведении — для заголовков с текстом в data-hover
+        'title-outline_hoverable': $attrs['data-hover'] != null,
+        'title-outline_inverse': inverse,
+      },
+    ]"
+  >
     <slot/>
   </Component>
 </template>
 
 <script setup>
-const props = defineProps({
+defineProps({
   tag: {
     type: String,
     default: 'span',
   },
   inverse: Boolean,
 })
-const elem = ref(null);
-const hoverable = computed(() => elem?.value?.hasAttribute('data-hover'))
-const classes = computed(() => [
-  'title-outline',
-  {
-    'title-outline_hoverable': hoverable.value,
-    'title-outline_inverse': props.inverse,
-  },
-])
 </script>
 
 <style lang="scss" scoped src="./style.scss"/>

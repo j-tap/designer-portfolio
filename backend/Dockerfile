@@ -24,4 +24,5 @@ ARG STRAPI_PUBLIC_URL
 
 RUN yarn build
 
-CMD ["npm", "run", "start"]
+# node directly rather than through yarn/npm, so the container stop signal reaches Strapi itself
+CMD ["node", "node_modules/@strapi/strapi/bin/strapi.js", "start"]

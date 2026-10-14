@@ -1,29 +1,22 @@
 <template>
-  <div :class="['checkbox', { 'checkbox_checked': modelValue }]">
-    <input :checked="isChecked" type="checkbox" @input="onChange" />
+  <div :class="['checkbox', { 'checkbox_checked': isChecked }]">
+    <input v-model="model" :value="value" type="checkbox" />
     <span />
   </div>
 </template>
 
 <script setup>
+// v-model — либо true/false, либо массив выбранных значений (как у нативного checkbox)
+const model = defineModel({ type: [Boolean, Array], default: false })
+
 const props = defineProps({
-  modelValue: {
-    type: Boolean,
-    default: false,
-  },
-  checked: {
-    type: Boolean,
-    default: false,
+  value: {
+    type: [String, Number, Boolean],
+    default: true,
   },
 })
 
-const emit = defineEmits(['update:modelValue'])
-
-const isChecked = computed(() => props.checked || props.modelValue)
-
-function onChange ({ target }) {
-  emit('update:modelValue', target.checked)
-}
+const isChecked = computed(() => (Array.isArray(model.value) ? model.value.includes(props.value) : model.value))
 </script>
 
 <style lang="scss" src="./style.scss" scoped />

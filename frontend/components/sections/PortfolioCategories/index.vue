@@ -7,7 +7,7 @@
     >
       <NuxtLink
         class="portfolio-categories__title"
-        :to="localePath({ name: 'portfolio-category', params: { category: item.slug } })"
+        :to="localePath(portfolioPath(item.slug))"
       >
         <TitleOutline
           class="portfolio-categories__title-text"
@@ -23,6 +23,7 @@
 
 <script setup>
 import { TitleOutline } from '~/components/common'
+import { portfolioPath } from '~/config/portfolio'
 
 const localePath = useLocalePath()
 

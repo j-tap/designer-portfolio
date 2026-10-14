@@ -8,7 +8,6 @@
       <li
         v-for="(page, ind) in pagesDefault"
         :key="page.id"
-        :ref="ref => handlePageItemRef(ind, ref)"
         :class="[
           'uiux-pages__item',
           'uiux-page',
@@ -25,7 +24,7 @@
           >
             <ImgBlock
               class="uiux-page__images-img"
-              :src="urlFile(img.url)"
+              :src="mediaUrl(img.url)"
               :blurhash="img.blurhash"
               :width="img.width"
               :height="img.height"
@@ -65,7 +64,9 @@
 <script setup>
 import { ImgBlock } from '~/components/common'
 import { ProjectViewsItem, ProjectColors, ProjectFonts } from '~/components/sections'
-import { pageTypes, getPagesByType } from '~/composables/useProject'
+import { pageTypes, getPagesByType } from '~/utils/projectPages'
+
+const { mediaUrl } = useMedia()
 
 const { t } = useI18n()
 const props = defineProps({

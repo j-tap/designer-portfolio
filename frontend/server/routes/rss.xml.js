@@ -1,78 +1,51 @@
+import { fetchAllPosts } from '~/server/utils/postsCache'
 import { getPostTitle, getPostImage } from '~/utils/post'
-import { safeUrl } from '~/utils/url'
+import { escapeHtml, safeUrl } from '~/utils/url'
 
-const DEFAULT_LOCALE = 'ru'
-
-function escapeXml(unsafe) {
-  if (!unsafe) return ''
-  return unsafe
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&apos;')
-}
+// Посты пишутся по-русски: ссылки ведут на русскую версию страницы поста
+const POSTS_LOCALE = 'ru'
+const RSS_ITEMS = 15
 
 // "]]>" внутри текста закрыл бы CDATA раньше времени и сломал ленту
 function cdata(value) {
   return `<![CDATA[${String(value ?? '').replace(/]]>/g, ']]]]><![CDATA[>')}]]>`
 }
 
-function formatRssDate(dateString) {
-  const date = new Date(dateString)
-  const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
-  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-  
-  const day = days[date.getUTCDay()]
-  const month = months[date.getUTCMonth()]
-  const year = date.getUTCFullYear()
-  const hours = String(date.getUTCHours()).padStart(2, '0')
-  const minutes = String(date.getUTCMinutes()).padStart(2, '0')
-  const seconds = String(date.getUTCSeconds()).padStart(2, '0')
-  
-  return `${day}, ${String(date.getUTCDate()).padStart(2, '0')} ${month} ${year} ${hours}:${minutes}:${seconds} GMT`
-}
-
 export default defineEventHandler(async (event) => {
-  // Адрес сайта зашит в сборку (nuxt.config → runtimeConfig.public.baseURL)
-  const BASE_URL = useRuntimeConfig().public.baseURL
+  // Адрес сайта зашит в сборку (nuxt.config → runtimeConfig.public.siteUrl)
+  const BASE_URL = useRuntimeConfig().public.siteUrl
   setHeader(event, 'Content-Type', 'application/rss+xml; charset=utf-8')
-  setHeader(event, 'Cache-Control', 'public, max-age=3600')
 
   try {
-    const postsResponse = await $fetch('/api/posts', {
-      headers: {
-        'Accept': 'application/json'
-      }
-    })
+    // Из того же кеша, что раздел постов на сайте
+    const { data: posts = [] } = await fetchAllPosts()
 
-    const posts = postsResponse?.data || []
-
-    const rssItems = posts.map(post => {
+    const rssItems = posts.slice(0, RSS_ITEMS).map(post => {
       const imageUrl = getPostImage(post)
-      const postUrl = `${BASE_URL}/${DEFAULT_LOCALE}/posts/${post.id}`
+      const postUrl = `${BASE_URL}/${POSTS_LOCALE}/posts/${post.id}`
       const linkedinUrl = safeUrl(post.url) || ''
       const title = getPostTitle(post)
       // description читалки рендерят как HTML, поэтому текст поста экранируем
-      let description = escapeXml(post.text || '')
+      let description = escapeHtml(post.text || '')
 
       if (linkedinUrl) {
-        description += `\n\n<a href="${escapeXml(linkedinUrl)}">Читать на LinkedIn</a>`
+        description += `\n\n<a href="${escapeHtml(linkedinUrl)}">Читать на LinkedIn</a>`
       }
       if (imageUrl) {
-        description += `\n<br/><img src="${escapeXml(imageUrl)}" alt="Post image" />`
+        description += `\n<br/><img src="${escapeHtml(imageUrl)}" alt="Post image" />`
       }
 
-      const pubDate = formatRssDate(post.created_at)
+      // Дата в формате RFC 822, который ждёт RSS: «Wed, 14 Oct 2026 17:20:00 GMT»
+      const pubDate = post.created_at ? `<pubDate>${new Date(post.created_at).toUTCString()}</pubDate>` : ''
 
       return `
     <item>
       <title>${cdata(title)}</title>
       <link>${postUrl}</link>
       <guid isPermaLink="true">${postUrl}</guid>
-      <pubDate>${pubDate}</pubDate>
+      ${pubDate}
       <description>${cdata(description)}</description>
-      ${imageUrl ? `<enclosure url="${escapeXml(imageUrl)}" type="image/jpeg" />` : ''}
+      ${imageUrl ? `<enclosure url="${escapeHtml(imageUrl)}" type="image/jpeg" />` : ''}
     </item>`
     }).join('')
 
@@ -83,7 +56,7 @@ export default defineEventHandler(async (event) => {
     <link>${BASE_URL}</link>
     <description>Posts by Diana Konoiko</description>
     <language>ru-RU</language>
-    <lastBuildDate>${formatRssDate(new Date().toISOString())}</lastBuildDate>
+    <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
     <atom:link href="${BASE_URL}/rss.xml" rel="self" type="application/rss+xml" />
     ${rssItems}
   </channel>

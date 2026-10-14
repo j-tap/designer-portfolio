@@ -13,13 +13,7 @@
               'portfolio-subcategories-nav__link_active': active?.slug === item.slug,
             },
           ]"
-          :to="localePath({
-            name: 'portfolio-category-subcategory',
-            params: {
-              category: item.category.slug,
-              subcategory: item.slug,
-            },
-          })"
+          :to="localePath(portfolioPath(item.category.slug, item.slug))"
         >
           {{ item.title }}
         </NuxtLink>
@@ -29,6 +23,8 @@
 </template>
 
 <script setup>
+import { portfolioPath } from '~/config/portfolio'
+
 const localePath = useLocalePath()
 
 const props = defineProps({

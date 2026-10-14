@@ -1,18 +1,4 @@
 /**
- *
- * @param hex {string|null}
- * @returns {number[]|null}
- */
-export function hexToHsl (hex = null) {
-  if (hex) {
-    const rgb = hexToRgb(hex)
-    return rgbToHsl(rgb)
-  }
-
-  return null
-}
-
-/**
  * RGB color to HSL color
  * @param {[r, g, b]}
  * @returns {(number|number)[]}

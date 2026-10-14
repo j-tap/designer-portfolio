@@ -1,6 +1,6 @@
 'use strict';
 
-const { siteUrl, mailFrom } = require('../../../utils/urls');
+const { siteUrl } = require('../../../utils/urls');
 
 function escapeHtml(value) {
   return String(value ?? '')
@@ -14,12 +14,13 @@ function escapeHtml(value) {
 /**
  * Письмо админу о новом отзыве. Отправляется из контроллера, а не из lifecycle afterCreate:
  * в Strapi 5 afterCreate срабатывает и при публикации черновика из админки, и письмо
- * приходило бы второй раз. Ошибка SMTP не мешает сохранению отзыва.
+ * приходило бы второй раз. Ошибка SMTP не мешает сохранению отзыва — она только логируется,
+ * поэтому функцию можно не ждать.
  */
 async function notifyNewReview(review) {
   const site = siteUrl();
   const domain = new URL(site).host;
-  const adminUrl = `${strapi.config.get('server.url')}/admin/content-manager/collection-types/api::review.review/${review.documentId}`;
+  const adminUrl = `${strapi.config.get('admin.absoluteUrl')}/content-manager/collection-types/api::review.review/${review.documentId}`;
 
   // Поля отзыва пишет кто угодно: без экранирования в письмо админу можно вставить
   // свою разметку и ссылки, и оно уйдёт с нашего SMTP как доверенное
@@ -30,7 +31,6 @@ async function notifyNewReview(review) {
   try {
     await strapi.plugin('email').service('email').send({
       to: process.env.NOTIFY_EMAIL,
-      from: mailFrom(),
       subject: `Новый отзыв на сайте ${domain}`,
       text: `Новый отзыв на сайте ${domain}\n\n${review.text || ''}\n\nОценка: ${review.rating}\n— ${review.name}, ${review.company}\n\nПерейти к просмотру: ${adminUrl}`,
       html: `

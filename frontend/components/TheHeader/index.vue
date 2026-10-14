@@ -18,9 +18,7 @@
 <script setup>
 import MenuHeader from './MenuHeader'
 import { BurgerBtn } from '~/components/common'
-import { useCommonStore } from '~/stores/commonStore'
 
-const commonStore = useCommonStore()
 const menuMain = [
   { path: '/', locale: 'menu.main' },
   { path: '/portfolio', locale: 'menu.portfolio' },
@@ -28,11 +26,7 @@ const menuMain = [
   { path: '/reviews', locale: 'menu.reviews' },
   { path: '/contacts', locale: 'menu.contacts' },
 ]
-const openMenu = ref(false);
-
-watch(openMenu, (val) => {
-  commonStore.setDisplayMobileMenu(val)
-})
+const openMenu = useMobileMenu()
 
 function closeMenu () {
   openMenu.value = false

@@ -1,153 +1,75 @@
-import { useMetaStore } from '~/stores/metaStore'
-import i18nConfig, { defaultLocale } from '~/config/i18n'
+const DESCRIPTION_MAX = 160
+const ROBOTS_INDEX = 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'
 
-// og:locale ждёт формат ru_RU, а useI18n().locales отдаёт только коды
-const localeIsoMap = i18nConfig.locales.reduce((acc, loc) => {
-  acc[loc.code] = (loc.language || loc.code).replace('-', '_')
-  return acc
-}, {})
+/**
+ * Абсолютные адреса страниц сайта (для JSON-LD и соцсетей). Путь — уже с префиксом языка.
+ * Вызывается в setup, как useMedia().
+ */
+export function useAbsoluteUrl () {
+  const base = useRuntimeConfig().public.siteUrl
 
-export function normalizeUrlPath (path) {
-  if (!path) return '/'
-  const [pathname, query] = String(path).split('?')
-  const clean = pathname.replace(/\/+$/, '') || '/'
-  return query ? `${clean}?${query}` : clean
+  return (path = '/') => {
+    const [pathname, query] = String(path).split('?')
+    const clean = pathname.replace(/\/+$/, '') || '/'
+    return `${base}${clean}${query ? `?${query}` : ''}`
+  }
 }
 
-export function metaInfo(info = {}) {
-  const { t, locale, locales } = useI18n()
+/**
+ * Заголовок, описание, картинка и разметка для соцсетей (Open Graph, Twitter) страницы.
+ * Значения — строки, ref или геттеры; незаданные берутся из мета-информации сайта.
+ * canonical, hreflang, og:url и og:locale для всех страниц ставит app.vue (useLocaleHead).
+ */
+export function usePageMeta (info = {}) {
+  const { t } = useI18n()
   const route = useRoute()
-  const config = useRuntimeConfig()
-  const metaStore = useMetaStore()
-  const switchLocalePath = useSwitchLocalePath()
-  const defMeta = metaStore.getMetaInfo
-  const apiUrl = config.public.strapi.url
-  const baseUrl = config.public.baseURL
+  const getRouteBaseName = useRouteBaseName()
+  const siteMeta = useSiteMeta()
+  const { mediaUrl } = useMedia()
+  const absoluteUrl = useAbsoluteUrl()
+  const siteName = useSiteName()
 
-  const twcard = 'summary_large_image'
-  const author = ref(defMeta.author)
-  const siteName = computed(() => t('app.name') || defMeta.title || 'Portfolio')
-  const type = computed(() => unref(info.type) || 'website')
-  const localeIso = computed(() => localeIsoMap[locale.value] || locale.value)
-  // Каноническая ссылка всегда указывает на текущую локализованную страницу:
-  // путь уже содержит префикс локали (стратегия i18n — prefix)
-  const currentUrl = computed(() => {
-    const path = unref(info.canonical) || route.path
-    return `${baseUrl}${normalizeUrlPath(path)}`
-  })
-
+  // На главной — только заголовок сайта, на остальных — «Страница | Сайт»
   const title = computed(() => {
-    let tl = info.title?.value || defMeta.title || t('app.name')
-    if (route.name !== 'index') {
-      tl += ` | ${siteName.value}`
-    }
-    return tl
-  })
-
-  const image = computed(() => {
-    let img = info.image?.value || defMeta.image || '/og-image.png'
-    if (info.image?.value) {
-      if (img.startsWith('/uploads/') || img.startsWith('/api/')) {
-        img = `${apiUrl}${img}`
-      } else if (!img.startsWith('http')) {
-        img = `${baseUrl}${img}`
-      }
-    } else {
-      img = `${baseUrl}${img}`
-    }
-    return img
+    const own = toValue(info.title) || siteMeta.value.title || t('app.name')
+    return getRouteBaseName(route) === 'index' ? own : `${own} | ${siteName.value}`
   })
 
   const description = computed(() => {
-    const desc = info.description?.value || defMeta.description
-    if (desc && desc.length > 160) {
-      return desc.substring(0, 157) + '...'
-    }
-    return desc
+    const text = toValue(info.description) || siteMeta.value.description
+    return text?.length > DESCRIPTION_MAX ? `${text.slice(0, DESCRIPTION_MAX - 3)}...` : text
   })
 
-  const keywords = computed(() => info.keywords?.value || defMeta.keywords)
-
-  // Ссылки на языковые версии текущего маршрута (с префиксом локали)
-  const localeAlternates = computed(() => {
-    return locales.value.reduce((acc, loc) => {
-      const code = typeof loc === 'string' ? loc : loc.code
-      const path = switchLocalePath(code)
-
-      if (path) {
-        acc.push({ code, iso: localeIsoMap[code] || code, url: `${baseUrl}${normalizeUrlPath(path)}` })
-      }
-      return acc
-    }, [])
+  // Картинка страницы и картинка сайта лежат в медиатеке Strapi, запасная — в public сайта
+  const image = computed(() => {
+    const own = toValue(info.image) || siteMeta.value.image
+    return own ? mediaUrl(own) : absoluteUrl('/og-image.png')
   })
 
-  const hreflangLinks = computed(() => {
-    const links = []
+  useSeoMeta({
+    title,
+    description,
+    keywords: () => toValue(info.keywords) || siteMeta.value.keywords,
+    author: () => siteMeta.value.author,
+    robots: () => (toValue(info.noindex) ? 'noindex, nofollow' : ROBOTS_INDEX),
 
-    localeAlternates.value.forEach(({ code, url }) => {
-      links.push({
-        rel: 'alternate',
-        hreflang: code,
-        href: url,
-      })
+    ogType: () => toValue(info.type) || 'website',
+    ogTitle: title,
+    ogDescription: description,
+    ogImage: image,
+    ogImageWidth: 1200,
+    ogImageHeight: 630,
+    ogImageAlt: title,
+    ogSiteName: siteName,
 
-      if (code === defaultLocale) {
-        links.push({
-          rel: 'alternate',
-          hreflang: 'x-default',
-          href: url,
-        })
-      }
-    })
-
-    return links
+    twitterCard: 'summary_large_image',
+    twitterTitle: title,
+    twitterDescription: description,
+    twitterImage: image,
+    twitterImageAlt: title,
   })
 
-  const localeAlternateMeta = computed(() => {
-    return localeAlternates.value
-      .filter(({ code }) => code !== locale.value)
-      .map(({ iso }) => ({ property: 'og:locale:alternate', content: iso }))
+  useHead({
+    link: [{ rel: 'image_src', href: image }],
   })
-
-  return computed(() => ({
-    title: title.value,
-    link: [
-      { rel: 'canonical', href: currentUrl.value },
-      { rel: 'image_src', href: image.value },
-      ...hreflangLinks.value,
-    ],
-    meta: [
-      { name: 'description', content: description.value },
-      { name: 'keywords', content: keywords.value },
-      { name: 'author', content: author.value },
-      { name: 'robots', content: info.noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1' },
-
-      // Open Graph
-      { property: 'og:type', content: type.value },
-      { property: 'og:url', content: currentUrl.value },
-      { property: 'og:title', content: title.value },
-      { property: 'og:description', content: description.value },
-      { property: 'og:image', content: image.value },
-      { property: 'og:image:width', content: '1200' },
-      { property: 'og:image:height', content: '630' },
-      { property: 'og:image:alt', content: title.value },
-      { property: 'og:locale', content: localeIso.value },
-      ...localeAlternateMeta.value,
-      { property: 'og:site_name', content: siteName.value },
-
-      // Twitter Card
-      { name: 'twitter:card', content: twcard },
-      { name: 'twitter:url', content: currentUrl.value },
-      { name: 'twitter:title', content: title.value },
-      { name: 'twitter:description', content: description.value },
-      { name: 'twitter:image', content: image.value },
-      { name: 'twitter:image:alt', content: title.value },
-    ],
-    bodyAttrs: {
-      class: '',
-    },
-    htmlAttrs: {
-      lang: locale.value,
-    },
-  }))
 }

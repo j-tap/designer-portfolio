@@ -2,67 +2,57 @@
   <form
     v-if="form"
     class="form review-form"
-    @submit.prevent="sendForm"
+    @submit.prevent="emit('send', form)"
   >
     <label class="form__item">
-      <span class="label">Имя *</span>
-      <input v-model="form.name" class="field" type="text" placeholder="Напишите имя" required />
+      <span class="label">{{ t('reviews.name') }} *</span>
+      <input v-model="form.name" class="field" type="text" :placeholder="t('reviews.name_placeholder')" required />
     </label>
 
     <label class="form__item">
-      <span class="label">Компания/Проект *</span>
-      <input v-model="form.company" class="field" type="text" placeholder="Напишите компанию" required />
+      <span class="label">{{ t('reviews.company') }} *</span>
+      <input v-model="form.company" class="field" type="text" :placeholder="t('reviews.company_placeholder')" required />
     </label>
 
     <label class="form__item">
-      <span class="label">Ссылка</span>
-      <TooltipBase text="Вставьте ссылку на проект или сайт компании">
-        <input v-model="form.link" class="field" type="text" placeholder="Вставьте ссылку" />
+      <span class="label">{{ t('reviews.link') }}</span>
+      <TooltipBase :text="t('reviews.link_tooltip')">
+        <input v-model="form.link" class="field" type="text" :placeholder="t('reviews.link_placeholder')" />
       </TooltipBase>
     </label>
 
     <div class="form__item">
-      <span class="label">Оценка</span>
+      <span class="label">{{ t('reviews.rating') }}</span>
       <RatingStars v-model="form.rating" editable />
     </div>
 
     <div class="form__item form__item_large">
-      <span class="label">Сотрудничество</span>
+      <span class="label">{{ t('reviews.cooperations') }}</span>
       <label
         v-for="item in data.cooperations"
         :key="item.id"
         class="checkbox-row"
       >
-        <CheckboxField
-          :checked="form.cooperations.includes(item.documentId)"
-          :value="item.documentId"
-          required
-          @change="onChangeCheck(item.documentId, 'cooperations')"
-        />
+        <CheckboxField v-model="form.cooperations" :value="item.documentId" />
         {{ item?.title }}
       </label>
     </div>
 
     <div class="form__item form__item_large">
-      <span class="label">Услуги</span>
+      <span class="label">{{ t('reviews.developments') }}</span>
       <label
         v-for="item in data.developments"
         :key="item.id"
         class="checkbox-row"
       >
-        <CheckboxField
-          :checked="form.developments.includes(item.documentId)"
-          :value="item.documentId"
-          required
-          @change="onChangeCheck(item.documentId, 'developments')"
-        />
+        <CheckboxField v-model="form.developments" :value="item.documentId" />
         {{ item?.title }}
       </label>
     </div>
 
     <label class="form__item">
-      <span class="label">Отзыв</span>
-      <textarea v-model="form.text" class="field" placeholder="Напишите отзыв" rows="6"></textarea>
+      <span class="label">{{ t('reviews.text') }}</span>
+      <textarea v-model="form.text" class="field" :placeholder="t('reviews.text_placeholder')" rows="6"></textarea>
     </label>
 
     <FilesUpload v-model="form.files" editable />
@@ -75,16 +65,18 @@
 
     <p v-if="error" class="review-form__error" role="alert">{{ error }}</p>
 
-    <button class="btn" type="submit" :disabled="sending">{{ sending ? 'Отправка…' : 'Отправить' }}</button>
+    <button class="btn" type="submit" :disabled="sending">{{ sending ? t('reviews.sending') : t('reviews.submit') }}</button>
   </form>
 </template>
 
 <script setup>
 import { RatingStars, CheckboxField, TooltipBase, FilesUpload } from '~/components/common'
 
+const { t } = useI18n()
 const emit = defineEmits(['send'])
 
-const props = defineProps({
+// Состояние формы живёт на странице (она же отправляет отзыв), поля меняются прямо в нём
+defineProps({
   form: {
     type: Object,
     required: true,
@@ -102,20 +94,6 @@ const props = defineProps({
     default: false,
   },
 })
-
-function onChangeCheck (id, key) {
-  if (props.form[key].includes(id)) {
-    props.form[key] = props.form[key].filter(v => v !== id)
-  }
-  else {
-    props.form[key].push(id)
-  }
-}
-
-function sendForm () {
-  // if (props.form.cooperation.length && props.form.developments.length) {
-  emit('send', props.form)
-}
 </script>
 
 <style lang="scss" scoped src="./style.scss"/>

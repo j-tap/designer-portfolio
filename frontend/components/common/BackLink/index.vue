@@ -14,8 +14,12 @@ import { IconBase } from '~/components/common'
 
 const localePath = useLocalePath()
 
-const props = defineProps({
-  to: Object,
+// Адрес без префикса языка: строка или объект маршрута ({ path, hash })
+defineProps({
+  to: {
+    type: [String, Object],
+    required: true,
+  },
 })
 </script>
 

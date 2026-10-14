@@ -1,6 +1,6 @@
 export default defineEventHandler((event) => {
   const config = useRuntimeConfig()
-  const baseUrl = config.public.baseURL
+  const baseUrl = config.public.siteUrl
 
   const robotsTxt = `# robots.txt
 
@@ -17,7 +17,6 @@ Allow: /_nuxt/
 Sitemap: ${baseUrl}/sitemap_index.xml
 `
   setHeader(event, 'Content-Type', 'text/plain; charset=utf-8')
-  setHeader(event, 'Cache-Control', 'public, max-age=3600')
 
   return robotsTxt
 })

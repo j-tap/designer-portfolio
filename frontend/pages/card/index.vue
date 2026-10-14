@@ -3,7 +3,7 @@
     <TitlePage class="page-card__title" decor>{{ title }}</TitlePage>
     <h2 class="page-card__subtitle">
       <small>{{ meta.specialization }}</small>
-      <b>{{ meta.first_name }} {{ meta.last_name }}</b>
+      <b>{{ meta.firstName }} {{ meta.lastName }}</b>
     </h2>
 
     <div class="page-card__socials card-socials">
@@ -18,30 +18,17 @@
 <script setup>
 import { TitlePage } from '~/components/common'
 import { SocialsList } from '~/components/sections'
-import { metaInfo } from '~/composables/useMeta'
-import { serverFetch } from '~/composables/useApi'
-import { useMetaStore } from '~/stores/metaStore'
+import { stringToKey } from '~/utils/formatData'
 
 const { t } = useI18n()
-const metaStore = useMetaStore()
-const title = ref(t('app.card'))
-const meta = computed(() => metaStore.getMetaInfo)
-const contactsData = serverFetch('contact', {}, [])
-const links = computed(() => contactsData.value?.contact?.filter(filterLink).map(mapLink) || [])
-
-function filterLink(link) {
-  return link.display?.includes('card')
-}
-
-function mapLink (link) {
-  return {
-    ...link,
-    name: stringToKey(link.title),
-  }
-}
+const title = computed(() => t('app.card'))
+const meta = useSiteMeta()
+const contacts = useContacts('card')
+// name — имя иконки соцсети
+const links = computed(() => contacts.value.map(link => ({ ...link, name: stringToKey(link.title) })))
 
 // Визитка — служебная страница, дублирует контакты: из индекса убираем
-useHead(metaInfo({ title, noindex: true }))
+usePageMeta({ title, noindex: true })
 </script>
 
 <style lang="scss" scoped src="./style.scss"/>

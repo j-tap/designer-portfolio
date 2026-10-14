@@ -1301,7 +1301,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nuxt/kit@npm:4.6.1, @nuxt/kit@npm:^4.4.4, @nuxt/kit@npm:^4.4.8, @nuxt/kit@npm:^4.5.1, @nuxt/kit@npm:^4.5.2, @nuxt/kit@npm:^4.6.0, @nuxt/kit@npm:^4.6.1":
+"@nuxt/kit@npm:4.6.1, @nuxt/kit@npm:^4.4.4, @nuxt/kit@npm:^4.5.1, @nuxt/kit@npm:^4.5.2, @nuxt/kit@npm:^4.6.0, @nuxt/kit@npm:^4.6.1":
   version: 4.6.1
   resolution: "@nuxt/kit@npm:4.6.1"
   dependencies:
@@ -2158,17 +2158,6 @@ __metadata:
     "@parcel/watcher-win32-x64":
       optional: true
   checksum: 10c0/0d6799bdf7d59a1ab5e4a79859035f387a66078586d9543eef0b9bd01c9d61cebe3b64eb96f0bd1f8bf50f07ed7266a1628604b66dc63025a3cee19be2e60d65
-  languageName: node
-  linkType: hard
-
-"@pinia/nuxt@npm:^1.0.2":
-  version: 1.0.2
-  resolution: "@pinia/nuxt@npm:1.0.2"
-  dependencies:
-    "@nuxt/kit": "npm:^4.4.8"
-  peerDependencies:
-    pinia: ^4.0.3
-  checksum: 10c0/54fda4b9f3f7c3c510690c56e4e41b8b1206829f18e162a4808fc490c12e8ffce7a5fa04466f535153ee41e1c364f27373f1a1d7a0aed7b763333503b110ef32
   languageName: node
   linkType: hard
 
@@ -4723,12 +4712,10 @@ __metadata:
     "@nuxtjs/i18n": "npm:^10.6.0"
     "@nuxtjs/sitemap": "npm:^9.0.0"
     "@nuxtjs/strapi": "npm:^2.2.0"
-    "@pinia/nuxt": "npm:^1.0.2"
     "@vueuse/core": "npm:^15.0.0"
     blurhash: "npm:^2.0.5"
     marked: "npm:^18.1.0"
     nuxt: "npm:^4.6.1"
-    pinia: "npm:^4.0.3"
     qs: "npm:^6.16.0"
     sass: "npm:^1.105.1"
     vue: "npm:^3.5.43"
@@ -6046,7 +6033,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nostics@npm:^1.1.4, nostics@npm:^1.3.0":
+"nostics@npm:^1.3.0":
   version: 1.3.0
   resolution: "nostics@npm:1.3.0"
   checksum: 10c0/d0bede1e8b27e363844119496b4547b89159fa8ef8135ee03b28bfe98e2542f799b3c2625afa8a18f8e98983441fac27cb619c3d471c0e767fdc4ad623fcc8ab
@@ -6655,24 +6642,6 @@ __metadata:
   version: 4.0.7
   resolution: "picomatch@npm:4.0.7"
   checksum: 10c0/beb6ae02c43ae44e84883b90830196d9046b1726ead292adcf7f57945e0bb0d992d68563d87e03b484b6f3c9a5c6defda7523477f047d7f0e663f126cc01787f
-  languageName: node
-  linkType: hard
-
-"pinia@npm:^4.0.3":
-  version: 4.0.3
-  resolution: "pinia@npm:4.0.3"
-  dependencies:
-    nostics: "npm:^1.1.4"
-  peerDependencies:
-    "@vue/devtools-api": ^8.1.5
-    typescript: ">=5.6.0"
-    vue: ^3.5.11
-  peerDependenciesMeta:
-    "@vue/devtools-api":
-      optional: false
-    typescript:
-      optional: true
-  checksum: 10c0/6c06c872dd555cb8095a7a9cf3271449b8e88a9908d2cbc9ec6df328ace0d3256848e523c5d30653f7eff2eba7c91dd16f4a9f1cd0a78ff881c7a9dc11096464
   languageName: node
   linkType: hard
 

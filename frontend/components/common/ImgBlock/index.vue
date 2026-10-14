@@ -29,7 +29,7 @@
     </picture>
     <div
       v-if="srcHover"
-      :style="`background-image: url(${srcHover})`"
+      :style="{ backgroundImage: `url(${JSON.stringify(srcHover)})` }"
       class="img-block__img-hover"
     />
   </div>
@@ -37,7 +37,6 @@
 
 <script setup>
 import { BlurHash } from '~/components/common'
-import { getSizeFromProps } from '~/composables/useSizePx'
 
 const props = defineProps({
   src: {
@@ -89,7 +88,7 @@ const classes = computed(() => [
   'img-block',
   { 'img-block_loaded': isLoaded.value }
 ])
-const size = computed(() => getSizeFromProps(props))
+const size = computed(() => ({ width: props.width, height: props.height }))
 
 function onLoadImg () {
   isLoaded.value = true

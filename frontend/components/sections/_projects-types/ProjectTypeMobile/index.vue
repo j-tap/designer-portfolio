@@ -18,7 +18,7 @@
 
 <script setup>
 import { ProjectViews, ProjectColors, ProjectFonts } from '~/components/sections'
-import { pageTypes, getPagesByType } from '~/composables/useProject'
+import { pageTypes, getPagesByType } from '~/utils/projectPages'
 
 const props = defineProps({
   data: Object,

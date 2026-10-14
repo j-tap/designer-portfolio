@@ -5,11 +5,15 @@
  */
 
 const { createCoreController } = require('@strapi/strapi').factories;
+// Ошибки Strapi: обработчик ошибок сам отвечает 400 (ValidationError) или 429 (RateLimitError)
+// с текстом в error.message — его и показывает форма на сайте
+const { errors: { ValidationError, RateLimitError } } = require('@strapi/utils');
 const { issueFormToken, checkFormToken, hitRateLimit } = require('../utils/antispam');
-const { FileError, prepareReviewFiles, removeUploaded } = require('../utils/files');
+const { prepareReviewFiles } = require('../utils/files');
 const { notifyNewReview } = require('../utils/notify');
 
 const UID = 'api::review.review';
+const SUCCESS = { data: { ok: true } };
 
 const LIMITS = {
   name: 100,
@@ -17,8 +21,6 @@ const LIMITS = {
   link: 500,
   text: 5000,
 };
-
-class ValidationError extends Error {}
 
 function readData(ctx) {
   const { data } = ctx.request.body || {};
@@ -48,7 +50,8 @@ function link(value) {
   const raw = text(value, 'link');
   if (!raw) return null;
 
-  const withScheme = /^[a-z][a-z\d+.-]*:/i.test(raw) ? raw : `https://${raw}`;
+  // Схема — только «что-то://»: иначе company.ru:8080 принимается за схему company.ru
+  const withScheme = /^[a-z][a-z\d+.-]*:\/\//i.test(raw) ? raw : `https://${raw}`;
   try {
     const url = new URL(withScheme);
     if (['http:', 'https:'].includes(url.protocol)) return url.href;
@@ -90,15 +93,20 @@ async function relation(uid, value, locale) {
  * Из формы принимаем только известные поля: остальное (publishedAt, createdBy и т.п.)
  * отбрасываем, чтобы отправитель не мог влиять на модерацию и служебные данные.
  */
+function rating(value) {
+  const result = Number(value);
+  if (!Number.isInteger(result) || result < 1 || result > 5) throw new ValidationError('Оценка должна быть от 1 до 5');
+  return result;
+}
+
 async function sanitizeReview(data) {
-  const rating = Number(data.rating);
   const locale = await resolveLocale(data.locale);
 
   return {
     name: text(data.name, 'name', { required: true }),
     company: text(data.company, 'company', { required: true }),
     link: link(data.link),
-    rating: Number.isInteger(rating) && rating >= 1 && rating <= 5 ? rating : 5,
+    rating: rating(data.rating),
     text: text(data.text, 'text'),
     developments: { connect: await relation('api::reviews-development.reviews-development', data.developments, locale) },
     cooperations: { connect: await relation('api::reviews-cooperation.reviews-cooperation', data.cooperations, locale) },
@@ -113,12 +121,14 @@ async function uploadFiles(files) {
   if (!files.length) return [];
 
   const folder = await strapi.plugin('upload').service('api-upload-folder').getAPIUploadFolder();
-  const uploaded = await strapi.plugin('upload').service('upload').upload({
+  return strapi.plugin('upload').service('upload').upload({
     data: { fileInfo: files.map(() => ({ folder: folder.id })) },
     files,
   });
+}
 
-  return uploaded.map(({ id }) => id);
+async function removeFiles(files) {
+  await Promise.all(files.map(file => strapi.plugin('upload').service('upload').remove(file)));
 }
 
 // Черновики (отзывы на модерации) наружу не отдаём, даже если в запросе status=draft
@@ -142,46 +152,46 @@ module.exports = createCoreController(UID, () => ({
     ctx.body = { token: issueFormToken() };
   },
 
+  // Временные файлы запроса удаляет middleware cleanup-uploads
   async create(ctx) {
+    const data = readData(ctx);
+
+    // Скрытое поле: человек его не видит и не заполняет, а боты заполняют все поля подряд.
+    // Отвечаем так же, как на успех, чтобы бот не понял, что его отсеяли
+    if (data.website) {
+      ctx.body = SUCCESS;
+      return;
+    }
+
+    if (!checkFormToken(data.formToken)) {
+      throw new ValidationError('Форма устарела, обновите страницу и попробуйте ещё раз');
+    }
+
+    const review = await sanitizeReview(data);
+
+    // Попытку засчитываем только за заполненную форму (исправление опечаток лимит не тратит),
+    // но до обработки файлов: перекодирование картинок — самая тяжёлая часть запроса
+    if (hitRateLimit(ctx.request.ip)) {
+      throw new RateLimitError('Слишком много отзывов, попробуйте позже');
+    }
+
+    const uploaded = await uploadFiles(await prepareReviewFiles(ctx));
+
     try {
-      const data = readData(ctx);
-
-      // Скрытое поле: человек его не видит и не заполняет, а боты заполняют все поля подряд.
-      // Отвечаем как на успех, чтобы бот не понял, что его отсеяли
-      if (data.website) {
-        ctx.status = 200;
-        ctx.body = { data: null };
-        return;
-      }
-
-      if (!checkFormToken(data.formToken)) {
-        return ctx.badRequest('Форма устарела, обновите страницу и попробуйте ещё раз');
-      }
-
-      if (hitRateLimit(ctx.request.ip)) {
-        return ctx.tooManyRequests('Слишком много отзывов, попробуйте позже');
-      }
-
-      const review = await sanitizeReview(data);
-      const files = await uploadFiles(await prepareReviewFiles(ctx));
-
       // Без status документ создаётся черновиком и ждёт модерации в админке
       const document = await strapi.documents(UID).create({
-        data: { ...review, files },
+        data: { ...review, files: uploaded.map(({ id }) => id) },
       });
 
-      await notifyNewReview(document);
-      ctx.body = { data: { ok: true } };
+      // Не ждём SMTP: письмо не должно задерживать ответ, а его ошибки notifyNewReview логирует сама
+      notifyNewReview(document);
     }
     catch (error) {
-      if (error instanceof ValidationError || error instanceof FileError) {
-        return ctx.badRequest(error.message);
-      }
+      // Отзыв не сохранился — его файлы в медиатеке ни к чему не привязаны
+      await removeFiles(uploaded);
       throw error;
     }
-    finally {
-      // Временные файлы formidable в /tmp сами не удаляются
-      await removeUploaded(ctx);
-    }
+
+    ctx.body = SUCCESS;
   },
 }));

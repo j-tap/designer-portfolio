@@ -1,6 +1,8 @@
 <script setup>
 import { ImgBlock } from '~/components/common'
 
+const { mediaUrl } = useMedia()
+
 const props = defineProps({
   images: Array,
 })
@@ -17,8 +19,8 @@ const sortedImages = computed(() => {
       v-for="(img, index) in sortedImages"
       :key="img.id"
       :eager="index === 0"
-      :src="urlFile(img.url)"
-      :src-lite="urlFile(img.formats?.large?.url || img.url)"
+      :src="mediaUrl(img.url)"
+      :src-lite="mediaUrl(img.formats?.large?.url || img.url)"
       :blurhash="img.blurhash"
       :width="img.width"
       :height="img.height"

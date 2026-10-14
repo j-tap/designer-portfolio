@@ -8,7 +8,7 @@
       <NuxtLink
         :class="['menu__link', { 'menu__link_active': isActive(item) }]"
         :to="localePath(item.path)"
-        @click.native="onClickItem(item)"
+        @click="onClickItem(item)"
       >
         <TitleOutline class="menu__link-text_sm">{{ t(item.locale) }}</TitleOutline>
         <span class="menu__link-text_md-up">{{ t(item.locale) }}</span>
@@ -37,15 +37,10 @@ function onClickItem (item) {
   emit('click-item', item)
 }
 
-function isActive(item) {
-  const currentPath = route.path
-  const pathWithoutLocale = currentPath.replace(/^\/[a-z]{2}(\/|$)/, '/')
-
-  if (item.path === '/') {
-    return pathWithoutLocale === '/'
-  }
-
-  return pathWithoutLocale === item.path || pathWithoutLocale.startsWith(item.path + '/')
+// Раздел активен на своей странице и на вложенных (портфолио → категория → проект), главная — только на себе
+function isActive (item) {
+  const path = localePath(item.path)
+  return route.path === path || (item.path !== '/' && route.path.startsWith(`${path}/`))
 }
 </script>
 

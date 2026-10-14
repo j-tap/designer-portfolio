@@ -11,12 +11,11 @@ module.exports = () => [
       origin: siteUrl(),
     },
   },
-  'strapi::poweredBy',
   'strapi::query',
   'strapi::body',
+  { name: 'global::cleanup-uploads' },
   'strapi::session',
   'strapi::favicon',
   'strapi::public',
-  { name: 'global::redirector' },
   { name: 'global::populate-deep' },
 ];

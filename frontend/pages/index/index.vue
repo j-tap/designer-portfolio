@@ -15,12 +15,12 @@
         <span class="title-section__row title-section__row_3 row-title-3">
           <MarqueeBlock class="row-title-3__marquee" reverse>
             <TitleOutline tag="div" itemprop="name">
-              {{ meta.first_name }} {{ meta.last_name }}&nbsp;
+              {{ meta.firstName }} {{ meta.lastName }}&nbsp;
             </TitleOutline>
           </MarqueeBlock>
           <TitleOutline class="row-title-3__static" tag="div">
-            {{ meta.last_name }}
-            <div class="row-title-3__static-small">{{ meta.first_name }}</div>
+            {{ meta.lastName }}
+            <div class="row-title-3__static-small">{{ meta.firstName }}</div>
           </TitleOutline>
         </span>
       </h1>
@@ -67,45 +67,23 @@
 <script setup>
 import { TitleOutline, MarqueeBlock, HtmlMarked } from '~/components/common'
 import { PortfolioCategories } from '~/components/sections'
-import { serverFetch } from '~/composables/useApi'
-import { metaInfo } from '~/composables/useMeta'
-import { useStructuredData } from '~/composables/useStructuredData'
-import { useMetaStore } from '~/stores/metaStore'
 import { fillExperience } from '~/utils/experience'
 
 const { t } = useI18n()
-const metaStore = useMetaStore()
-const meta = computed(() => metaStore.getMetaInfo)
-const withYears = text => fillExperience(text, meta.value.career_start_year)
-const home = serverFetch('home', {}, {}, 'findOne')
-const categories = serverFetch('category-projects', {
-  sort: [{ rank: 'asc' }],
-}, [])
-const contactsData = serverFetch('contact', {}, [])
+const meta = useSiteMeta()
+const withYears = text => fillExperience(text, meta.value.careerStartYear)
 
-useHead(metaInfo())
+const { data: home } = await useRequiredStrapiData('home', {}, { allowMissing: true })
+const { data: categories } = useStrapiData('category-projects', { sort: [{ rank: 'asc' }] })
+const contacts = useContacts()
 
-// sameAs связывает страницу с профилями автора — помогает поисковикам склеить сущность
-const sameAs = computed(() => (contactsData.value?.contact || [])
-  .map(item => item.link)
-  .filter(link => typeof link === 'string' && link.startsWith('http')))
+usePageMeta()
 
-const { getStructuredData } = useStructuredData('home', {
+useStructuredData('home', {
   includeOrganization: true,
-  sameAs,
+  // sameAs связывает страницу с профилями автора — помогает поисковикам склеить сущность
+  sameAs: computed(() => contacts.value.map(item => item.link).filter(link => link?.startsWith('http'))),
 })
-
-watch(getStructuredData, (schemas) => {
-  if (schemas && schemas.length > 0) {
-    useHead({
-      script: schemas.map((schema, index) => ({
-        type: 'application/ld+json',
-        innerHTML: JSON.stringify(schema),
-        key: `structured-data-${index}`,
-      })),
-    })
-  }
-}, { immediate: true, deep: true })
 </script>
 
 <style lang="scss" scoped src="./style.scss"/>

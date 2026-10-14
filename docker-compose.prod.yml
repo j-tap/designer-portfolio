@@ -1,15 +1,12 @@
 # Production overrides for docker-compose.yml (variables are defined there).
+# The start commands are the CMD of each Dockerfile.
 services:
   strapi:
     environment:
       NODE_ENV: production
-      # Behind Traefik: take client IPs (rate limit of reviews) from X-Forwarded-For
+      # Behind Traefik: client IP (rate limit of reviews) and HTTPS come from X-Forwarded-* (config/server.js)
       PROXY: "true"
     restart: unless-stopped
-    build:
-      args:
-        MODE: production
-    command: "node node_modules/@strapi/strapi/bin/strapi.js start"
     networks:
       - traefik
     volumes:
@@ -18,25 +15,15 @@ services:
       - ./backend/config:/app/config:ro
       - ./backend/public:/app/public
       - ./backend/tmp:/tmp
-      - ./backend/yarn-cache:/root/.yarn
-#    depends_on:
-#      - postgres
 
   nuxt:
     environment:
       NODE_ENV: production
     restart: unless-stopped
-    build:
-      args:
-        MODE: production
-    command: "node .output/server/index.mjs"
     networks:
       - traefik
     volumes:
       - ./frontend/public:/app/public:ro
-
-#volumes:
-#  pgdata:
 
 networks:
   traefik:

@@ -6,8 +6,9 @@
       class="socials-list__item"
     >
       <NuxtLink
-        v-if="item.name"
-        :to="item.link"
+        v-if="item.name && safeUrl(item.link)"
+        :to="safeUrl(item.link)"
+        :aria-label="item.title"
         class="socials-list__link"
         target="_blank"
         external
@@ -24,6 +25,7 @@
 
 <script setup>
 import { IconBase } from '~/components/common'
+import { safeUrl } from '~/utils/url'
 
 const props = defineProps({
   items: {

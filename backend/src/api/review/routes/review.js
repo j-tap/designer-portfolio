@@ -1,9 +1,12 @@
 'use strict';
 
 /**
- * review router
+ * review router. Открыты только действия, которые вызывает сайт: остальные
+ * (update, delete…) не откроет даже случайная галочка в правах роли Public
  */
 
 const { createCoreRouter } = require('@strapi/strapi').factories;
 
-module.exports = createCoreRouter('api::review.review');
+module.exports = createCoreRouter('api::review.review', {
+  only: ['find', 'findOne', 'create'],
+});

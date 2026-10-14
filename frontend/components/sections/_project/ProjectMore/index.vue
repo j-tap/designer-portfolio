@@ -4,16 +4,13 @@
     <ScrollBlock class="more-projects__wrap-list">
       <ul class="more-projects__list">
         <li
-          v-for="project in props.items"
+          v-for="project in items"
           :key="project.id"
           class="more-projects__list-item"
         >
           <ProjectPreview
             :data="project"
-            :to="localePath({
-              name: 'portfolio-category-project',
-              params: { category: categoryName, project: project.slug }
-            })"
+            :to="projectLink(project)"
             class="more-projects__item-preview"
           />
         </li>
@@ -25,16 +22,31 @@
 <script setup>
 import { ScrollBlock } from '~/components/common'
 import { ProjectPreview } from '~/components/sections'
-
-const localePath = useLocalePath()
+import { projectPath } from '~/config/portfolio'
 
 const { t } = useI18n()
-const route = useRoute()
+const localePath = useLocalePath()
+
 const props = defineProps({
-  items: Array,
+  items: {
+    type: Array,
+    default: () => [],
+  },
+  // Проекты той же категории (и подкатегории), что и открытый: ссылки — в том же разделе
+  categorySlug: {
+    type: String,
+    required: true,
+  },
+  subcategorySlug: {
+    type: String,
+    default: null,
+  },
 })
 
-const categoryName = computed(() => route.params.category)
+function projectLink ({ slug }) {
+  const path = projectPath({ category: props.categorySlug, subcategory: props.subcategorySlug }, slug)
+  return path && localePath(path)
+}
 </script>
 
 <style lang="scss" src="./style.scss" scoped />

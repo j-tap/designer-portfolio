@@ -10,43 +10,23 @@
 <script setup>
 import { PortfolioCategories } from '~/components/sections'
 import { ContentWrap } from '~/components/structure'
-import { metaInfo } from '~/composables/useMeta'
-import { useStructuredData } from '~/composables/useStructuredData'
-import { serverFetch } from '~/composables/useApi'
+import { portfolioPath } from '~/config/portfolio'
 
 const { t } = useI18n()
-const categories = serverFetch('category-projects', {
-  sort: [{ rank: 'asc' }],
-}, [])
+const { data: categories } = await useRequiredStrapiData('category-projects', { sort: [{ rank: 'asc' }] }, { allowMissing: true })
 
-useHead(metaInfo({
-  title: ref(t('menu.portfolio')),
-}))
+usePageMeta({ title: () => t('menu.portfolio') })
 
-const collectionData = computed(() => categories.value ? {
-  title: t('menu.portfolio') || 'Portfolio',
-  description: t('menu.portfolio') || 'Portfolio',
-  items: categories.value.map(category => ({
-    title: category.title,
-    url: `/portfolio/${category.slug}`,
+useStructuredData('collection', {
+  collection: computed(() => ({
+    title: t('menu.portfolio'),
+    description: t('menu.portfolio'),
+    items: (categories.value || []).map(category => ({
+      title: category.title,
+      url: portfolioPath(category.slug),
+    })),
   })),
-} : null)
-
-const { getStructuredData } = useStructuredData('collection', {
-  collection: collectionData,
 })
-
-watch(getStructuredData, (schemas) => {
-  if (schemas && schemas.length > 0) {
-    useHead({
-      script: schemas.map((schema, index) => ({
-        type: 'application/ld+json',
-        innerHTML: JSON.stringify(schema),
-        key: `structured-data-${index}`,
-      })),
-    })
-  }
-}, { immediate: true, deep: true })
 </script>
 
 <style lang="scss" scoped src="./style.scss"/>

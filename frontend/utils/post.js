@@ -1,3 +1,6 @@
+// utils/ сервер в режиме разработки загружает без сборщика: импорт — относительный, с расширением
+import { formatRelativeDate } from './formatDate.js'
+
 export function getPostTitle(post) {
   if (!post?.text) return ''
   const text = post.text.replace(/\n/g, ' ').trim()
@@ -22,47 +25,19 @@ export function getPostTitle(post) {
   return title
 }
 
-export function getPostImage(post) {
-  // Fallback на простое поле image
-  if (post?.image) {
-    return post.image
+export function getPostImage (post) {
+  return post?.image || null
+}
+
+/**
+ * Дата поста для показа: «3 дня назад» — как её отдаёт LinkedIn, иначе дата загрузки поста.
+ * t и d — из useI18n() страницы.
+ */
+export function formatPostDate (post, { t, d }) {
+  if (post.date_value !== undefined && post.date_unit) {
+    return formatRelativeDate({ value: post.date_value, unit: post.date_unit, raw: post.date_raw }, t)
   }
-
-  if (!post?.content?.images || !Array.isArray(post.content.images) || post.content.images.length === 0) {
-    return null
-  }
-
-  const firstImageSet = post.content.images[0]
-  if (!firstImageSet?.image || !Array.isArray(firstImageSet.image)) {
-    return null
-  }
-
-  const targetWidth = 1280
-  let bestImage = null
-  let bestWidth = 0
-
-  for (const img of firstImageSet.image) {
-    if (img.width && img.url) {
-      if (img.width === targetWidth) {
-        return img.url
-      }
-      if (img.width < targetWidth && img.width > bestWidth) {
-        bestWidth = img.width
-        bestImage = img.url
-      }
-    }
-  }
-
-  if (!bestImage) {
-    for (const img of firstImageSet.image) {
-      if (img.width && img.url && img.width > bestWidth) {
-        bestWidth = img.width
-        bestImage = img.url
-      }
-    }
-  }
-
-  return bestImage
+  return post.created_at ? d(post.created_at, 'date') : ''
 }
 
 export function getPostPreview(post) {

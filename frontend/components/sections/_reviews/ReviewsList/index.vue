@@ -12,10 +12,10 @@
               <a v-if="safeUrl(item.link)" :href="safeUrl(item.link)" target="_blank" rel="noopener noreferrer nofollow">{{ item.company }}</a>
               <span v-else>{{ item.company }}</span>
             </h2>
-            <RatingStars v-model="item.rating" />
+            <RatingStars :model-value="item.rating" />
           </div>
           <div class="review__subheader">
-            <time class="review__date" :datetime="item.createdAt" >{{ dateFormat(item.createdAt) }}</time>
+            <time class="review__date" :datetime="item.createdAt">{{ d(item.createdAt, 'date') }}</time>
             <div v-if="item.cooperations" class="review__cooperations">
               {{ item.cooperations.map(o => o.title).join(',' + '&nbsp;'.repeat(5)) }}
             </div>
@@ -30,15 +30,16 @@
       </article>
     </li>
   </ul>
-  <p v-else>Пока нет отзывов, вы можете быть первым</p>
+  <p v-else>{{ t('reviews.empty') }}</p>
 </template>
 
 <script setup>
 import { RatingStars, FilesList } from '~/components/common'
-import { dateFormat } from '~/utils/formatDate'
 import { safeUrl } from '~/utils/url'
 
-const props = defineProps({
+const { t, d } = useI18n()
+
+defineProps({
   items: {
     type: Array,
     required: true,

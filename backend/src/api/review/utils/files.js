@@ -3,6 +3,7 @@
 const fs = require('fs/promises');
 const path = require('path');
 const sharp = require('sharp');
+const { errors: { ValidationError } } = require('@strapi/utils');
 
 const MAX_FILES = 10;
 // Лимит щедрый: изображения ниже ужимаются до разумного размера
@@ -26,8 +27,6 @@ const RESIZABLE = {
   'image/webp': img => img.webp({ quality: 82 }),
   'image/avif': img => img.avif({ quality: 60 }),
 };
-
-class FileError extends Error {}
 
 /**
  * formidable отдаёт либо один файл, либо массив — приводим к массиву.
@@ -56,6 +55,8 @@ function safeBaseName(name) {
 /**
  * Перекодирование заодно убирает EXIF (в том числе геолокацию с фото телефона)
  * и обезвреживает файлы-полиглоты, у которых за заголовком картинки спрятано что-то ещё.
+ * GIF и PDF не перекодируются: их отдают с Content-Type по проверенному расширению,
+ * а браузер не угадывает тип (X-Content-Type-Options: nosniff от strapi::security).
  */
 async function compressImage(file, type) {
   const output = await RESIZABLE[type.mime](
@@ -70,28 +71,28 @@ async function compressImage(file, type) {
 
 /**
  * Проверяет и подготавливает файлы отзыва к сохранению. Возвращает их список для загрузки
- * в медиатеку. Бросает FileError с текстом для пользователя.
+ * в медиатеку. Бросает ValidationError с текстом для пользователя (ответ 400).
  */
 async function prepareReviewFiles(ctx) {
   const keys = Object.keys(ctx.request.files || {});
   if (keys.some(key => key !== 'files.files')) {
-    throw new FileError('Файлы можно прикрепить только к полю files');
+    throw new ValidationError('Файлы можно прикрепить только к полю files');
   }
 
   const files = listUploaded(ctx);
   if (files.length > MAX_FILES) {
-    throw new FileError(`Можно прикрепить не больше ${MAX_FILES} файлов`);
+    throw new ValidationError(`Можно прикрепить не больше ${MAX_FILES} файлов`);
   }
 
   for (const file of files) {
     if (file.size > MAX_FILE_SIZE) {
-      throw new FileError(`Файл «${file.originalFilename}» больше ${MAX_FILE_SIZE / 1024 / 1024} МБ`);
+      throw new ValidationError(`Файл «${file.originalFilename}» больше ${MAX_FILE_SIZE / 1024 / 1024} МБ`);
     }
 
     const head = await readHead(file.filepath);
     const type = SIGNATURES.find(({ test }) => test(head));
     if (!type) {
-      throw new FileError(`Файл «${file.originalFilename}»: поддерживаются только изображения (JPG, PNG, GIF, WebP, AVIF) и PDF`);
+      throw new ValidationError(`Файл «${file.originalFilename}»: поддерживаются только изображения (JPG, PNG, GIF, WebP, AVIF) и PDF`);
     }
 
     if (RESIZABLE[type.mime]) {
@@ -99,7 +100,7 @@ async function prepareReviewFiles(ctx) {
         await compressImage(file, type);
       }
       catch {
-        throw new FileError(`Не удалось обработать изображение «${file.originalFilename}»`);
+        throw new ValidationError(`Не удалось обработать изображение «${file.originalFilename}»`);
       }
     }
 
@@ -111,12 +112,6 @@ async function prepareReviewFiles(ctx) {
   return files;
 }
 
-async function removeUploaded(ctx) {
-  await Promise.all(listUploaded(ctx).map(file => fs.rm(file.filepath, { force: true })));
-}
-
 module.exports = {
-  FileError,
   prepareReviewFiles,
-  removeUploaded,
 };

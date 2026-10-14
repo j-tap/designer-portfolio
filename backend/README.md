@@ -1,57 +1,21 @@
-# 🚀 Getting started with Strapi
+## Backend: Strapi 5
 
-Strapi comes with a full featured [Command Line Interface](https://docs.strapi.io/developer-docs/latest/developer-resources/cli/CLI.html) (CLI) which lets you scaffold and manage your project in seconds.
+Configuration comes from the root `.env` (see the project [README](../README.md)); there is no `.env` in this folder.
 
-### `develop`
-
-Start your Strapi application with autoReload enabled. [Learn more](https://docs.strapi.io/developer-docs/latest/developer-resources/cli/CLI.html#strapi-develop)
-
-```
-npm run develop
-# or
-yarn develop
+```sh
+yarn develop   # admin panel with the Content-Type Builder, autoreload
+yarn build     # build the admin panel
+yarn start     # production mode (schemas are read-only in the admin)
 ```
 
-### `start`
+Content types (fields) are changed only in `develop` mode: the Content-Type Builder writes them to
+`src/api/**/schema.json` and `src/components/**`, which are committed and deployed. In production
+the builder is read-only.
 
-Start your Strapi application with autoReload disabled. [Learn more](https://docs.strapi.io/developer-docs/latest/developer-resources/cli/CLI.html#strapi-start)
+Project-specific code:
 
-```
-npm run start
-# or
-yarn start
-```
+- `src/middlewares/populate-deep.js` — `?populate=deep` used by the frontend (replaces the v4 plugin)
+- `src/index.js`, `src/utils/blurhash.js` — blurhash of uploaded images
+- `src/api/review` — the public review form: token, rate limit, file checks, notification email
 
-### `build`
-
-Build your admin panel. [Learn more](https://docs.strapi.io/developer-docs/latest/developer-resources/cli/CLI.html#strapi-build)
-
-```
-npm run build
-# or
-yarn build
-```
-
-## ⚙️ Deployment
-
-Strapi gives you many possible deployment options for your project. Find the one that suits you on the [deployment section of the documentation](https://docs.strapi.io/developer-docs/latest/setup-deployment-guides/deployment.html).
-
-## 📚 Learn more
-
-- [Resource center](https://strapi.io/resource-center) - Strapi resource center.
-- [Strapi documentation](https://docs.strapi.io) - Official Strapi documentation.
-- [Strapi tutorials](https://strapi.io/tutorials) - List of tutorials made by the core team and the community.
-- [Strapi blog](https://docs.strapi.io) - Official Strapi blog containing articles made by the Strapi team and the community.
-- [Changelog](https://strapi.io/changelog) - Find out about the Strapi product updates, new features and general improvements.
-
-Feel free to check out the [Strapi GitHub repository](https://github.com/strapi/strapi). Your feedback and contributions are welcome!
-
-## ✨ Community
-
-- [Discord](https://discord.strapi.io) - Come chat with the Strapi community including the core team.
-- [Forum](https://forum.strapi.io/) - Place to discuss, ask questions and find answers, show your Strapi project and get feedback or just talk with other Community members.
-- [Awesome Strapi](https://github.com/strapi/awesome-strapi) - A curated list of awesome things related to Strapi.
-
----
-
-<sub>🤫 Psst! [Strapi is hiring](https://strapi.io/careers).</sub>
+The upgrade from Strapi 4 and its decisions: [docs/UPGRADE.md](../docs/UPGRADE.md).

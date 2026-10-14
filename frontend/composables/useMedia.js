@@ -10,7 +10,7 @@ const sizes = {
 }
 
 export function useMedia (size) {
-    if (process.client) {
+    if (import.meta.client) {
         const result = ref(sizes[size](window.outerWidth))
         let rafId = null
 

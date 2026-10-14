@@ -100,7 +100,7 @@ watch(props.category, async (val) => {
   }
 }, { deep: true })
 
-if (process.client) {
+if (import.meta.client) {
   let rafId = null
   let scrollHandler = null
 

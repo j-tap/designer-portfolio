@@ -145,14 +145,14 @@ watch(blogSchema, (schema) => {
     useHead({
       script: [{
         type: 'application/ld+json',
-        children: JSON.stringify(schema),
+        innerHTML: JSON.stringify(schema),
         key: 'blog-structured-data',
       }],
     })
   }
 }, { immediate: true, deep: true })
 
-if (process.client) {
+if (import.meta.client) {
   watch(currentPage, (newPage, oldPage) => {
     if (oldPage !== undefined && newPage !== oldPage) {
       nextTick(() => {

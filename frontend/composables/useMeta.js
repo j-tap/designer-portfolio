@@ -3,7 +3,7 @@ import i18nConfig, { defaultLocale } from '~/config/i18n'
 
 // og:locale ждёт формат ru_RU, а useI18n().locales отдаёт только коды
 const localeIsoMap = i18nConfig.locales.reduce((acc, loc) => {
-  acc[loc.code] = (loc.iso || loc.code).replace('-', '_')
+  acc[loc.code] = (loc.language || loc.code).replace('-', '_')
   return acc
 }, {})
 

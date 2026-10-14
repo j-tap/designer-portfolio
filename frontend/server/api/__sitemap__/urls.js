@@ -1,3 +1,4 @@
+import qs from 'qs'
 import { asSitemapUrl, defineSitemapEventHandler } from '#imports'
 import { fetchAllPosts } from '~/server/utils/postsCache'
 
@@ -14,6 +15,9 @@ const staticPages = [
   { path: '/posts', priority: 0.7, changefreq: 'daily' },
   { path: '/contacts', priority: 0.7, changefreq: 'monthly' },
 ]
+
+// Strapi по умолчанию отдаёт 25 записей; 100 — максимум (config/api.js в бэкенде)
+const PAGE_SIZE = 100
 
 // Стратегия i18n — prefix: локаль есть в адресе всегда, включая язык по умолчанию
 function localizedPath (locale, path) {
@@ -62,12 +66,11 @@ export default defineSitemapEventHandler(async () => {
     let projects = []
 
     try {
-      const response = await $fetch(`${urlApi}/category-projects`, {
-        params: {
-          populate: 'subcategories',
-          locale: locale,
-        }
-      })
+      const response = await $fetch(`${urlApi}/category-projects?${qs.stringify({
+        populate: ['subcategories'],
+        pagination: { pageSize: PAGE_SIZE },
+        locale,
+      }, { encodeValuesOnly: true })}`)
       categories = response?.data || []
     }
     catch (error) {
@@ -75,12 +78,15 @@ export default defineSitemapEventHandler(async () => {
     }
 
     try {
-      const response = await $fetch(`${urlApi}/projects`, {
-        params: {
-          populate: ['categories', 'subcategories', 'updatedAt'],
-          locale: locale,
-        }
-      })
+      // Адрес проекта в подкатегории строится через её категорию: subcategory.category.slug
+      const response = await $fetch(`${urlApi}/projects?${qs.stringify({
+        populate: {
+          categories: true,
+          subcategories: { populate: ['category'] },
+        },
+        pagination: { pageSize: PAGE_SIZE },
+        locale,
+      }, { encodeValuesOnly: true })}`)
       projects = response?.data || []
     }
     catch (error) {

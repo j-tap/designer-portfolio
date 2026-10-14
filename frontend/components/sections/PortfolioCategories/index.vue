@@ -24,6 +24,8 @@
 <script setup>
 import { TitleOutline } from '~/components/common'
 
+const localePath = useLocalePath()
+
 const props = defineProps({
   items: {
     type: Array,

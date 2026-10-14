@@ -42,7 +42,7 @@ import { serverFetch, serverCreate, fetchJson } from '~/composables/useApi'
 import { useReviewsStore } from '~/stores/reviewsStore'
 import { useMedia } from '~/composables/useMedia'
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const mdDown = useMedia('md-down')
 const reviewsStore = useReviewsStore()
 const title = ref(t('menu.reviews'))
@@ -122,7 +122,8 @@ function handleScroll () {
 }
 
 async function sendForm (form) {
-  const data = { formToken: formToken.value }
+  // Язык нужен, чтобы связать отзыв с направлениями на том языке, который видел автор
+  const data = { formToken: formToken.value, locale: locale.value }
   const formData = new FormData()
 
   Object.keys(form).forEach(key => {

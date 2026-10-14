@@ -149,7 +149,7 @@ async function sendRequest (name, params, method, cb) {
 }
 
 function updateLoading (isLoading) {
-  if (process.client) {
+  if (import.meta.client) {
     const loadingStore = useLoadingStore()
     loadingStore.updateLoading(isLoading)
   }

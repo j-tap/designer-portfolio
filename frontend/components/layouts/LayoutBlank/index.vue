@@ -14,7 +14,7 @@ const classes = computed(() => [
   { 'layout-blank_loaded': isLoaded.value },
 ])
 
-if (process.client) {
+if (import.meta.client) {
   onMounted(() => {
     isLoaded.value = true
   })

@@ -1,13 +1,13 @@
-FROM node:20
+FROM node:24-alpine
 
 WORKDIR /app
 
 RUN mkdir -p .yarn/releases
 
-COPY .yarn/releases/yarn-4.9.1.cjs .yarn/releases/
+COPY .yarn/releases/yarn-4.18.1.cjs .yarn/releases/
 COPY .yarnrc.yml ./
 
-RUN corepack enable && corepack prepare yarn@4.9.1 --activate
+RUN corepack enable && corepack prepare yarn@4.18.1 --activate
 
 COPY package.json yarn.lock ./
 RUN yarn install --immutable

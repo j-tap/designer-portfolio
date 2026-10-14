@@ -29,7 +29,7 @@
     </picture>
     <div
       v-if="srcHover"
-      :style="`background-image: url(${srcHover})`"
+      :style="{ backgroundImage: `url(${JSON.stringify(srcHover)})` }"
       class="img-block__img-hover"
     />
   </div>

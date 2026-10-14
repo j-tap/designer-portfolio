@@ -27,8 +27,7 @@ export function usePageMeta (info = {}) {
   const siteMeta = useSiteMeta()
   const { mediaUrl } = useMedia()
   const absoluteUrl = useAbsoluteUrl()
-
-  const siteName = computed(() => t('app.name') || siteMeta.value.title || 'Portfolio')
+  const siteName = useSiteName()
 
   // На главной — только заголовок сайта, на остальных — «Страница | Сайт»
   const title = computed(() => {

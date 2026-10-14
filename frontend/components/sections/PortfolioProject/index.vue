@@ -25,7 +25,7 @@ const props = defineProps({
     type: String,
     required: true,
   },
-  // Подкатегория из адреса проекта: «Назад» ведёт в её список
+  // Подкатегория из адреса проекта: «Назад» и «Ещё проекты» ведут в её раздел
   subcategorySlug: {
     type: String,
     default: null,
@@ -130,6 +130,7 @@ const links = computed(() => (props.project.links || [])
       v-if="moreProjects.length"
       :items="moreProjects"
       :category-slug="categorySlug"
+      :subcategory-slug="subcategorySlug"
       class="portfolio-project__more-projects"
     />
   </div>

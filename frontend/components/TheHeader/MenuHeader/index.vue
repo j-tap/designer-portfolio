@@ -37,15 +37,10 @@ function onClickItem (item) {
   emit('click-item', item)
 }
 
-function isActive(item) {
-  const currentPath = route.path
-  const pathWithoutLocale = currentPath.replace(/^\/[a-z]{2}(\/|$)/, '/')
-
-  if (item.path === '/') {
-    return pathWithoutLocale === '/'
-  }
-
-  return pathWithoutLocale === item.path || pathWithoutLocale.startsWith(item.path + '/')
+// Раздел активен на своей странице и на вложенных (портфолио → категория → проект), главная — только на себе
+function isActive (item) {
+  const path = localePath(item.path)
+  return route.path === path || (item.path !== '/' && route.path.startsWith(`${path}/`))
 }
 </script>
 

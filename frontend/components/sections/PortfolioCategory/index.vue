@@ -58,7 +58,7 @@
 import { BackLink, TitleOutline } from '~/components/common'
 import { ContentWrap } from '~/components/structure'
 import { ProjectPreview, PortfolioSubcategoriesNav } from '~/components/sections'
-import { hasProjectPages, portfolioPath } from '~/config/portfolio'
+import { projectPath } from '~/config/portfolio'
 
 const props = defineProps({
   projects: {
@@ -98,8 +98,8 @@ const localePath = useLocalePath()
 useParallax(useTemplateRef('listItems'))
 
 function projectLink ({ slug }) {
-  const slugs = { category: props.categorySlug, subcategory: props.subcategorySlug }
-  return hasProjectPages(slugs) ? localePath(portfolioPath(slugs.category, slugs.subcategory, slug)) : null
+  const path = projectPath({ category: props.categorySlug, subcategory: props.subcategorySlug }, slug)
+  return path && localePath(path)
 }
 </script>
 

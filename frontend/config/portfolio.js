@@ -17,6 +17,11 @@ export function portfolioPath (...slugs) {
   return ['/portfolio', ...slugs.filter(Boolean)].join('/')
 }
 
+// Адрес страницы проекта из списка категории или подкатегории; null — у работ этого списка нет страниц
+export function projectPath ({ category, subcategory = null }, slug) {
+  return hasProjectPages({ category, subcategory }) ? portfolioPath(category, subcategory, slug) : null
+}
+
 // rank в Strapi — строка: сравниваем как числа, иначе «10» окажется раньше «2»
 export function sortByRank (list = []) {
   return [...list].sort((a, b) => a.rank - b.rank)

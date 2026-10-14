@@ -7,7 +7,19 @@
  *
  * По умолчанию `populate=deep` (backend/src/middlewares/populate-deep.js).
  * `single: true` — запрос по фильтру (например, по slug): вместо списка — первая запись или null.
+ *
+ * Одни и те же данные запрашивают несколько компонентов (мета-информацию — app.vue, usePageMeta,
+ * useStructuredData…), а Strapi должен получить один запрос:
+ * - `dedupe: 'defer'` — вызов, пока запрос ещё идёт, ждёт его (по умолчанию `cancel`: каждый
+ *   следующий вызов отменял бы запрос и отправлял новый);
+ * - getCachedData — на сервере вызов после загрузки (компонент ниже `await` страницы) берёт данные
+ *   из payload этого запроса страницы; Nuxt по умолчанию на сервере загрузил бы их заново.
+ *   В браузере данные из payload берутся только при гидратации, при переходах — запрашиваются заново.
  */
+function getCachedData (key, nuxtApp) {
+  if (import.meta.server || nuxtApp.isHydrating) return nuxtApp.payload.data[key]
+}
+
 export function useStrapiData (name, params = {}, { single = false, ...options } = {}) {
   const { locale } = useI18n()
   const { find } = useStrapi()
@@ -26,7 +38,7 @@ export function useStrapiData (name, params = {}, { single = false, ...options }
         throw error
       }
     },
-    options,
+    { dedupe: 'defer', getCachedData, ...options },
   )
 }
 

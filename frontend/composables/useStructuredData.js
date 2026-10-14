@@ -5,7 +5,7 @@
  * Адреса в additionalData — пути сайта; префикс языка добавляется, если его нет.
  */
 export function useStructuredData(type = 'website', additionalData = {}) {
-  const { t, locale, localeCodes } = useI18n()
+  const { locale, localeCodes } = useI18n()
   const route = useRoute()
   const localePath = useLocalePath()
   const siteMeta = useSiteMeta()
@@ -21,8 +21,7 @@ export function useStructuredData(type = 'website', additionalData = {}) {
   }
 
   const homeUrl = computed(() => localeUrl('/'))
-
-  const siteName = computed(() => t('app.name') || siteMeta.value.title || 'Portfolio')
+  const siteName = useSiteName()
 
   // WebSite
   const websiteSchema = computed(() => ({

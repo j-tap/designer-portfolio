@@ -59,16 +59,6 @@
           {{ t('posts.back_to_list') }}
         </BackLink>
       </article>
-      
-      <div v-else class="post-full__not-found">
-        <p>{{ t('posts.not_found') }}</p>
-        <BackLink
-          to="/posts"
-          class="post-full__back"
-        >
-          {{ t('posts.back_to_list') }}
-        </BackLink>
-      </div>
     </ContentWrap>
   </div>
 </template>
@@ -84,15 +74,17 @@ const absoluteUrl = useAbsoluteUrl()
 const { t, d } = useI18n()
 const route = useRoute()
 
-const { data: postData, error } = await useFetch(`/api/posts/${route.params.id}`, {
+const { data: postData, error } = await useFetch(`/api/posts/${encodeURIComponent(route.params.id)}`, {
   key: `post-${route.params.id}`,
   default: () => ({ data: null }),
 })
 
+// Ненайденный пост (API отвечает 404) — страница 404, как у остальных страниц (useRequiredStrapiData)
 if (error.value) {
   throw createError({
     statusCode: error.value.statusCode || 404,
     statusMessage: error.value.statusMessage || 'Post not found',
+    fatal: import.meta.client,
   })
 }
 

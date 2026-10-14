@@ -24,3 +24,12 @@ export function useSiteMeta () {
     }
   })
 }
+
+/**
+ * Название сайта для заголовков, соцсетей и JSON-LD: из переводов, иначе заголовок из Strapi.
+ */
+export function useSiteName () {
+  const { t } = useI18n()
+  const siteMeta = useSiteMeta()
+  return computed(() => t('app.name') || siteMeta.value.title || 'Portfolio')
+}

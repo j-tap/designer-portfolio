@@ -1,20 +1,10 @@
 import { fetchAllPosts } from '~/server/utils/postsCache'
 import { getPostTitle, getPostImage } from '~/utils/post'
-import { safeUrl } from '~/utils/url'
+import { escapeHtml, safeUrl } from '~/utils/url'
 
 // Посты пишутся по-русски: ссылки ведут на русскую версию страницы поста
 const POSTS_LOCALE = 'ru'
 const RSS_ITEMS = 15
-
-function escapeXml(unsafe) {
-  if (!unsafe) return ''
-  return unsafe
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&apos;')
-}
 
 // "]]>" внутри текста закрыл бы CDATA раньше времени и сломал ленту
 function cdata(value) {
@@ -25,7 +15,6 @@ export default defineEventHandler(async (event) => {
   // Адрес сайта зашит в сборку (nuxt.config → runtimeConfig.public.siteUrl)
   const BASE_URL = useRuntimeConfig().public.siteUrl
   setHeader(event, 'Content-Type', 'application/rss+xml; charset=utf-8')
-  setHeader(event, 'Cache-Control', 'public, max-age=3600')
 
   try {
     // Из того же кеша, что раздел постов на сайте
@@ -37,13 +26,13 @@ export default defineEventHandler(async (event) => {
       const linkedinUrl = safeUrl(post.url) || ''
       const title = getPostTitle(post)
       // description читалки рендерят как HTML, поэтому текст поста экранируем
-      let description = escapeXml(post.text || '')
+      let description = escapeHtml(post.text || '')
 
       if (linkedinUrl) {
-        description += `\n\n<a href="${escapeXml(linkedinUrl)}">Читать на LinkedIn</a>`
+        description += `\n\n<a href="${escapeHtml(linkedinUrl)}">Читать на LinkedIn</a>`
       }
       if (imageUrl) {
-        description += `\n<br/><img src="${escapeXml(imageUrl)}" alt="Post image" />`
+        description += `\n<br/><img src="${escapeHtml(imageUrl)}" alt="Post image" />`
       }
 
       // Дата в формате RFC 822, который ждёт RSS: «Wed, 14 Oct 2026 17:20:00 GMT»
@@ -56,7 +45,7 @@ export default defineEventHandler(async (event) => {
       <guid isPermaLink="true">${postUrl}</guid>
       ${pubDate}
       <description>${cdata(description)}</description>
-      ${imageUrl ? `<enclosure url="${escapeXml(imageUrl)}" type="image/jpeg" />` : ''}
+      ${imageUrl ? `<enclosure url="${escapeHtml(imageUrl)}" type="image/jpeg" />` : ''}
     </item>`
     }).join('')
 

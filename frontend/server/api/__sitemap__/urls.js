@@ -2,7 +2,7 @@ import qs from 'qs'
 import { asSitemapUrl, defineSitemapEventHandler } from '#imports'
 import { fetchAllPosts } from '~/server/utils/postsCache'
 import i18nConfig from '~/config/i18n'
-import { hasProjectPages, listOnly, portfolioPath } from '~/config/portfolio'
+import { listOnly, portfolioPath, projectPath } from '~/config/portfolio'
 
 const locales = i18nConfig.locales.map(locale => locale.code)
 
@@ -84,8 +84,10 @@ export default defineSitemapEventHandler(async () => {
         : project.categories.map(category => ({ category: category.slug }))
 
       places
-        .filter(place => place.category && hasProjectPages(place))
-        .forEach(place => add(locale, portfolioPath(place.category, place.subcategory, project.slug), { lastmod }))
+        .filter(place => place.category)
+        .map(place => projectPath(place, project.slug))
+        .filter(Boolean)
+        .forEach(path => add(locale, path, { lastmod }))
     })
   }
 

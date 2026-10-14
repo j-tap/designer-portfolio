@@ -19,11 +19,15 @@ function strapiPublicUrl() {
 }
 
 /**
- * Адрес отправителя писем. Gmail отправляет только от имени самого аккаунта
- * или подтверждённого в нём псевдонима, поэтому по умолчанию это SMTP_USERNAME.
+ * Адрес отправителя писем: SMTP_FROM, по умолчанию SMTP_USERNAME (почтовые серверы
+ * обычно разрешают отправлять только от имени того ящика, под которым вошли).
+ * SMTP_FROM можно указать с именем — «Имя <адрес>», тогда он используется как есть.
  */
 function mailFrom() {
-  return `Diana UI/UX <${process.env.SMTP_FROM || process.env.SMTP_USERNAME}>`;
+  // Пустая строка, а не исключение: конфиг читается и при `strapi build`, где почты нет
+  const from = process.env.SMTP_FROM || process.env.SMTP_USERNAME || '';
+  if (!from || from.includes('<')) return from;
+  return `Diana UI/UX <${from}>`;
 }
 
 module.exports = {

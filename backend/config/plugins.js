@@ -1,6 +1,9 @@
 const { mailFrom } = require('../src/utils/urls');
 
-module.exports = ({ env }) => ({
+module.exports = ({ env }) => {
+  const smtpPort = env.int('SMTP_PORT', 465);
+
+  return {
   'drag-drop-content-types': {
     enabled: true,
   },
@@ -57,8 +60,10 @@ module.exports = ({ env }) => ({
       provider: 'strapi-provider-email-smtp',
       providerOptions: {
         host: env('SMTP_HOST'),
-        port: env.int('SMTP_PORT', 465),
-        secure: true,
+        port: smtpPort,
+        // 465 — TLS сразу при подключении; 587 и другие — обычное подключение,
+        // которое requireTLS обязывает перевести в TLS через STARTTLS
+        secure: smtpPort === 465,
         username: env('SMTP_USERNAME'),
         password: env('SMTP_PASSWORD'),
         rejectUnauthorized: true,
@@ -71,4 +76,5 @@ module.exports = ({ env }) => ({
       },
     },
   },
-});
+};
+};

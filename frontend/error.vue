@@ -1,19 +1,20 @@
 <template>
-  <!-- 404 (например, из middleware/portfolio.js) — та же страница, что и для неизвестного адреса -->
   <NuxtLayout v-if="is404">
     <Error404 />
   </NuxtLayout>
   <div v-else>
     <ContentWrap class="server-error">
       <div>
-        <TitleOutline class="server-error__text" tag="h1">Sorry, unknown error</TitleOutline>
-        <button class="server-error__btn" @click="handleError">Clear errors</button>
+        <TitleOutline class="server-error__text" tag="h1">{{ t('error.unknown') }}</TitleOutline>
+        <button class="server-error__btn" type="button" @click="clearError({ redirect: '/' })">
+          {{ t('error.clear') }}
+        </button>
         <div v-if="isDev">
           <p>Code: {{ error.statusCode }}</p>
           <p>URL: {{ error.url }}</p>
           <p>Status: {{ error.statusMessage }}</p>
           <p>{{ error.message }}</p>
-          <pre v-html="error.stack" />
+          <pre>{{ error.stack }}</pre>
         </div>
       </div>
     </ContentWrap>
@@ -24,21 +25,27 @@
 import { ContentWrap } from '~/components/structure'
 import { TitleOutline } from '~/components/common'
 import { Error404 } from '~/components/sections'
-import { metaInfo } from '~/composables/useMeta'
 
 const props = defineProps({
-  error: Object
+  error: Object,
 })
 
-const is404 = computed(() => props.error?.statusCode === 404)
-const handleError = () => clearError({ redirect: '/' })
-const runtimeConfig = useRuntimeConfig()
-const isDev = computed(() => runtimeConfig.public.NODE_ENV !== 'production')
+const { t } = useI18n()
+const isDev = import.meta.dev
 
+// Страница ошибки рендерится вместо app.vue: язык у <html> ставим здесь. canonical и hreflang
+// странице ошибки не нужны — она не индексируется
+useHead(useLocaleHead({ seo: false }))
+// 404 — та же страница, что и для неизвестного адреса ([...slug].vue), остальные ошибки — общий экран
+const is404 = computed(() => props.error?.statusCode === 404)
+
+// Страница 404 задаёт мета-теги сама (Error404); здесь — только для остальных ошибок,
+// без запросов к Strapi: он может быть причиной ошибки
 if (!is404.value) {
-  useHead(metaInfo({
-    title: 'Error. Sorry, unknown error',
-  }))
+  useSeoMeta({
+    title: () => t('error.unknown'),
+    robots: 'noindex, nofollow',
+  })
 }
 </script>
 

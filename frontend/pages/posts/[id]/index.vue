@@ -3,7 +3,7 @@
     <ContentWrap>
       <article v-if="post" class="post-full" itemscope itemtype="https://schema.org/BlogPosting">
         <BackLink
-          :to="'/posts'"
+          to="/posts"
           class="post-full__back"
         >
           {{ t('posts.back_to_list') }}
@@ -18,12 +18,7 @@
                 :datetime="post.created_at"
                 itemprop="datePublished"
               >
-                <template v-if="post.date_value !== undefined && post.date_unit">
-                  {{ formatRelativeDate({ value: post.date_value, unit: post.date_unit, raw: post.date_raw }, t) }}
-                </template>
-                <template v-else-if="post.created_at">
-                  {{ dateFormat(post.created_at, {}, locale) }}
-                </template>
+                {{ formatPostDate(post, { t, d }) }}
               </time>
             </header>
             
@@ -58,7 +53,7 @@
         </div>
         
         <BackLink
-          :to="'/posts'"
+          to="/posts"
           class="post-full__back"
         >
           {{ t('posts.back_to_list') }}
@@ -68,7 +63,7 @@
       <div v-else class="post-full__not-found">
         <p>{{ t('posts.not_found') }}</p>
         <BackLink
-          :to="'/posts'"
+          to="/posts"
           class="post-full__back"
         >
           {{ t('posts.back_to_list') }}
@@ -81,103 +76,58 @@
 <script setup>
 import { BackLink } from '~/components/common'
 import { ContentWrap } from '~/components/structure'
-import { metaInfo, normalizeUrlPath } from '~/composables/useMeta'
-import { dateFormat, formatRelativeDate } from '~/utils/formatDate'
-import { getPostTitle, getPostImage } from '~/utils/post'
+import { getPostTitle, getPostImage, formatPostDate } from '~/utils/post'
 import { safeUrl } from '~/utils/url'
 
-const { t, locale } = useI18n()
-const config = useRuntimeConfig()
+const absoluteUrl = useAbsoluteUrl()
+
+const { t, d } = useI18n()
 const route = useRoute()
-const localePath = useLocalePath()
 
-definePageMeta({
-  key: route => route.fullPath
-})
-
-const postId = computed(() => route.params.id)
-
-const { data: postData, error } = await useFetch(`/api/posts/${postId.value}`, {
-  server: true,
+const { data: postData, error } = await useFetch(`/api/posts/${route.params.id}`, {
+  key: `post-${route.params.id}`,
   default: () => ({ data: null }),
-  key: `post-${postId.value}`,
 })
-
-const post = computed(() => {
-  return postData.value?.data || null
-})
-
-const pageTitle = computed(() => {
-  if (!post.value) return t('menu.posts')
-  return getPostTitle(post.value)
-})
-
-const pageDescription = computed(() => {
-  if (!post.value?.text) return t('posts.description')
-  const text = post.value.text.replace(/\n/g, ' ').trim()
-  return text.length > 160 ? text.substring(0, 157) + '...' : text
-})
-
-const pageImage = computed(() => {
-  if (!post.value) return null
-  return getPostImage(post.value)
-})
-
-useHead(metaInfo({
-  title: pageTitle,
-  description: pageDescription,
-  image: pageImage,
-  type: 'article',
-}))
-
-const baseUrl = config.public.baseURL
-const currentUrl = computed(() => `${baseUrl}${normalizeUrlPath(route.path)}`)
-
-const blogPostSchema = computed(() => {
-  if (!post.value) return null
-
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'BlogPosting',
-    headline: getPostTitle(post.value),
-    description: pageDescription.value,
-    datePublished: post.value.created_at,
-    dateModified: post.value.created_at,
-    author: {
-      '@type': 'Person',
-      name: post.value.author?.full_name || '',
-    },
-    image: getPostImage(post.value),
-    mainEntityOfPage: {
-      '@type': 'WebPage',
-      '@id': currentUrl.value,
-    },
-    url: post.value.url || currentUrl.value,
-  }
-})
-
-function getPostImageAlt(post) {
-  const title = getPostTitle(post)
-  return title || t('posts.image_alt')
-}
-
-watch(blogPostSchema, (schema) => {
-  if (schema && post.value) {
-    useHead({
-      script: [{
-        type: 'application/ld+json',
-        innerHTML: JSON.stringify(schema),
-        key: 'blogpost-structured-data',
-      }],
-    })
-  }
-}, { immediate: true, deep: true })
 
 if (error.value) {
   throw createError({
     statusCode: error.value.statusCode || 404,
-    statusMessage: error.value.statusMessage || 'Post not found'
+    statusMessage: error.value.statusMessage || 'Post not found',
   })
+}
+
+const post = computed(() => postData.value?.data || null)
+const pageTitle = computed(() => (post.value ? getPostTitle(post.value) : t('menu.posts')))
+const pageDescription = computed(() => post.value?.text?.replace(/\n/g, ' ').trim() || t('posts.description'))
+
+usePageMeta({
+  title: pageTitle,
+  description: pageDescription,
+  image: () => post.value && getPostImage(post.value),
+  type: 'article',
+})
+
+useJsonLd(() => post.value && {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: pageTitle.value,
+  description: pageDescription.value,
+  datePublished: post.value.created_at,
+  dateModified: post.value.created_at,
+  author: {
+    '@type': 'Person',
+    name: post.value.author?.full_name || '',
+  },
+  image: getPostImage(post.value),
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': absoluteUrl(route.path),
+  },
+  url: post.value.url || absoluteUrl(route.path),
+}, 'blogpost')
+
+function getPostImageAlt (post) {
+  return getPostTitle(post) || t('posts.image_alt')
 }
 </script>
 

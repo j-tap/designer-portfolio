@@ -3,7 +3,7 @@
     <img
       v-if="imageTop"
       class="project-web__img-top"
-      :src="urlFile(imageTop.url)"
+      :src="mediaUrl(imageTop.url)"
       alt=" "
     >
     <ProjectFonts
@@ -34,7 +34,7 @@
     <img
       v-if="imageBottom"
       class="project-web__img-bottom"
-      :src="urlFile(imageBottom.url)"
+      :src="mediaUrl(imageBottom.url)"
       alt=" "
     >
   </div>
@@ -43,30 +43,19 @@
 <script setup>
 import { ImgBlock } from '~/components/common'
 import { ProjectColors, ProjectFonts } from '~/components/sections'
-import {getFormatImages} from "~/composables/useApi";
+
+const { mediaUrl, mediaImage } = useMedia()
 
 const props = defineProps({
   data: Object,
 })
-const imgs = computed(() => props.data.images)
 
-const imageTop = computed(() => imgs.value ? imgs.value[0] : null)
-const imageBottom = computed(() => imgs.value && imgs.value > 1 ? imgs.value[imgs.value.length - 1] : null)
+// Первая картинка проекта — над шрифтами и цветами, последняя (если их больше одной) — в самом низу
+const images = computed(() => props.data.images || [])
+const imageTop = computed(() => images.value[0] || null)
+const imageBottom = computed(() => (images.value.length > 1 ? images.value.at(-1) : null))
 
-const imagesList = computed(() => {
-  if (props.data.pages) {
-    const imgs = []
-    props.data.pages.forEach(o => {
-      if (o.images) {
-        o.images.forEach(p => {
-          imgs.push(getFormatImages(p))
-        })
-      }
-    })
-    return imgs
-  }
-  return []
-})
+const imagesList = computed(() => (props.data.pages || []).flatMap(page => (page.images || []).map(mediaImage)))
 </script>
 
 <style lang="scss" src="./style.scss" scoped/>

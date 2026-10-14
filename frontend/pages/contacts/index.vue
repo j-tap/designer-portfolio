@@ -10,7 +10,7 @@
       >
         <TitleOutline tag="span">{{ item.title }}</TitleOutline>
         <NuxtLink
-          :to="item.link"
+          :to="safeUrl(item.link)"
           class="contacts-list__link"
           target="_blank"
           external
@@ -25,19 +25,13 @@
 
 <script setup>
 import { TitleOutline, TitlePage } from '~/components/common'
-import { metaInfo } from '~/composables/useMeta'
-import { serverFetch } from '~/composables/useApi'
+import { safeUrl } from '~/utils/url'
 
 const { t } = useI18n()
-const title = ref(t('menu.contacts'))
-const contactsData = serverFetch('contact', {}, [])
-const contacts = computed(() => contactsData.value?.contact?.filter(filterLink) || [])
+const title = computed(() => t('menu.contacts'))
+const contacts = useContacts('contacts')
 
-function filterLink(link) {
-  return link.display?.includes('contacts')
-}
-
-useHead(metaInfo({ title }))
+usePageMeta({ title })
 </script>
 
 <style lang="scss" scoped src="./style.scss"/>

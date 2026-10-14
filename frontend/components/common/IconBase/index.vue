@@ -5,7 +5,11 @@
 </template>
 
 <script setup>
+import IconUnknown from './icons/IconUnknown.vue'
 import { kebabToPascalCase } from '~/utils/formatData'
+
+// Иконки маленькие: попадают в бандл сразу, без отдельной загрузки каждой
+const icons = import.meta.glob('./icons/Icon*.vue', { eager: true, import: 'default' })
 
 const props = defineProps({
   name: {
@@ -18,17 +22,7 @@ const props = defineProps({
   },
 })
 
-const icon = computed(() => `${kebabToPascalCase(props.name)}`)
-const iconComponent = computed(() =>
-  defineAsyncComponent(async () => {
-    try {
-      return await import(`./icons/Icon${icon.value}.vue`);
-    }
-    catch (err) {
-      return await import('./icons/IconUnknown.vue');
-    }
-  })
-)
+const iconComponent = computed(() => icons[`./icons/Icon${kebabToPascalCase(props.name)}.vue`] || IconUnknown)
 
 const classes = computed(() => [
   'icon',

@@ -5,13 +5,12 @@ import {
   ProjectTypeMobile,
   ProjectTypeUiUx,
   ProjectTypeWeb,
-  ProjectTypeIdentity,
   ProjectPresentation,
   ProjectMore,
   ProjectBack,
 } from '~/components/sections'
-
-const localePath = useLocalePath()
+import { portfolioPath } from '~/config/portfolio'
+import { safeUrl } from '~/utils/url'
 
 const props = defineProps({
   project: {
@@ -24,41 +23,44 @@ const props = defineProps({
   },
   categorySlug: {
     type: String,
+    required: true,
+  },
+  // Подкатегория из адреса проекта: «Назад» ведёт в её список
+  subcategorySlug: {
+    type: String,
     default: null,
   },
 })
+
+// Раскладка страницы проекта зависит от категории; у остальных категорий (identity)
+// кроме шапки проекта ничего нет
 const categoryToComponent = {
   'mobile-development': ProjectTypeMobile,
   'ui-ux-design': ProjectTypeUiUx,
   'web-design': ProjectTypeWeb,
-  'identity': ProjectTypeIdentity,
 }
 
-const projectComponentName = computed(() => categoryToComponent[props.categorySlug])
-const title = computed(() => `${props.project?.title} / ${props.project?.categories?.find(o => o.slug === props.categorySlug)?.title}`)
-
-const presentationImages = computed(() => {
-  const project = props.project
-  const p = project?.presentation
-  if (!p) return []
-  if (Array.isArray(p)) return p
-  return []
-})
+const projectComponent = computed(() => categoryToComponent[props.categorySlug])
+const listPath = computed(() => portfolioPath(props.categorySlug, props.subcategorySlug))
+const presentationImages = computed(() => (Array.isArray(props.project.presentation) ? props.project.presentation : []))
+const links = computed(() => (props.project.links || [])
+  .map(item => ({ ...item, href: safeUrl(item.link) }))
+  .filter(item => item.href))
 </script>
 
 <template>
-  <div class="portfolio-project" itemscope itemtype="https://schema.org/Product">
+  <div class="portfolio-project">
     <ul
-      v-if="project.links?.length"
+      v-if="links.length"
       class="portfolio-project__links links-project"
     >
       <li
-        v-for="item in project.links"
+        v-for="item in links"
         :key="item.id"
         class="links-project__item"
       >
         <NuxtLink
-          :to="localePath(item.link)"
+          :to="item.href"
           class="links-project__link"
           target="_blank"
           external
@@ -69,10 +71,10 @@ const presentationImages = computed(() => {
     </ul>
 
     <header class="portfolio-project__head">
-      <h1 class="portfolio-project__title" itemprop="name">
+      <h1 class="portfolio-project__title">
         <NuxtLink
-          v-if="project.link"
-          :to="localePath(project.link)"
+          v-if="safeUrl(project.link)"
+          :to="safeUrl(project.link)"
           target="_blank"
           external
         >
@@ -83,7 +85,6 @@ const presentationImages = computed(() => {
       <div
         v-if="project.subtitle"
         class="portfolio-project__subtitle"
-        itemprop="description"
       >
         {{ project.subtitle }}
       </div>
@@ -103,32 +104,32 @@ const presentationImages = computed(() => {
 
     <ProjectBack
       class="portfolio-project__back"
-      :category-name="categorySlug"
+      :list-path="listPath"
       :project-id="project.id"
     />
 
     <div class="portfolio-project__content">
       <ProjectPresentation
-        v-if="presentationImages?.length"
+        v-if="presentationImages.length"
         :images="presentationImages"
-        :key="presentationImages?.length"
       />
       <Component
-        v-else
-        :is="projectComponentName"
+        :is="projectComponent"
+        v-else-if="projectComponent"
         :data="project"
       />
     </div>
 
     <ProjectBack
       class="portfolio-project__back"
-      :category-name="categorySlug"
+      :list-path="listPath"
       :project-id="project.id"
     />
 
     <ProjectMore
-      v-if="moreProjects?.length"
+      v-if="moreProjects.length"
       :items="moreProjects"
+      :category-slug="categorySlug"
       class="portfolio-project__more-projects"
     />
   </div>

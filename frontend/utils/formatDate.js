@@ -23,26 +23,16 @@ export function datesDiff (startDate, endDate, unit) {
   return Math.abs(Math.ceil(result))
 }
 
-export function dateFormat (d, options = {}, locale = 'ru') {
-  const date = new Date(d)
-  const opt = {
-    day: 'numeric',
-    month: 'numeric',
-    year: 'numeric',
-    ...options,
-  }
-
-  return new Intl
-    .DateTimeFormat(locale, opt)
-    .format(date)
-}
-
+/**
+ * Выходные дни между датами. Дни считаются в UTC: даты проекта приходят из Strapi как полночь UTC,
+ * и в часовом поясе браузера (западнее UTC) день недели сдвинулся бы, а с ним и число часов.
+ */
 export function getWeekendsDays (startDate, endDate) {
   const results = []
   const end = new Date(endDate)
 
-  for (let start = new Date(startDate); start <= end; start.setDate(start.getDate() + 1)) {
-    const day = start.getDay()
+  for (let start = new Date(startDate); start <= end; start.setUTCDate(start.getUTCDate() + 1)) {
+    const day = start.getUTCDay()
 
     if (day === 6 || day === 0) {
       results.push(new Date(start))

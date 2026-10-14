@@ -1,6 +1,7 @@
-export default defineNuxtPlugin((nuxtApp) => {
+// Яндекс Метрика: только в браузере (.client) и только с номером счётчика (YANDEX_METRIKA_ID)
+export default defineNuxtPlugin(() => {
   const config = useRuntimeConfig()
-  if (import.meta.client) {
+  if (config.public.yandexMetrikaId && !import.meta.dev) {
     (function(m,e,t,r,i,k,a){
       m[i]=m[i]||function(){
         (m[i].a=m[i].a||[]).push(arguments)

@@ -8,14 +8,14 @@
     </p>
     <div class="images-items__wrap-list">
       <ScrollBlock>
-        <ul v-if="props.images.length" ref="elList" class="images-items__list">
+        <ul v-if="images?.length" ref="list" class="images-items__list">
           <li
-            v-for="item in props.images"
+            v-for="item in images"
             :key="item.id"
             class="images-items__item"
           >
             <ScrollBlock>
-              <img :src="urlFile(item.url)" alt=" ">
+              <img :src="mediaUrl(item.url)" alt=" ">
             </ScrollBlock>
           </li>
         </ul>
@@ -25,9 +25,12 @@
 </template>
 
 <script setup>
+import { useEventListener } from '@vueuse/core'
 import { ScrollBlock } from '~/components/common'
 
 const { t } = useI18n()
+const { mediaUrl } = useMedia()
+
 const props = defineProps({
   images: Array,
   imagesSize: {
@@ -39,34 +42,21 @@ const props = defineProps({
     default: false,
   },
 })
-const elList = ref(null)
-const widthScreen = ref(0)
-const widthEl = ref(0)
 
-const isDisplayHint = computed(() => props.displayHint && widthEl.value > widthScreen.value)
+const classes = computed(() => ['images-items', `images-items_size-${props.imagesSize}`])
 
-const classes = computed(() => {
-  const cls = 'images-items'
-  return [cls, `${cls}_size-${props.imagesSize}`]
-})
+// Подсказка «потяните в сторону» — только когда картинки не помещаются в окно
+const listEl = useTemplateRef('list')
+const isOverflowing = ref(false)
+const isDisplayHint = computed(() => props.displayHint && isOverflowing.value)
 
-async function onWidthResize () {
-  widthScreen.value = window.innerWidth
-  widthEl.value = 0
-
-  for (const child of elList.value.children) {
-    widthEl.value += child.offsetWidth
-  }
+function measure () {
+  const width = [...(listEl.value?.children || [])].reduce((sum, child) => sum + child.offsetWidth, 0)
+  isOverflowing.value = width > window.innerWidth
 }
 
-onMounted(() => {
-  window.addEventListener('resize', onWidthResize)
-  onWidthResize()
-})
-
-onUnmounted(() => {
-  window.removeEventListener('resize', onWidthResize)
-})
+onMounted(measure)
+useEventListener('resize', measure, { passive: true })
 </script>
 
 <style lang="scss" src="./style.scss" scoped />

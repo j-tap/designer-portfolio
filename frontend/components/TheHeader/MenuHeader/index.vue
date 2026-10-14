@@ -8,7 +8,7 @@
       <NuxtLink
         :class="['menu__link', { 'menu__link_active': isActive(item) }]"
         :to="localePath(item.path)"
-        @click.native="onClickItem(item)"
+        @click="onClickItem(item)"
       >
         <TitleOutline class="menu__link-text_sm">{{ t(item.locale) }}</TitleOutline>
         <span class="menu__link-text_md-up">{{ t(item.locale) }}</span>

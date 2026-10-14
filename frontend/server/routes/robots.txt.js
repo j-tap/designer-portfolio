@@ -1,6 +1,6 @@
 export default defineEventHandler((event) => {
   const config = useRuntimeConfig()
-  const baseUrl = config.public.baseURL
+  const baseUrl = config.public.siteUrl
 
   const robotsTxt = `# robots.txt
 

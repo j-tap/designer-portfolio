@@ -10,11 +10,11 @@
         </TitleOutline>
       </div>
       <div class="page-posts__list">
-        <PostsList :items="posts" :pending="pending" />
+        <PostsList :items="posts" />
       </div>
-      <div v-if="hasPrev || hasNext" class="page-posts__pagination">
+      <div v-if="prevLink || nextLink" class="page-posts__pagination">
         <NuxtLink
-          v-if="hasPrev"
+          v-if="prevLink"
           :to="prevLink"
           class="page-posts__pagination-btn"
         >
@@ -28,7 +28,7 @@
         </span>
         <span class="page-posts__pagination-page">{{ currentPage }}</span>
         <NuxtLink
-          v-if="hasNext"
+          v-if="nextLink"
           :to="nextLink"
           class="page-posts__pagination-btn"
         >
@@ -49,123 +49,68 @@
 import { TitleOutline } from '~/components/common'
 import { ContentWrap } from '~/components/structure'
 import { PostsList } from '~/components/sections'
-import { metaInfo, normalizeUrlPath } from '~/composables/useMeta'
 import { getPostTitle, getPostImage } from '~/utils/post'
 
+const absoluteUrl = useAbsoluteUrl()
+
 const { t } = useI18n()
-const config = useRuntimeConfig()
 const route = useRoute()
 
-const currentPage = computed(() => {
-  const page = route.query.page
-  return Math.max(1, parseInt(page) || 1)
-})
+const currentPage = computed(() => Math.max(1, parseInt(route.query.page) || 1))
 
-const { data: postsData, error, pending } = await useFetch('/api/posts', {
+const { data: postsData, error } = await useFetch('/api/posts', {
   query: computed(() => ({ page: currentPage.value })),
   key: computed(() => `posts-page-${currentPage.value}`),
-  server: true,
   default: () => ({ data: [], hasMore: false }),
-  watch: [currentPage],
 })
 
 if (error.value) {
   console.error('Ошибка загрузки постов:', error.value)
 }
 
-const posts = computed(() => {
-  if (!postsData.value?.data || !Array.isArray(postsData.value.data)) {
-    return []
-  }
-  return postsData.value.data
-})
+const posts = computed(() => (Array.isArray(postsData.value?.data) ? postsData.value.data : []))
 
-const hasNext = computed(() => postsData.value?.hasMore === true)
-const hasPrev = computed(() => currentPage.value > 1)
-
-const nextLink = computed(() => {
-  if (!hasNext.value) return null
-  const nextPage = currentPage.value + 1
-  return `?page=${nextPage}`
-})
-
+const nextLink = computed(() => (postsData.value?.hasMore === true ? `?page=${currentPage.value + 1}` : null))
 const prevLink = computed(() => {
-  if (!hasPrev.value) return null
-  const prevPage = currentPage.value - 1
-  return prevPage > 1 ? `?page=${prevPage}` : route.path
+  if (currentPage.value <= 1) return null
+  return currentPage.value > 2 ? `?page=${currentPage.value - 1}` : route.path
 })
 
 const pageTitle = computed(() => t('menu.posts'))
-const pageDescription = computed(() => {
-  const count = posts.value.length
-  return t('posts.description', { count }) || `${pageTitle.value} - ${t('app.name')}`
-})
+const pageDescription = computed(() => t('posts.description', { count: posts.value.length }))
 
-// Страницы пагинации канонизируем сами на себя, чтобы не терять посты со 2+ страницы
-const canonicalPath = computed(() => (
-  currentPage.value > 1 ? `${route.path}?page=${currentPage.value}` : route.path
-))
-
-useHead(metaInfo({
+usePageMeta({
   title: pageTitle,
   description: pageDescription,
-  canonical: canonicalPath,
-}))
-
-const baseUrl = config.public.baseURL
-const currentUrl = computed(() => `${baseUrl}${normalizeUrlPath(canonicalPath.value)}`)
-
-const blogSchema = computed(() => {
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'Blog',
-    name: pageTitle.value,
-    description: pageDescription.value,
-    url: currentUrl.value,
-      blogPost: posts.value.slice(0, 10).map(post => ({
-        '@type': 'BlogPosting',
-        headline: getPostTitle(post),
-        datePublished: post.created_at,
-        author: {
-          '@type': 'Person',
-          name: post.author?.full_name || '',
-        },
-        image: getPostImage(post) || undefined,
-        mainEntityOfPage: post.url ? {
-          '@type': 'WebPage',
-          '@id': post.url,
-        } : undefined,
-      })),
-  }
 })
 
+useJsonLd(() => posts.value.length && {
+  '@context': 'https://schema.org',
+  '@type': 'Blog',
+  name: pageTitle.value,
+  description: pageDescription.value,
+  url: absoluteUrl(currentPage.value > 1 ? `${route.path}?page=${currentPage.value}` : route.path),
+  blogPost: posts.value.slice(0, 10).map(post => ({
+    '@type': 'BlogPosting',
+    headline: getPostTitle(post),
+    datePublished: post.created_at,
+    author: {
+      '@type': 'Person',
+      name: post.author?.full_name || '',
+    },
+    image: getPostImage(post) || undefined,
+    mainEntityOfPage: post.url ? {
+      '@type': 'WebPage',
+      '@id': post.url,
+    } : undefined,
+  })),
+}, 'blog')
 
-watch(blogSchema, (schema) => {
-  if (schema && posts.value.length > 0) {
-    useHead({
-      script: [{
-        type: 'application/ld+json',
-        innerHTML: JSON.stringify(schema),
-        key: 'blog-structured-data',
-      }],
-    })
-  }
-}, { immediate: true, deep: true })
-
-if (import.meta.client) {
-  watch(currentPage, (newPage, oldPage) => {
-    if (oldPage !== undefined && newPage !== oldPage) {
-      nextTick(() => {
-        setTimeout(() => {
-          window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-          })
-        }, 100)
-      })
-    }
-  })
-}
+// Переход между страницами списка — тот же адрес с другим ?page: Nuxt в этом случае
+// прокрутку не сбрасывает, поднимаем к началу списка сами
+watch(currentPage, () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+})
 </script>
 
 <style lang="scss" scoped src="./style.scss"/>

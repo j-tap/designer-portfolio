@@ -29,12 +29,13 @@
           v-for="(project, index) in projects"
           :key="project.slug"
           :id="`project-${project.id}`"
-          :ref="setProjectElems"
+          ref="listItems"
+          :data-index="index"
           class="projects-list__item"
         >
           <ProjectPreview
             :data="project"
-            :to="getTo(project)"
+            :to="projectLink(project)"
             :eager="index === 0"
             title-tag="h2"
             class="projects-list__item-preview"
@@ -57,19 +58,23 @@
 import { BackLink, TitleOutline } from '~/components/common'
 import { ContentWrap } from '~/components/structure'
 import { ProjectPreview, PortfolioSubcategoriesNav } from '~/components/sections'
-import {
-  updateProjectsPrlx,
-  resetParalax,
-  initPositions,
-  elems as projectElems,
-} from '~/composables/useElemsParalax'
-import { detailExclude } from '~/config/portfolio'
+import { hasProjectPages, portfolioPath } from '~/config/portfolio'
 
 const props = defineProps({
   projects: {
     type: Array,
     default: () => [],
   },
+  // Слаги категории и подкатегории списка: из них строятся ссылки на проекты
+  categorySlug: {
+    type: String,
+    required: true,
+  },
+  subcategorySlug: {
+    type: String,
+    default: null,
+  },
+  // Текущая подкатегория (подсвечивается в навигации) и все подкатегории категории
   category: {
     type: Object,
     default: () => ({}),
@@ -89,73 +94,12 @@ const props = defineProps({
 })
 
 const localePath = useLocalePath()
-const route = useRoute()
-const categorySlug = computed(() => route.params.category)
-const subcategorySlug = computed(() => route.params.subcategory)
 
-if (import.meta.client) {
-  let rafId = null
-  let scrollHandler = null
+useParallax(useTemplateRef('listItems'))
 
-  onMounted(() => {
-    resetParalax()
-    projectElems.value = []
-    
-    if (window.innerWidth >= 768) {
-      nextTick(() => {
-        initPositions()
-        updateProjectsPrlx(props.projects, window.scrollY)
-      })
-
-      scrollHandler = () => {
-        if (rafId) cancelAnimationFrame(rafId)
-        rafId = requestAnimationFrame(() => {
-          updateProjectsPrlx(props.projects, window.scrollY)
-          rafId = null
-        })
-      }
-      window.addEventListener('scroll', scrollHandler, { passive: true })
-    }
-  })
-
-  onBeforeUnmount(() => {
-    if (scrollHandler) {
-      window.removeEventListener('scroll', scrollHandler)
-    }
-    if (rafId) {
-      cancelAnimationFrame(rafId)
-    }
-    resetParalax()
-    projectElems.value = []
-  })
-}
-
-function setProjectElems (el) {
-  if (el) {
-    projectElems.value.push(el)
-  }
-}
-
-function getTo ({ slug }) {
-  const isSubCat = !!props.subcategories?.length
-  const detailExcludeSubCats = detailExclude.map(v => v.split('/'))
-  const isExcluded = detailExclude.some(v => route.path.includes(v)) ||
-    (!isSubCat && detailExcludeSubCats.some(([s1, s2]) =>
-      route.path.includes(s1) || route.path.includes(s2)
-    ))
-
-  if (isExcluded) {
-    return null;
-  }
-
-  const params = {
-    category: categorySlug.value,
-    project: slug,
-    ...(isSubCat ? { subcategory: subcategorySlug.value || props.subcategories[0].slug } : {}),
-  }
-  const name = isSubCat ? 'portfolio-category-subcategory-project' : 'portfolio-category-project'
-
-  return localePath({ name, params })
+function projectLink ({ slug }) {
+  const slugs = { category: props.categorySlug, subcategory: props.subcategorySlug }
+  return hasProjectPages(slugs) ? localePath(portfolioPath(slugs.category, slugs.subcategory, slug)) : null
 }
 </script>
 

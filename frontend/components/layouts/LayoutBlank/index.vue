@@ -14,11 +14,9 @@ const classes = computed(() => [
   { 'layout-blank_loaded': isLoaded.value },
 ])
 
-if (import.meta.client) {
-  onMounted(() => {
-    isLoaded.value = true
-  })
-}
+onMounted(() => {
+  isLoaded.value = true
+})
 </script>
 
 <style lang="scss" src="./style.scss" scoped />

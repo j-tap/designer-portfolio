@@ -7,25 +7,25 @@
         :items="reviews"
         class="page-reviews__list"
       />
-      <div ref="elForm" :style="elFormStyle" class="page-reviews__form-wrap">
+      <div ref="formWrap" :style="elFormStyle" class="page-reviews__form-wrap">
         <h2
-          :class="['page-reviews__form-title', { 'page-reviews__form-title_active': isDisplayForm }]"
-          @click="toggleForm"
+          :class="['page-reviews__form-title', { 'page-reviews__form-title_active': isFormOpen }]"
+          @click="isFormOpen = !isFormOpen"
         >
-          Оставить отзыв
+          {{ t('reviews.form_title') }}
         </h2>
-        <div :class="['page-reviews__form', { 'page-reviews__form_show': isDisplayForm }]">
+        <div :class="['page-reviews__form', { 'page-reviews__form_show': isFormOpen }]">
           <ReviewForm
             v-if="canSendReview"
             :form="form"
-            :data="data"
+            :data="{ developments, cooperations }"
             :error="formError"
             :sending="sending"
             @send="sendForm"
           />
           <div v-else class="page-reviews__form-success">
-            <h3>Спасибо, что оставили отзыв!</h3>
-            <p>Ваш отзыв будет опубликован в ближайшее время.</p>
+            <h3>{{ t('reviews.success_title') }}</h3>
+            <p>{{ t('reviews.success_text') }}</p>
           </div>
         </div>
       </div>
@@ -34,43 +34,53 @@
 </template>
 
 <script setup>
-// TODO: decompose component
+import { useEventListener, useLocalStorage, useMediaQuery } from '@vueuse/core'
 import { TitleOutline } from '~/components/common'
 import { ReviewsList, ReviewForm } from '~/components/sections'
-import { metaInfo } from '~/composables/useMeta'
-import { serverFetch, serverCreate, fetchJson } from '~/composables/useApi'
-import { useReviewsStore } from '~/stores/reviewsStore'
-import { useMedia } from '~/composables/useMedia'
 
 const { t, locale } = useI18n()
-const mdDown = useMedia('md-down')
-const reviewsStore = useReviewsStore()
-const title = ref(t('menu.reviews'))
-const reviewsData = serverFetch('reviews', {
-  sort: [{ createdAt: 'desc' }],
-}, [])
-const reviews = computed(() => reviewsData.value)
-const developmentsData = serverFetch('reviews-developments')
-const cooperationsData = serverFetch('reviews-cooperations')
-const data = computed(() => ({
-  developments: developmentsData.value,
-  cooperations: cooperationsData.value,
-}))
-const canSendReview = computed(() => reviewsStore.getCanSendReview)
-const isDisplayForm = ref(!mdDown.value)
+const client = useStrapiClient()
+const title = computed(() => t('menu.reviews'))
 
-const elForm = ref(null)
+const { data: reviews } = await useRequiredStrapiData('reviews', { sort: [{ createdAt: 'desc' }] }, { allowMissing: true })
+const { data: developments } = useStrapiData('reviews-developments')
+const { data: cooperations } = useStrapiData('reviews-cooperations')
+
+// Отзыв уже отправлен с этого браузера — вместо формы благодарность.
+// Значение читается после монтирования, чтобы разметка совпала с серверной
+const canSendReview = useLocalStorage('canSendReview', true, { initOnMounted: true })
+
+// На узких экранах форма свёрнута под заголовком, на широких открыта и едет вместе с прокруткой
+const isNarrow = useMediaQuery('(max-width: 1023.98px)')
+const isFormOpen = ref(true)
+watch(isNarrow, (narrow) => {
+  isFormOpen.value = !narrow
+})
+
+const formWrap = useTemplateRef('formWrap')
 const offsetBottom = ref(0)
 const elFormStyle = computed(() => ({
-  transform: `translateY(${offsetBottom.value}px)`
+  transform: `translateY(${offsetBottom.value}px)`,
 }))
+
+function followScroll () {
+  if (isNarrow.value || !formWrap.value) {
+    offsetBottom.value = 0
+    return
+  }
+  const formBottom = formWrap.value.offsetHeight + formWrap.value.offsetTop
+  const viewportBottom = window.scrollY + window.innerHeight
+  offsetBottom.value = Math.max(viewportBottom - formBottom, 0)
+}
+
+useEventListener('scroll', followScroll, { passive: true })
+useEventListener('resize', followScroll, { passive: true })
 
 const form = reactive({
   name: null,
   company: null,
   link: null,
   rating: 5,
-  review: null,
   developments: [],
   cooperations: [],
   text: null,
@@ -84,8 +94,7 @@ const sending = ref(false)
 // Токен выдаётся сервером при открытии формы: без него отзыв не примут (защита от ботов)
 async function loadFormToken () {
   try {
-    const { token } = await fetchJson('reviews/form-token')
-    formToken.value = token
+    formToken.value = (await client('/reviews/form-token')).token
   }
   catch (error) {
     console.error('Error loading review form token:', error)
@@ -94,69 +103,33 @@ async function loadFormToken () {
 
 onMounted(() => {
   loadFormToken()
-  window.addEventListener('scroll', handleScroll)
-  window.addEventListener('resize', handleScroll)
-  handleScroll()
+  followScroll()
 })
 
-onBeforeUnmount(() => {
-  window.removeEventListener('scroll', handleScroll)
-  window.removeEventListener('resize', handleScroll)
-})
-
-function toggleForm () {
-  isDisplayForm.value = !isDisplayForm.value
-}
-
-function handleScroll () {
-  if (mdDown.value) {
-    offsetBottom.value = 0
-  }
-  else {
-    const windowHeight = window.innerHeight
-    const blockHeight = elForm.value.offsetHeight + elForm.value.offsetTop
-    const scrollY = window.scrollY + windowHeight
-
-    offsetBottom.value = scrollY > blockHeight ? offsetBottom.value = scrollY - blockHeight : 0
-  }
-}
-
-async function sendForm (form) {
+async function sendForm ({ files, ...fields }) {
   // Язык нужен, чтобы связать отзыв с направлениями на том языке, который видел автор
-  const data = { formToken: formToken.value, locale: locale.value }
   const formData = new FormData()
-
-  Object.keys(form).forEach(key => {
-    if (!['files'].includes(key)) {
-      data[key] = form[key]
-    }
-    else if (key === 'files') {
-      form.files.forEach(file => {
-        formData.append(`files.${key}`, file, file.name)
-      })
-    }
-  })
-
-  formData.append('data', JSON.stringify(data))
+  formData.append('data', JSON.stringify({ ...fields, formToken: formToken.value, locale: locale.value }))
+  files.forEach(file => formData.append('files.files', file, file.name))
 
   sending.value = true
   formError.value = null
 
-  const { ok, error } = await serverCreate('reviews', formData)
-
-  sending.value = false
-
-  if (ok) {
-    reviewsStore.setCanSendReview(false)
+  try {
+    await client('/reviews', { method: 'POST', body: formData })
+    canSendReview.value = false
   }
-  else {
-    formError.value = error || 'Не удалось отправить отзыв, попробуйте ещё раз'
+  catch (error) {
+    formError.value = error?.error?.message || t('reviews.send_error')
     // Токен мог устареть: берём новый, чтобы повторная отправка прошла
     loadFormToken()
   }
+  finally {
+    sending.value = false
+  }
 }
 
-useHead(metaInfo({ title }))
+usePageMeta({ title })
 </script>
 
 <style lang="scss" scoped src="./style.scss"/>

@@ -1,7 +1,10 @@
 <template>
   <button
-    :class="classes"
-    @click="onClick"
+    :class="['burger-btn', { 'burger-btn_active': open }]"
+    type="button"
+    :aria-label="t('menu.toggle')"
+    :aria-expanded="open"
+    @click="open = !open"
   >
     <span/>
     <span/>
@@ -11,24 +14,8 @@
 </template>
 
 <script setup>
-const props = defineProps({
-  modelValue: {
-    type: Boolean,
-    required: true,
-  }
-})
-const emit = defineEmits(['update:modelValue', 'click'])
-
-const classes = computed(() => [
-  'burger-btn',
-  { 'burger-btn_active': props.modelValue },
-])
-
-function onClick (evt) {
-  const val = !props.modelValue
-  emit('update:modelValue', val)
-  emit('click', val)
-}
+const { t } = useI18n()
+const open = defineModel({ type: Boolean, required: true })
 </script>
 
 <style lang="scss" scoped src="./style.scss"/>

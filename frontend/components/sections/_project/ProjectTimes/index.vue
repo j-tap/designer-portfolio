@@ -1,12 +1,12 @@
 <template>
-  <div class="project-time" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
+  <div class="project-time">
     <div class="project-time__dates">
       <h2 class="project-time__title">{{ t('project.development_time') }}</h2>
       <TitleOutline class="project-time__value" tag="time">
-        {{ dateFormat(props.time.start) }}
+        {{ d(time.start, 'date') }}
       </TitleOutline>
-      <TitleOutline class="project-time__value" tag="time">
-        {{ dateFormat(props.time.end) }}
+      <TitleOutline v-if="time.end" class="project-time__value" tag="time">
+        {{ d(time.end, 'date') }}
       </TitleOutline>
     </div>
     <div class="project-time__prices">
@@ -14,10 +14,9 @@
       <TitleOutline class="project-time__value" tag="div">
         {{ timeHours }} {{ t('common.hour', timeHours) }}
       </TitleOutline>
-      <TitleOutline class="project-time__value" tag="div" itemprop="price" :content="timePrice">
+      <TitleOutline class="project-time__value" tag="div">
         {{ priceFormat(timePrice) }}
       </TitleOutline>
-      <span class="sr-only" itemprop="priceCurrency" content="USD">$</span>
     </div>
   </div>
 </template>
@@ -25,20 +24,16 @@
 <script setup>
 import { TitleOutline } from '~/components/common'
 import { priceFormat } from '~/utils/formatData'
-import { dateFormat } from '~/utils/formatDate'
-import { getHours } from '~/composables/useCalcPrice'
+import { getHours, getPrice } from '~/utils/projectTime'
 
-const { t } = useI18n()
+const { t, d } = useI18n()
+const siteMeta = useSiteMeta()
 const props = defineProps({
   time: Object,
 })
 
-const timeHours = computed(() => {
-  const { time } = props
-  return getHours(time)
-})
-
-const timePrice = computed(() => getPrice(timeHours.value))
+const timeHours = computed(() => getHours(props.time))
+const timePrice = computed(() => getPrice(timeHours.value, siteMeta.value.payRate))
 </script>
 
 <style lang="scss" src="./style.scss" scoped />

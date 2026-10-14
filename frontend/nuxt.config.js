@@ -4,7 +4,6 @@ import strapi from './config/strapi'
 import sitemap from './config/sitemap'
 import { siteUrl } from './config/site'
 
-const baseURL = siteUrl
 const isDev = process.env.NODE_ENV !== 'production'
 
 export default defineNuxtConfig({
@@ -17,110 +16,37 @@ export default defineNuxtConfig({
 	},
 
 	nitro: {
-    preset: 'node-server',
-    compressPublicAssets: !isDev,
-		prerender: {
-			// crawlLinks: true,
-			// routes: ['/', 'sitemap.xml'],
-			ignore: ['/card']
-		},
+		preset: 'node-server',
+		compressPublicAssets: !isDev,
+		// Правила совпадают по адресу целиком, а у страниц всегда есть префикс языка (/ru/…),
+		// поэтому для страниц работает только '/**'. Заголовки более точного правила
+		// дополняют и переопределяют заголовки '/**'
 		routeRules: {
-			// API роуты - исключаем из i18n
-			'/api/**': {
-				locale: false,
-				cors: true,
+			'/**': {
 				headers: {
-					'Cache-Control': 'no-cache, no-store, must-revalidate'
-				}
-			},
-			// Статические ассеты - долгое кеширование
-			'/_nuxt/**': {
-				headers: {
-					'Cache-Control': 'public, max-age=31536000, immutable' // 1 год
-				}
-			},
-			'/favicon.ico': {
-				headers: {
-					'Cache-Control': 'public, max-age=31536000, immutable' // 1 год
-				}
-			},
-			'/robots.txt': {
-				headers: {
-					'Cache-Control': 'public, max-age=3600' // 1 час
-				}
-			},
-			'/sitemap.xml': {
-				headers: {
-					'Cache-Control': 'public, max-age=3600' // 1 час
-				}
-			},
-			'/rss.xml': {
-				headers: {
-					'Cache-Control': 'public, max-age=3600' // 1 час
-				}
-			},
-			// Статические страницы - ISR паттерн (через Cache-Control)
-			// Корень не пререндерим, чтобы работал detectBrowserLanguage
-			'/': {
-				headers: {
-					'Cache-Control': isDev ? 'no-cache' : 'public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400',
-					'X-Content-Type-Options': 'nosniff',
-					'X-Frame-Options': 'DENY',
-					'X-XSS-Protection': '1; mode=block',
-					'Referrer-Policy': 'strict-origin-when-cross-origin',
-				}
-			},
-			// Не пререндерим: при стратегии i18n prefix страница живёт по адресам /<locale>/portfolio,
-			// а без префикса Nuxt 3 сохранял в статику страницу 404. Данных Strapi при сборке в Docker тоже нет
-			'/portfolio': {
-				headers: {
-					'Cache-Control': isDev ? 'no-cache' : 'public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400',
-					'X-Content-Type-Options': 'nosniff',
-					'X-Frame-Options': 'DENY',
-					'X-XSS-Protection': '1; mode=block',
-					'Referrer-Policy': 'strict-origin-when-cross-origin',
-				}
-			},
-			'/posts': {
-				headers: {
-					'Cache-Control': isDev ? 'no-cache' : 'public, max-age=300, s-maxage=3600, stale-while-revalidate=86400',
-					'X-Content-Type-Options': 'nosniff',
-					'X-Frame-Options': 'DENY',
-					'X-XSS-Protection': '1; mode=block',
-					'Referrer-Policy': 'strict-origin-when-cross-origin',
-				}
-			},
-			'/posts/**': {
-				headers: {
-					'Cache-Control': isDev ? 'no-cache' : 'public, max-age=300, s-maxage=3600, stale-while-revalidate=86400',
-					'X-Content-Type-Options': 'nosniff',
-					'X-Frame-Options': 'DENY',
-					'X-XSS-Protection': '1; mode=block',
-					'Referrer-Policy': 'strict-origin-when-cross-origin',
-				}
-			},
-			// Динамические страницы категорий и проектов - SWR паттерн
-			'/portfolio/**': {
-				headers: {
-					'Cache-Control': isDev ? 'no-cache, no-store, must-revalidate' : 'public, max-age=300, s-maxage=3600, stale-while-revalidate=86400',
-					'X-Content-Type-Options': 'nosniff',
-					'X-Frame-Options': 'DENY',
-					'X-XSS-Protection': '1; mode=block',
-					'Referrer-Policy': 'strict-origin-when-cross-origin',
-				}
-			},
-			// Остальные страницы
-			'/**': { 
-				streaming: false,
-				headers: {
+					// Страницы с данными из Strapi: браузер каждый раз проверяет, не изменились ли они
 					'Cache-Control': isDev ? 'no-cache, no-store, must-revalidate' : 'public, max-age=0, must-revalidate',
 					'X-Content-Type-Options': 'nosniff',
 					'X-Frame-Options': 'DENY',
-					'X-XSS-Protection': '1; mode=block',
 					'Referrer-Policy': 'strict-origin-when-cross-origin',
-				}
-			}
-		}
+				},
+			},
+			// Корень только перенаправляет на язык браузера: ответ зависит от Accept-Language и cookie
+			'/': { headers: { 'Cache-Control': 'no-store' } },
+			'/_nuxt/**': { headers: { 'Cache-Control': 'public, max-age=31536000, immutable' } },
+			'/favicon.ico': { headers: { 'Cache-Control': 'public, max-age=31536000, immutable' } },
+			'/robots.txt': { headers: { 'Cache-Control': 'public, max-age=3600' } },
+			'/rss.xml': { headers: { 'Cache-Control': 'public, max-age=3600' } },
+			'/sitemap_index.xml': { headers: { 'Cache-Control': 'public, max-age=3600' } },
+			'/__sitemap__/**': { headers: { 'Cache-Control': 'public, max-age=3600' } },
+		},
+	},
+
+	router: {
+		options: {
+			// Переход к якорю (#project-…) — плавной прокруткой; отступ под шапку — scroll-padding-top в app.scss
+			scrollBehaviorType: 'smooth',
+		},
 	},
 
 	components: {
@@ -132,12 +58,11 @@ export default defineNuxtConfig({
 			url: strapi.url
 		},
 		public: {
-			baseURL,
+			siteUrl,
 			strapi: {
 				url: strapi.publicUrl
 			},
 			yandexMetrikaId: process.env.YANDEX_METRIKA_ID,
-			NODE_ENV: process.env.NODE_ENV
 		}
 	},
 
@@ -185,17 +110,17 @@ export default defineNuxtConfig({
 	},
 
 	site: {
-		url: baseURL
+		url: siteUrl
 	},
 
 	modules: [
 		'@nuxtjs/i18n',
 		'@nuxtjs/sitemap',
 		'@nuxtjs/strapi',
-		'@pinia/nuxt',
 	],
 
 	strapi,
-	i18n,
+	// baseUrl — для абсолютных canonical и hreflang (useLocaleHead в app.vue)
+	i18n: { ...i18n, baseUrl: siteUrl },
 	sitemap,
 })

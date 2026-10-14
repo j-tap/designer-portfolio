@@ -1,161 +1,79 @@
-import qs from 'qs'
-import { useLoadingStore } from '~/stores/loadingStore'
+/**
+ * Данные Strapi для страницы: useAsyncData с ключом из запроса (вместе с языком).
+ *
+ * Ошибка запроса остаётся в `error`, а не превращается в пустые данные: страница сама решает,
+ * что показать (404, страницу ошибки). Чтобы данные были на месте до рендера — и на сервере,
+ * и при переходе по сайту, — результат ждут: `const { data } = await useStrapiData(...)`.
+ *
+ * По умолчанию `populate=deep` (backend/src/middlewares/populate-deep.js).
+ * `single: true` — запрос по фильтру (например, по slug): вместо списка — первая запись или null.
+ */
+export function useStrapiData (name, params = {}, { single = false, ...options } = {}) {
+  const { locale } = useI18n()
+  const { find } = useStrapi()
+  const query = computed(() => ({ locale: locale.value, populate: 'deep', ...toValue(params) }))
 
-export function serverFetch (name, params = {}, defaultValue = [], fetchType = 'find') {
-  const nuxtApp = useNuxtApp()
-  const key = `${name}-${JSON.stringify(params)}`
-  let slug = null
-
-  if (params?.slug) {
-    slug = params.slug
-    delete params.slug
-  }
-
-  const methods = {
-    find: () => find(name, params),
-    findBySlug: () => findBySlug(name, slug, params),
-    findOne: () => findOne(name, params),
-  }
-
-  const { data } = useAsyncData(key, methods[fetchType], {
-    server: true,
-    default: () => defaultValue,
-    getCachedData: key => nuxtApp.payload?.static?.[key] ?? nuxtApp.payload?.data?.[key],
-  })
-
-  return computed(() => (data.value?.data !== undefined ? data.value.data : defaultValue))
-}
-
-export async function serverCreate (name, data = {}) {
-  try {
-    const response = await create(name, data)
-    const body = await response.json().catch(() => null)
-
-    return {
-      ok: response.ok,
-      error: response.ok ? null : body?.error?.message || null,
-    }
-  }
-  catch (error) {
-    console.error('Error api serverCreate:', error)
-    return { ok: false, error: null }
-  }
-}
-
-export function urlFile (urlFile) {
-  if (!urlFile) return null
-  const config = useRuntimeConfig()
-  return `${config.public.strapi.url}${urlFile}`
-}
-
-export function getFormatImages (item) {
-  return {
-    blurhash: item.blurhash,
-    url: urlFile(item.url),
-    id: item.id,
-    title: item.name,
-    width: item.width,
-    height: item.height,
-  }
-}
-
-export async function find (name, params = {}) {
-  return sendRequest(name, params, 'get', async (query) => {
-    const { find } = useStrapi()
-    return await find(query)
-  })
-}
-
-export async function findBySlug (name, slug, params = {}) {
-  const modParams = {
-    ...params,
-    filters: {
-      ...params.filters,
-      slug: { $eq: slug },
+  return useAsyncData(
+    () => `strapi:${name}:${JSON.stringify(query.value)}`,
+    async () => {
+      try {
+        const { data } = await find(name, query.value)
+        return single ? (data[0] ?? null) : data
+      }
+      catch (error) {
+        // Одиночный тип без версии на этом языке Strapi отдаёт как 404: данных нет, это не сбой
+        if (error?.error?.status === 404) return null
+        throw error
+      }
     },
-  }
-  return sendRequest(name, modParams, 'get', async (query) => {
-    const { find } = useStrapi()
-    const result = await find(query)
-    return { ...result, data: result.data[0] }
-  })
+    options,
+  )
 }
 
-export async function findOne (name, params = {}) {
-  return sendRequest(name, params, 'get', async (query) => {
-    const { findOne } = useStrapi()
-    return await findOne(query)
-  })
-}
+/**
+ * Данные, без которых страницы нет: если Strapi ответил ошибкой — страница ошибки (500),
+ * если запись не нашлась — 404. Сервер отвечает статусом ошибки, а не пустой страницей с 200.
+ * allowMissing: true — пустой ответ допустим (например, у страницы нет версии на этом языке),
+ * ошибкой считается только сбой Strapi.
+ */
+export async function useRequiredStrapiData (name, params = {}, { allowMissing = false, ...options } = {}) {
+  const result = await useStrapiData(name, params, options)
 
-export async function create (name, body) {
-  const config = useRuntimeConfig()
-  // FormData (форма с файлами) отправляется как есть: браузер сам выставит multipart с boundary,
-  // а JSON.stringify(FormData) дал бы пустой объект "{}"
-  const isFormData = body instanceof FormData
-
-  return await fetch(`${config.public.strapi.url}/api/${name}`, {
-    method: 'post',
-    headers: isFormData ? {} : { 'Content-Type': 'application/json' },
-    body: isFormData ? body : JSON.stringify(body),
-  })
-}
-
-export async function fetchJson (name) {
-  const config = useRuntimeConfig()
-  const response = await fetch(`${config.public.strapi.url}/api/${name}`)
-  if (!response.ok) throw new Error(`Request ${name} failed: ${response.status}`)
-  return await response.json()
-}
-
-async function sendRequest (name, params, method, cb) {
-  let locale = null
-
-  try {
-    const i18n = useI18n()
-    locale = i18n?.locale?.value
+  if (result.error.value) {
+    throw createError({ statusCode: 500, statusMessage: 'Strapi request failed', fatal: true })
   }
-  catch (error) {}
-
-  const query = method === 'get' ? qs.stringify({
-    locale: toSimpleLocale(locale),
-    populate: 'deep',
-    ...params,
-  }, { encodeValuesOnly: true }) : ''
-
-  const result = {
-    data: null,
-    meta: null,
-    status: false,
+  if (!result.data.value && !allowMissing) {
+    // fatal нужен только в браузере (иначе при переходе по сайту не откроется страница ошибки);
+    // на сервере он лишь пишет в лог стек каждого 404 — например, от ботов
+    throw createError({ statusCode: 404, statusMessage: 'Page Not Found', fatal: import.meta.client })
   }
-
-  try {
-    updateLoading(true)
-    const url = `${name}${query ? `?${query}` : ''}`
-    const resp = method === 'get' ? await cb(url) : await cb(url, params)
-
-    result.data = resp?.data || resp
-    result.meta = resp?.meta
-    result.status = true
-  }
-  catch (error) {
-    console.error('Error api asyncData:', error)
-  }
-  finally {
-    updateLoading(false)
-  }
-
   return result
 }
 
-function updateLoading (isLoading) {
-  if (import.meta.client) {
-    const loadingStore = useLoadingStore()
-    loadingStore.updateLoading(isLoading)
-  }
-}
+/**
+ * Адреса файлов из медиатеки Strapi для браузера: в ответах API пути относительные (/uploads/…),
+ * а Strapi отдаётся с другого адреса, чем сайт. Вызывается в setup — адрес Strapi берётся
+ * из конфигурации сразу, и функции можно звать где угодно, в том числе при сборке <head>.
+ */
+export function useMedia () {
+  const base = useRuntimeConfig().public.strapi.url
 
-function toSimpleLocale (locale) {
-  if (!locale) return null
-  return locale.split('-')[0]
+  function mediaUrl (path) {
+    if (!path) return null
+    return /^https?:\/\//.test(path) ? path : `${base}${path}`
+  }
+
+  // Картинка в виде, который ждёт ImgBlock
+  function mediaImage (file) {
+    return {
+      id: file.id,
+      url: mediaUrl(file.url),
+      blurhash: file.blurhash,
+      title: file.name,
+      width: file.width,
+      height: file.height,
+    }
+  }
+
+  return { mediaUrl, mediaImage }
 }

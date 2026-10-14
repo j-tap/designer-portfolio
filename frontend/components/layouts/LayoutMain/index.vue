@@ -11,10 +11,7 @@
 
 <script setup>
 import TheHeader from '~/components/TheHeader/index.vue'
-import { useCommonStore } from '~/stores/commonStore'
-
-const commonStore = useCommonStore()
-
+const isMenuOpen = useMobileMenu()
 const isLoaded = ref(false)
 
 const classes = computed(() => [
@@ -24,14 +21,12 @@ const classes = computed(() => [
 
 const blurClasses = computed(() => [
   'blur-backdrop',
-  { 'blur-backdrop_display': commonStore.getDisplayMobileMenu },
+  { 'blur-backdrop_display': isMenuOpen.value },
 ])
 
-if (import.meta.client) {
-  onMounted(() => {
-    isLoaded.value = true
-  })
-}
+onMounted(() => {
+  isLoaded.value = true
+})
 </script>
 
 <style lang="scss" src="./style.scss" scoped />

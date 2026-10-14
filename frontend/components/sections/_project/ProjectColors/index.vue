@@ -27,7 +27,7 @@ import {
   rgbToLightness,
   rgbToLuminance,
   rgbToSaturation,
-} from '~/composables/useColors'
+} from '~/utils/colors'
 
 const sortFunctions = [
   rgbToLightness,
@@ -42,25 +42,17 @@ const props = defineProps({
   items: { type: Array, default: () => [] },
 })
 
+// Сортируем копию: props — данные страницы, их порядок менять нельзя
 const colorsList = computed(() => {
-  return props.items.sort((a, b) => {
-    const func = sortFunctions[curSortFunction.value]
-    const v1 = func(hexToRgb(a.color))
-    const v2 = func(hexToRgb(b.color))
-
-    return v1 > v2 ? 1 : (v1 < v2 ? -1 : 0)
-  })
+  const sortValue = sortFunctions[curSortFunction.value]
+  return props.items
+    .map(item => ({ ...item, value: sortValue(hexToRgb(item.color)) }))
+    .toSorted((a, b) => a.value - b.value)
 })
 
+// Клик по палитре переключает способ сортировки по кругу
 function toggleSorting () {
-  const max = sortFunctions.length
-  let val = curSortFunction.value + 1
-
-  if (val >= max || val < 0) {
-    val = 0
-  }
-
-  curSortFunction.value = val
+  curSortFunction.value = (curSortFunction.value + 1) % sortFunctions.length
 }
 </script>
 

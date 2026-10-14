@@ -12,28 +12,24 @@
 import { TitleOutline } from '~/components/common'
 import { ContentWrap } from '~/components/structure'
 import { DonateList } from '~/components/sections'
-import { getDonateOptions } from '~/composables/useDonate'
-import { metaInfo } from '~/composables/useMeta'
-import { urlFile } from '~/composables/useApi'
+
+const { mediaUrl } = useMedia()
 
 definePageMeta({ layout: 'blank' })
 
 const { t } = useI18n()
-const donateOptionsData = getDonateOptions()
 const title = computed(() => t('donate.title'))
 const description = computed(() => t('donate.description'))
-const options = computed(() => (donateOptionsData.value || []).map(item => ({
+
+const { data } = useStrapiData('donate-options', { sort: [{ order: 'asc' }] })
+const options = computed(() => (data.value || []).map(item => ({
   ...item,
-  icon: item.icon ? { ...item.icon, url: urlFile(item.icon.url) } : null,
-  qr: item.qr ? { ...item.qr, url: urlFile(item.qr.url) } : null,
+  icon: item.icon ? { ...item.icon, url: mediaUrl(item.icon.url) } : null,
+  qr: item.qr ? { ...item.qr, url: mediaUrl(item.qr.url) } : null,
   requisites: (item.requisites || []).filter(requisite => requisite?.value),
 })))
 
-useHead(metaInfo({
-  title,
-  description,
-  noindex: true,
-}))
+usePageMeta({ title, description, noindex: true })
 </script>
 
 <style lang="scss" scoped src="./style.scss"/>

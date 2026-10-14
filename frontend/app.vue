@@ -7,36 +7,20 @@
 </template>
 
 <script setup>
-import { useCommonStore } from '~/stores/commonStore'
-import { useMetaStore } from '~/stores/metaStore'
-import { useLoadingStore } from '~/stores/loadingStore'
-import { find } from '~/composables/useApi'
+const { isLoading } = useLoadingIndicator()
 
-const nuxtApp = useNuxtApp()
-const commonStore = useCommonStore()
-const metaStore = useMetaStore()
-const loadingStore = useLoadingStore()
+// Мета-информация нужна каждой странице (заголовки, JSON-LD): запрос делается здесь один раз,
+// страницы получают те же данные через useSiteMeta()
+useSiteMeta()
 
-updateMeta()
+// canonical, hreflang, og:url, og:locale и lang у <html> для текущей языковой версии (@nuxtjs/i18n).
+// Страницы списка постов (?page=2…) канонизируются сами на себя, чтобы посты со 2+ страницы не терялись
+useHead(useLocaleHead({ seo: { canonicalQueries: ['page'] } }))
 
-const classes = computed(() => {
-  return [
-    'app-container',
-    { 'app-container_loading': loadingStore.isLoading },
-  ]
-})
-
-async function updateMeta () {
-  const { data } = await useAsyncData('meta-info', () => find('meta-info'), {
-    server: true,
-    default: () => null,
-    getCachedData: key => nuxtApp.payload?.static?.[key] ?? nuxtApp.payload?.data?.[key],
-  })
-
-  if (data.value?.data) {
-    metaStore.updateMetaInfo(data.value.data)
-  }
-}
+const classes = computed(() => [
+  'app-container',
+  { 'app-container_loading': isLoading.value },
+])
 </script>
 
 <style lang="scss" src="~/assets/style/app.scss" />

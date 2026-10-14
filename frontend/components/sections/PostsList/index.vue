@@ -5,7 +5,8 @@
       v-for="(post, index) in processedPosts"
       :key="post.id"
       :id="`post-${post.id}`"
-      :ref="setPostElems"
+      ref="listItems"
+      :data-index="index"
       :style="{ zIndex: processedPosts.length - index }"
       class="posts-list__item"
     >
@@ -46,16 +47,10 @@
 </template>
 
 <script setup>
-import { dateFormat, formatRelativeDate } from '~/utils/formatDate'
-import { getPostTitle, getPostImage, getPostPreview } from '~/utils/post'
-import {
-  updateProjectsPrlx,
-  resetParalax,
-  initPositions,
-  elems as postElems,
-} from '~/composables/useElemsParalax'
+import { getPostTitle, getPostImage, getPostPreview, formatPostDate } from '~/utils/post'
 
-const { t, locale } = useI18n()
+const { t, d } = useI18n()
+const localePath = useLocalePath()
 
 const props = defineProps({
   items: {
@@ -64,85 +59,27 @@ const props = defineProps({
   },
 })
 
-const localePath = useLocalePath()
 const imageErrors = ref({})
 
-function onImageError(postId) {
+function onImageError (postId) {
   imageErrors.value[postId] = true
 }
 
-const processedPosts = computed(() => {
-  if (!props.items?.length) return []
-  
-  return props.items.map(post => {
-    const image = getPostImage(post)
-    const title = getPostTitle(post)
+const processedPosts = computed(() => props.items.map((post) => {
+  const title = getPostTitle(post)
 
-    let formattedDate = ''
-    if (post.date_value !== undefined && post.date_unit) {
-      formattedDate = formatRelativeDate({
-        value: post.date_value,
-        unit: post.date_unit,
-        raw: post.date_raw,
-      }, t)
-    } else if (post.created_at) {
-      formattedDate = dateFormat(post.created_at, {}, locale.value)
-    }
-    
-    return {
-      ...post,
-      image,
-      imageAlt: title || t('posts.image_alt'),
-      title,
-      preview: getPostPreview(post),
-      url: localePath(`/posts/${post.id}`),
-      formattedDate,
-    }
-  })
-})
-
-function setPostElems(el) {
-  if (el) {
-    postElems.value.push(el)
+  return {
+    ...post,
+    image: getPostImage(post),
+    imageAlt: title || t('posts.image_alt'),
+    title,
+    preview: getPostPreview(post),
+    url: localePath(`/posts/${post.id}`),
+    formattedDate: formatPostDate(post, { t, d }),
   }
-}
+}))
 
-if (import.meta.client) {
-  let rafId = null
-  let scrollHandler = null
-
-  onMounted(() => {
-    resetParalax()
-    postElems.value = []
-    
-    if (window.innerWidth >= 768) {
-      nextTick(() => {
-        initPositions()
-        updateProjectsPrlx(props.items, window.scrollY)
-      })
-
-      scrollHandler = () => {
-        if (rafId) cancelAnimationFrame(rafId)
-        rafId = requestAnimationFrame(() => {
-          updateProjectsPrlx(props.items, window.scrollY)
-          rafId = null
-        })
-      }
-      window.addEventListener('scroll', scrollHandler, { passive: true })
-    }
-  })
-
-  onBeforeUnmount(() => {
-    if (scrollHandler) {
-      window.removeEventListener('scroll', scrollHandler)
-    }
-    if (rafId) {
-      cancelAnimationFrame(rafId)
-    }
-    resetParalax()
-    postElems.value = []
-  })
-}
+useParallax(useTemplateRef('listItems'))
 </script>
 
 <style lang="scss" scoped src="./style.scss"/>

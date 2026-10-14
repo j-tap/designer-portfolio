@@ -1,20 +1,20 @@
 // Глобальный кеш всех постов
 const CACHE_TTL = 24 * 60 * 60 * 1000
+// Если внешний API не ответил, а кеш пуст, повторяем не раньше чем через это время:
+// иначе каждый просмотр раздела постов снова шёл бы в платный API
+const RETRY_AFTER_FAILURE = 10 * 60 * 1000
 const LINKEDIN_USER_NAME = process.env.LINKEDIN_USER_NAME
 const VR9_API_KEY = process.env.VR9_API_KEY
 const POSTS_UPDATE_TOKEN = process.env.POSTS_UPDATE_TOKEN
 const BASE_URL_API = 'https://vr9.pro/api/services/linkedin/posts'
 
 let pendingFetch = null
+let lastFailureAt = 0
 
 let allPostsCache = {
   data: [],
   timestamp: null,
   username: null,
-}
-
-export function clearPostsCache() {
-  allPostsCache = { data: [], timestamp: null, username: null }
 }
 
 export function isCacheValid() {
@@ -39,10 +39,6 @@ function redact(message) {
   return VR9_API_KEY ? String(message).replaceAll(VR9_API_KEY, '***') : message
 }
 
-export function getCachedPosts() {
-  return allPostsCache
-}
-
 export function getPostById(id) {
   const idStr = String(id)
   return allPostsCache.data.find(p => String(p.id) === idStr) || null
@@ -64,19 +60,11 @@ function mapPost(post, username) {
     author: {
       full_name: username || LINKEDIN_USER_NAME,
     },
-    content: post.image ? {
-      images: [{
-        image: [{
-          url: post.image,
-          width: 800,
-        }],
-      }],
-    } : null,
   }
 }
 
 export async function fetchAllPosts(forceUpdate = false) {
-  if (!forceUpdate && isCacheValid()) {
+  if (!forceUpdate && (isCacheValid() || Date.now() - lastFailureAt < RETRY_AFTER_FAILURE)) {
     return allPostsCache
   }
 
@@ -118,10 +106,11 @@ async function loadAllPosts() {
     }
   }
 
-  // Если API не ответил, оставляем то, что уже было: иначе раздел постов опустеет,
-  // а пустой кеш считается невалидным, и каждый запрос снова пойдёт во внешний API
-  if (!allPosts.length && allPostsCache.data.length) {
-    allPostsCache.timestamp = Date.now()
+  // Если API не ответил, оставляем то, что уже было (иначе раздел постов опустеет),
+  // а следующую попытку откладываем
+  if (!allPosts.length) {
+    lastFailureAt = Date.now()
+    if (allPostsCache.data.length) allPostsCache.timestamp = Date.now()
     return allPostsCache
   }
 

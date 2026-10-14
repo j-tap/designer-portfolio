@@ -1,17 +1,5 @@
 # Development overrides for docker-compose.yml (variables are defined there).
 services:
-#  postgres:
-#    image: postgres:15
-#    restart: unless-stopped
-#    volumes:
-#      - pgdata:/var/lib/postgresql/data
-#    environment:
-#      POSTGRES_DB: ${DB_NAME}
-#      POSTGRES_USER: ${DB_USER}
-#      POSTGRES_PASSWORD: ${DB_PASSWORD}
-#    ports:
-#      - "${DB_PORT}:${DB_PORT}"
-
   strapi:
     ports:
       - "${PORT_BACKEND:-1337}:${PORT_BACKEND:-1337}"
@@ -22,9 +10,6 @@ services:
       - ./backend/config:/app/config
       - ./backend/public:/app/public
       - ./backend/tmp:/tmp
-      - ./backend/yarn-cache:/root/.yarn
-#    depends_on:
-#      - postgres
 
   nuxt:
     ports:
@@ -32,6 +17,3 @@ services:
     command: "yarn dev"
     volumes:
       - ./frontend/public:/app/public:ro
-
-volumes:
-  pgdata:

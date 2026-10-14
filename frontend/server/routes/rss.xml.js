@@ -1,4 +1,5 @@
 import { getPostTitle, getPostImage } from '~/utils/post'
+import { safeUrl } from '~/utils/url'
 
 const BASE_URL = process.env.BASE_URL
 const DEFAULT_LOCALE = 'ru'
@@ -11,6 +12,11 @@ function escapeXml(unsafe) {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&apos;')
+}
+
+// "]]>" внутри текста закрыл бы CDATA раньше времени и сломал ленту
+function cdata(value) {
+  return `<![CDATA[${String(value ?? '').replace(/]]>/g, ']]]]><![CDATA[>')}]]>`
 }
 
 function formatRssDate(dateString) {
@@ -44,9 +50,10 @@ export default defineEventHandler(async (event) => {
     const rssItems = posts.map(post => {
       const imageUrl = getPostImage(post)
       const postUrl = `${BASE_URL}/${DEFAULT_LOCALE}/posts/${post.id}`
-      const linkedinUrl = post.url || ''
+      const linkedinUrl = safeUrl(post.url) || ''
       const title = getPostTitle(post)
-      let description = post.text || ''
+      // description читалки рендерят как HTML, поэтому текст поста экранируем
+      let description = escapeXml(post.text || '')
 
       if (linkedinUrl) {
         description += `\n\n<a href="${escapeXml(linkedinUrl)}">Читать на LinkedIn</a>`
@@ -59,11 +66,11 @@ export default defineEventHandler(async (event) => {
 
       return `
     <item>
-      <title><![CDATA[${title}]]></title>
+      <title>${cdata(title)}</title>
       <link>${postUrl}</link>
       <guid isPermaLink="true">${postUrl}</guid>
       <pubDate>${pubDate}</pubDate>
-      <description><![CDATA[${description}]]></description>
+      <description>${cdata(description)}</description>
       ${imageUrl ? `<enclosure url="${escapeXml(imageUrl)}" type="image/jpeg" />` : ''}
     </item>`
     }).join('')

@@ -25,7 +25,7 @@
         </span>
       </h1>
       <h2 class="title-section__row title-section__row_4">
-        <span class="title-section__row_4__sub-small" v-html="home?.small_description" />
+        <span class="title-section__row_4__sub-small">{{ home?.small_description }}</span>
         <TitleOutline class="title-section__row_4__sub-large" tag="div">{{ meta.specialization }}</TitleOutline>
       </h2>
     </section>

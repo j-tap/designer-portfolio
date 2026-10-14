@@ -9,7 +9,7 @@
         <header class="review__header">
           <div class="review__subheader">
             <h2 class="review__title">
-              <a v-if="item.link" :href="item.link" target="_blank">{{ item.company }}</a>
+              <a v-if="safeUrl(item.link)" :href="safeUrl(item.link)" target="_blank" rel="noopener noreferrer nofollow">{{ item.company }}</a>
               <span v-else>{{ item.company }}</span>
             </h2>
             <RatingStars v-model="item.rating" />
@@ -36,6 +36,7 @@
 <script setup>
 import { RatingStars, FilesList } from '~/components/common'
 import { dateFormat } from '~/utils/formatDate'
+import { safeUrl } from '~/utils/url'
 
 const props = defineProps({
   items: {

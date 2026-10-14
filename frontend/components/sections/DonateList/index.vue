@@ -23,10 +23,10 @@
             <span v-if="requisite.label" class="donate-item__label">{{ requisite.label }}</span>
             <div class="donate-item__value-row">
               <component
-                :is="requisite.link ? 'a' : 'span'"
-                :href="requisite.link || undefined"
-                :target="requisite.link ? '_blank' : undefined"
-                :rel="requisite.link ? 'noopener' : undefined"
+                :is="safeUrl(requisite.link) ? 'a' : 'span'"
+                :href="safeUrl(requisite.link)"
+                :target="safeUrl(requisite.link) ? '_blank' : undefined"
+                :rel="safeUrl(requisite.link) ? 'noopener' : undefined"
                 class="donate-item__value"
               >{{ requisite.value }}</component>
               <button
@@ -51,6 +51,8 @@
 </template>
 
 <script setup>
+import { safeUrl } from '~/utils/url'
+
 const props = defineProps({
   items: {
     type: Array,

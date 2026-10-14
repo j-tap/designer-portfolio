@@ -34,8 +34,8 @@
             <footer class="post-full__footer">
 
               <a 
-                v-if="post.url" 
-                :href="post.url" 
+                v-if="safeUrl(post.url)" 
+                :href="safeUrl(post.url)" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 class="post-full__source"
@@ -84,6 +84,7 @@ import { ContentWrap } from '~/components/structure'
 import { metaInfo, normalizeUrlPath } from '~/composables/useMeta'
 import { dateFormat, formatRelativeDate } from '~/utils/formatDate'
 import { getPostTitle, getPostImage } from '~/utils/post'
+import { safeUrl } from '~/utils/url'
 
 const { t, locale } = useI18n()
 const config = useRuntimeConfig()

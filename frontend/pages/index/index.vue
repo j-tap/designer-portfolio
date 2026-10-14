@@ -25,16 +25,16 @@
         </span>
       </h1>
       <h2 class="title-section__row title-section__row_4">
-        <span class="title-section__row_4__sub-small">{{ home?.small_description }}</span>
+        <span class="title-section__row_4__sub-small">{{ withYears(home?.small_description) }}</span>
         <TitleOutline class="title-section__row_4__sub-large" tag="div">{{ meta.specialization }}</TitleOutline>
       </h2>
     </section>
 
     <section class="page-main__section-info info-section">
       <h3 class="info-section__title">
-        {{ home?.experience?.title }}
+        {{ withYears(home?.experience?.title) }}
       </h3>
-      <HtmlMarked :text="home?.experience?.text" class="info-section__description" />
+      <HtmlMarked :text="withYears(home?.experience?.text)" class="info-section__description" />
 
       <div class="info-section__details info-details">
         <div class="info-details__one">
@@ -71,10 +71,12 @@ import { serverFetch } from '~/composables/useApi'
 import { metaInfo } from '~/composables/useMeta'
 import { useStructuredData } from '~/composables/useStructuredData'
 import { useMetaStore } from '~/stores/metaStore'
+import { fillExperience } from '~/utils/experience'
 
 const { t } = useI18n()
 const metaStore = useMetaStore()
 const meta = computed(() => metaStore.getMetaInfo)
+const withYears = text => fillExperience(text, meta.value.career_start_year)
 const home = serverFetch('home', {}, {}, 'findOne')
 const categories = serverFetch('category-projects', {
   sort: [{ rank: 'asc' }],

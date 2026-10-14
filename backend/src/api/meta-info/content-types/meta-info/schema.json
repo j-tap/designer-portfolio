@@ -76,6 +76,18 @@
       "required": true,
       "default": 1200
     },
+    "career_start_year": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": false
+        }
+      },
+      "type": "integer",
+      "required": true,
+      "default": 2019,
+      "min": 1990,
+      "max": 2100
+    },
     "first_name": {
       "pluginOptions": {
         "i18n": {

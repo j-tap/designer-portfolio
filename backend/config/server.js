@@ -7,9 +7,12 @@ module.exports = ({ env }) => ({
     keys: env.array('APP_KEYS'),
   },
   url: strapiPublicUrl(),
-  // В проде Strapi стоит за Traefik (docker-compose.prod.yml), и IP клиента берётся из X-Forwarded-For
-  proxy: env.bool('PROXY', false),
-  webhooks: {
-    populateRelations: false,
+  // В проде Strapi стоит за Traefik (docker-compose.prod.yml): IP клиента (лимит отзывов) и HTTPS
+  // (флаг Secure у cookie админки) берутся из заголовков X-Forwarded-*. Strapi 5 читает только
+  // proxy.koa — булево `proxy: true`, как в Strapi 4, он молча игнорирует. Перед Strapi ровно
+  // один прокси, поэтому из X-Forwarded-For берётся только последний адрес — его дописал Traefik
+  proxy: {
+    koa: env.bool('PROXY', false),
+    maxIpsCount: 1,
   },
 });

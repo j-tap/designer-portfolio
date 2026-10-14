@@ -1,9 +1,12 @@
 'use strict';
 
 /**
- * category-project router
+ * category-project router. Открыты только действия, которые вызывает сайт: остальные
+ * (update, delete…) не откроет даже случайная галочка в правах роли Public
  */
 
 const { createCoreRouter } = require('@strapi/strapi').factories;
 
-module.exports = createCoreRouter('api::category-project.category-project');
+module.exports = createCoreRouter('api::category-project.category-project', {
+  only: ['find', 'findOne'],
+});

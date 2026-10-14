@@ -1,9 +1,12 @@
 'use strict';
 
 /**
- * contact router
+ * contact router. Открыты только действия, которые вызывает сайт: остальные
+ * (update, delete…) не откроет даже случайная галочка в правах роли Public
  */
 
 const { createCoreRouter } = require('@strapi/strapi').factories;
 
-module.exports = createCoreRouter('api::contact.contact');
+module.exports = createCoreRouter('api::contact.contact', {
+  only: ['find'],
+});

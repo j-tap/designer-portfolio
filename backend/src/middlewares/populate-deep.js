@@ -43,7 +43,7 @@ function buildPopulate(strapi, uid, depth) {
 }
 
 /**
- * Адрес /api/<имя>: у коллекций в адресе pluralName, у одиночных типов — singularName.
+ * Адрес <префикс API>/<имя>: у коллекций в адресе pluralName, у одиночных типов — singularName.
  */
 function contentTypesByRoute(strapi) {
   const routes = new Map();
@@ -58,13 +58,14 @@ function contentTypesByRoute(strapi) {
 }
 
 module.exports = (config, { strapi }) => {
+  const prefix = `${strapi.config.get('api.rest.prefix')}/`;
   let routes;
   const cache = new Map();
 
   return async (ctx, next) => {
-    if (ctx.query.populate === 'deep' && ctx.path.startsWith('/api/')) {
+    if (ctx.query.populate === 'deep' && ctx.path.startsWith(prefix)) {
       routes ??= contentTypesByRoute(strapi);
-      const uid = routes.get(ctx.path.split('/')[2]);
+      const uid = routes.get(ctx.path.slice(prefix.length).split('/')[0]);
 
       if (uid) {
         if (!cache.has(uid)) cache.set(uid, buildPopulate(strapi, uid, DEPTH));

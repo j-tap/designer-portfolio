@@ -4,9 +4,9 @@
   "version": "2.0.0",
   "description": "Strapi admin panel",
   "scripts": {
-    "develop": "ENV_PATH=../.env node node_modules/@strapi/strapi/bin/strapi.js develop",
-    "start": "ENV_PATH=../.env node node_modules/@strapi/strapi/bin/strapi.js start",
-    "build": "ENV_PATH=../.env node node_modules/@strapi/strapi/bin/strapi.js build",
+    "develop": "ENV_PATH=../.env strapi develop",
+    "start": "ENV_PATH=../.env strapi start",
+    "build": "ENV_PATH=../.env strapi build",
     "strapi": "ENV_PATH=../.env strapi"
   },
   "dependencies": {
@@ -15,9 +15,9 @@
     "@strapi/plugin-users-permissions": "5.57.0",
     "@strapi/provider-email-nodemailer": "5.57.0",
     "@strapi/strapi": "5.57.0",
+    "@strapi/utils": "5.57.0",
     "better-sqlite3": "^12.11.1",
     "blurhash": "^2.0.5",
-    "pg": "^8.23.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.30.3",

@@ -2,7 +2,14 @@ module.exports = ({ env }) => [
   'strapi::errors',
   'strapi::security',
   'strapi::poweredBy',
-  'strapi::cors',
+  {
+    name: 'strapi::cors',
+    config: {
+      // Список доменов сайта через запятую, например https://example.com.
+      // Без переменной CORS открыт для всех, как было раньше
+      origin: env('CORS_ORIGINS', '*'),
+    },
+  },
   'strapi::logger',
   'strapi::query',
   'strapi::body',

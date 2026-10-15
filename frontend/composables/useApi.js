@@ -75,11 +75,30 @@ export function useMedia () {
     return /^https?:\/\//.test(path) ? path : `${base}${path}`
   }
 
+  /**
+   * srcset из уменьшенных WebP-копий картинки (backend/src/utils/image-variants.js — там те же
+   * ширины и то же правило): все ширины меньше оригинала и копия в размер оригинала.
+   * Strapi при замене файла оставляет прежнее имя, поэтому к адресу добавлена версия — дата
+   * изменения: браузер кеширует копии на год. null — для файла копий нет (SVG, GIF, документ).
+   */
+  function mediaSrcset (file) {
+    const name = file?.url?.match(/^\/uploads\/([^/]+\.(?:jpe?g|png))$/i)?.[1]
+    if (!name || !VARIANT_MIMES.has(file.mime) || !file.width) return null
+
+    const updated = Date.parse(file.updatedAt)
+    const version = Number.isNaN(updated) ? '' : `?v=${updated.toString(36)}`
+
+    return variantWidths(file.width)
+      .map(width => `${mediaUrl(`/uploads/_w${width}/${name}.webp`)}${version} ${Math.min(width, file.width)}w`)
+      .join(', ')
+  }
+
   // Картинка в виде, который ждёт ImgBlock
   function mediaImage (file) {
     return {
       id: file.id,
       url: mediaUrl(file.url),
+      srcset: mediaSrcset(file),
       blurhash: file.blurhash,
       title: file.name,
       width: file.width,
@@ -87,5 +106,13 @@ export function useMedia () {
     }
   }
 
-  return { mediaUrl, mediaImage }
+  return { mediaUrl, mediaSrcset, mediaImage }
+}
+
+const VARIANT_WIDTHS = [480, 800, 1280, 1920]
+const VARIANT_MIMES = new Set(['image/jpeg', 'image/png'])
+
+function variantWidths (width) {
+  const index = VARIANT_WIDTHS.findIndex(w => w >= width)
+  return index === -1 ? VARIANT_WIDTHS : VARIANT_WIDTHS.slice(0, index + 1)
 }

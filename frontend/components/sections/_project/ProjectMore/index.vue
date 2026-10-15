@@ -11,6 +11,7 @@
           <ProjectPreview
             :data="project"
             :to="projectLink(project)"
+            sizes="340px"
             class="more-projects__item-preview"
           />
         </li>

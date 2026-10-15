@@ -3,7 +3,13 @@
     <img
       v-if="imageTop"
       class="project-web__img-top"
-      :src="mediaUrl(imageTop.url)"
+      loading="lazy"
+      decoding="async"
+      sizes="100vw"
+      :srcset="imageTop.srcset"
+      :src="imageTop.url"
+      :width="imageTop.width"
+      :height="imageTop.height"
       alt=" "
     >
     <ProjectFonts
@@ -23,6 +29,8 @@
         <ImgBlock
           class="web-images__img"
           :src="item.url"
+          :srcset="item.srcset"
+          sizes="(max-width: 767px) 100vw, 66vw"
           :blurhash="item.blurhash"
           :width="item.width"
           :height="item.height"
@@ -34,7 +42,13 @@
     <img
       v-if="imageBottom"
       class="project-web__img-bottom"
-      :src="mediaUrl(imageBottom.url)"
+      loading="lazy"
+      decoding="async"
+      sizes="100vw"
+      :srcset="imageBottom.srcset"
+      :src="imageBottom.url"
+      :width="imageBottom.width"
+      :height="imageBottom.height"
       alt=" "
     >
   </div>
@@ -44,14 +58,14 @@
 import { ImgBlock } from '~/components/common'
 import { ProjectColors, ProjectFonts } from '~/components/sections'
 
-const { mediaUrl, mediaImage } = useMedia()
+const { mediaImage } = useMedia()
 
 const props = defineProps({
   data: Object,
 })
 
 // Первая картинка проекта — над шрифтами и цветами, последняя (если их больше одной) — в самом низу
-const images = computed(() => props.data.images || [])
+const images = computed(() => (props.data.images || []).map(mediaImage))
 const imageTop = computed(() => images.value[0] || null)
 const imageBottom = computed(() => (images.value.length > 1 ? images.value.at(-1) : null))
 

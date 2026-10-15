@@ -8,30 +8,37 @@
       :height="size.height"
     />
     <picture>
-      <source
-        v-if="srcLite"
-        :srcset="srcLite"
-        media="(max-width:1023px)"
-      >
+      <!-- loading, sizes и srcset — раньше src: картинку, созданную на клиенте, браузер начинает
+        грузить по src и иначе может скачать оригинал -->
       <img
         ref="imgElem"
         class="img-block__img"
+        :loading="props.eager ? 'eager' : 'lazy'"
+        :fetchpriority="props.eager ? 'high' : undefined"
+        decoding="async"
+        :sizes="props.srcset ? props.sizes : undefined"
+        :srcset="props.srcset || undefined"
         :src="props.src"
         :alt="props.alt"
         :width="size.width"
         :height="size.height"
         :itemprop="itemprop ? 'image' : undefined"
-        :loading="props.eager ? 'eager' : 'lazy'"
-        :fetchpriority="props.eager ? 'high' : undefined"
         @load="onLoadImg"
         @error="onError"
       >
     </picture>
-    <div
+    <!-- Ленивая картинка, а не фон: фон браузер скачал бы сразу для всех карточек на странице -->
+    <img
       v-if="srcHover"
-      :style="{ backgroundImage: `url(${JSON.stringify(srcHover)})` }"
       class="img-block__img-hover"
-    />
+      loading="lazy"
+      decoding="async"
+      :sizes="props.srcsetHover ? props.sizes : undefined"
+      :srcset="props.srcsetHover || undefined"
+      :src="srcHover"
+      alt=""
+      aria-hidden="true"
+    >
   </div>
 </template>
 
@@ -43,11 +50,20 @@ const props = defineProps({
     type: String,
     required: true,
   },
-  srcLite: {
+  // Уменьшенные копии (useMedia().mediaSrcset) и ширина картинки на странице для выбора из них
+  srcset: {
     type: String,
     default: null,
   },
+  sizes: {
+    type: String,
+    default: '100vw',
+  },
   srcHover: {
+    type: String,
+    default: null,
+  },
+  srcsetHover: {
     type: String,
     default: null,
   },

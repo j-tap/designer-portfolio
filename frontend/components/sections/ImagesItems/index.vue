@@ -15,7 +15,16 @@
             class="images-items__item"
           >
             <ScrollBlock>
-              <img :src="mediaUrl(item.url)" alt=" ">
+              <img
+                loading="lazy"
+                decoding="async"
+                :sizes="sizes"
+                :srcset="mediaSrcset(item)"
+                :src="mediaUrl(item.url)"
+                :width="item.width"
+                :height="item.height"
+                alt=" "
+              >
             </ScrollBlock>
           </li>
         </ul>
@@ -29,7 +38,7 @@ import { useEventListener } from '@vueuse/core'
 import { ScrollBlock } from '~/components/common'
 
 const { t } = useI18n()
-const { mediaUrl } = useMedia()
+const { mediaUrl, mediaSrcset } = useMedia()
 
 const props = defineProps({
   images: Array,
@@ -44,6 +53,13 @@ const props = defineProps({
 })
 
 const classes = computed(() => ['images-items', `images-items_size-${props.imagesSize}`])
+
+// Ширина карточки из style.scss: small — clamp(320px, 19vw, 360px), large — clamp(320px, 42vw, 810px)
+const SIZES = {
+  small: '360px',
+  large: '(max-width: 762px) 320px, (min-width: 1929px) 810px, 42vw',
+}
+const sizes = computed(() => SIZES[props.imagesSize] || '100vw')
 
 // Подсказка «потяните в сторону» — только когда картинки не помещаются в окно
 const listEl = useTemplateRef('list')

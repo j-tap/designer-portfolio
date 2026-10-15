@@ -25,6 +25,8 @@
             <ImgBlock
               class="uiux-page__images-img"
               :src="mediaUrl(img.url)"
+              :srcset="mediaSrcset(img)"
+              sizes="(max-width: 767px) 100vw, 50vw"
               :blurhash="img.blurhash"
               :width="img.width"
               :height="img.height"
@@ -66,7 +68,7 @@ import { ImgBlock } from '~/components/common'
 import { ProjectViewsItem, ProjectColors, ProjectFonts } from '~/components/sections'
 import { pageTypes, getPagesByType } from '~/utils/projectPages'
 
-const { mediaUrl } = useMedia()
+const { mediaUrl, mediaSrcset } = useMedia()
 
 const { t } = useI18n()
 const props = defineProps({

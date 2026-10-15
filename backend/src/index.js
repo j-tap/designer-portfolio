@@ -1,6 +1,7 @@
 'use strict';
 
 const { addBlurhash } = require('./utils/blurhash');
+const { createVariants, removeVariants, createAllVariants } = require('./utils/image-variants');
 
 module.exports = {
   register({ strapi }) {
@@ -17,6 +18,16 @@ module.exports = {
       models: ['plugin::upload.file'],
       beforeCreate: addBlurhash,
       beforeUpdate: addBlurhash,
+      // WebP-копии для сайта — в фоне, не задерживая ответ админке
+      afterCreate: ({ result }) => { createVariants(result); },
+      afterUpdate: ({ result }) => { createVariants(result); },
+      afterDelete: ({ result }) => removeVariants(result),
+    });
+
+    // Копии для уже загруженных картинок. Первый проход после обновления займёт минуты,
+    // сайт тем временем работает: недостающую копию создаст первый же запрос
+    setImmediate(() => {
+      createAllVariants().catch(error => strapi.log.error(`image variants: ${error.message}`));
     });
   },
 };

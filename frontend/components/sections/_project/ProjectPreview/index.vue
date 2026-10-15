@@ -8,7 +8,10 @@
       <ImgBlock
         class="project-preview__img"
         :src="mediaUrl(data.preview.url)"
+        :srcset="mediaSrcset(data.preview)"
         :src-hover="mediaUrl(data.preview_hover?.url)"
+        :srcset-hover="mediaSrcset(data.preview_hover)"
+        :sizes="sizes"
         :blurhash="data.preview.blurhash"
         :width="data.preview.width"
         :height="data.preview.height"
@@ -27,7 +30,7 @@
 import { NuxtLink } from '#components'
 import { ImgBlock } from '~/components/common'
 
-const { mediaUrl } = useMedia()
+const { mediaUrl, mediaSrcset } = useMedia()
 
 defineProps({
   data: Object,
@@ -40,6 +43,11 @@ defineProps({
     default: 'figcaption',
   },
   eager: Boolean,
+  // В списке работ превью на телефоне во всю ширину, на больших экранах — не шире 55% экрана
+  sizes: {
+    type: String,
+    default: '(max-width: 767px) 100vw, 55vw',
+  },
 })
 </script>
 

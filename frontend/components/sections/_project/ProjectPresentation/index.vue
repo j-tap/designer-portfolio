@@ -1,7 +1,7 @@
 <script setup>
 import { ImgBlock } from '~/components/common'
 
-const { mediaUrl } = useMedia()
+const { mediaUrl, mediaSrcset } = useMedia()
 
 const props = defineProps({
   images: Array,
@@ -20,7 +20,7 @@ const sortedImages = computed(() => {
       :key="img.id"
       :eager="index === 0"
       :src="mediaUrl(img.url)"
-      :src-lite="mediaUrl(img.formats?.large?.url || img.url)"
+      :srcset="mediaSrcset(img)"
       :blurhash="img.blurhash"
       :width="img.width"
       :height="img.height"

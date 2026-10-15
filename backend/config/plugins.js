@@ -12,6 +12,19 @@ module.exports = ({ env }) => {
       enabled: true,
     },
 
+    upload: {
+      config: {
+        providerOptions: {
+          // Срок кеша оригиналов в /uploads (по умолчанию Strapi — 0). Не дольше суток: при замене
+          // файла в медиатеке адрес не меняется. WebP-копии для сайта кешируются на год —
+          // src/middlewares/uploads.js
+          localServer: {
+            maxage: 24 * 60 * 60 * 1000,
+          },
+        },
+      },
+    },
+
     email: {
       config: {
         provider: 'nodemailer',

@@ -16,6 +16,7 @@ module.exports = () => [
   { name: 'global::cleanup-uploads' },
   'strapi::session',
   'strapi::favicon',
+  { name: 'global::uploads' },
   'strapi::public',
   { name: 'global::populate-deep' },
 ];

@@ -63,5 +63,18 @@
   "error.clear": "Go to the home page",
   "menu.toggle": "Menu",
   "menu.language": "Language",
-  "content.not_translated": "This page hasn't been translated yet, so it is shown in the original language."
+  "content.not_translated": "This page hasn't been translated yet, so it is shown in the original language.",
+  "modal.close": "Close",
+  "contact_form.title": "Get in touch",
+  "contact_form.name": "Name",
+  "contact_form.name_placeholder": "How should I address you",
+  "contact_form.email": "E-mail",
+  "contact_form.email_placeholder": "name@example.com",
+  "contact_form.message": "Message",
+  "contact_form.message_placeholder": "Tell me about your project",
+  "contact_form.submit": "Send",
+  "contact_form.sending": "Sending…",
+  "contact_form.success_title": "Thank you for your message!",
+  "contact_form.success_text": "I will reply to your e-mail shortly.",
+  "contact_form.send_error": "Could not send the message, please try again"
 }

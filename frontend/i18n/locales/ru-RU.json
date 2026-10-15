@@ -63,5 +63,18 @@
   "error.clear": "На главную",
   "menu.toggle": "Меню",
   "menu.language": "Язык",
-  "content.not_translated": "Эта страница ещё не переведена, поэтому показана на языке оригинала."
+  "content.not_translated": "Эта страница ещё не переведена, поэтому показана на языке оригинала.",
+  "modal.close": "Закрыть",
+  "contact_form.title": "Связаться",
+  "contact_form.name": "Имя",
+  "contact_form.name_placeholder": "Как к вам обращаться",
+  "contact_form.email": "E-mail",
+  "contact_form.email_placeholder": "name@example.com",
+  "contact_form.message": "Сообщение",
+  "contact_form.message_placeholder": "Расскажите о задаче",
+  "contact_form.submit": "Отправить",
+  "contact_form.sending": "Отправка…",
+  "contact_form.success_title": "Спасибо за сообщение!",
+  "contact_form.success_text": "Я отвечу вам на почту в ближайшее время.",
+  "contact_form.send_error": "Не удалось отправить сообщение, попробуйте ещё раз"
 }

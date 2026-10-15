@@ -8,11 +8,12 @@ const { createCoreController } = require('@strapi/strapi').factories;
 // Ошибки Strapi: обработчик ошибок сам отвечает 400 (ValidationError) или 429 (RateLimitError)
 // с текстом в error.message — его и показывает форма на сайте
 const { errors: { ValidationError, RateLimitError } } = require('@strapi/utils');
-const { issueFormToken, checkFormToken, hitRateLimit } = require('../utils/antispam');
+const { createAntispam } = require('../../../utils/antispam');
 const { prepareReviewFiles } = require('../utils/files');
 const { notifyNewReview } = require('../utils/notify');
 
 const UID = 'api::review.review';
+const { issueFormToken, checkFormToken, hitRateLimit } = createAntispam('review-form');
 const SUCCESS = { data: { ok: true } };
 
 const LIMITS = {

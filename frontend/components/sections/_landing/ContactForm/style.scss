@@ -1,0 +1,28 @@
+.contact-form {
+  &__trap {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  &__error {
+    margin: 0;
+    color: $color__blue;
+  }
+
+  &__success {
+    h3 {
+      margin: 0 0 16px;
+      font-family: $font__decor;
+      font-size: clamp(22px, 2.2vw, 36px);
+      font-weight: 400;
+    }
+
+    p {
+      margin: 0;
+      font-size: clamp(16px, 1.2vw, 20px);
+    }
+  }
+}

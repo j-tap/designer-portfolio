@@ -63,5 +63,18 @@
   "error.clear": "Ir a la página principal",
   "menu.toggle": "Menú",
   "menu.language": "Idioma",
-  "content.not_translated": "Esta página aún no está traducida, por eso se muestra en el idioma original."
+  "content.not_translated": "Esta página aún no está traducida, por eso se muestra en el idioma original.",
+  "modal.close": "Cerrar",
+  "contact_form.title": "Contactar",
+  "contact_form.name": "Nombre",
+  "contact_form.name_placeholder": "Cómo debo llamarte",
+  "contact_form.email": "E-mail",
+  "contact_form.email_placeholder": "name@example.com",
+  "contact_form.message": "Mensaje",
+  "contact_form.message_placeholder": "Cuéntame sobre tu proyecto",
+  "contact_form.submit": "Enviar",
+  "contact_form.sending": "Enviando…",
+  "contact_form.success_title": "¡Gracias por tu mensaje!",
+  "contact_form.success_text": "Te responderé por correo en breve.",
+  "contact_form.send_error": "No se pudo enviar el mensaje, inténtalo de nuevo"
 }

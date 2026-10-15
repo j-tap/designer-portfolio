@@ -1,0 +1,75 @@
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  overflow-y: auto;
+  padding: clamp(16px, 4vw, 60px);
+  background-color: rgba($color__dark, .6);
+  backdrop-filter: blur(8px);
+
+  &__dialog {
+    position: relative;
+    width: 100%;
+    max-width: 640px;
+    margin: auto;
+    padding: clamp(24px, 3.2vw, 60px);
+    background-color: $color__dark;
+    border: 1px solid $color__white;
+    color: $color__white;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  &__close {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    background: none;
+    border: none;
+    color: inherit;
+    font-size: 32px;
+    line-height: 1;
+    cursor: pointer;
+    transition: color .15s ease-in-out;
+
+    &:hover,
+    &:focus-visible {
+      color: $color__blue;
+    }
+  }
+
+  &__title {
+    margin: 0 40px clamp(20px, 2.1vw, 40px) 0;
+    font-family: $font__decor;
+    font-size: clamp(24px, 2.6vw, 44px);
+    font-weight: 400;
+    line-height: 1.1;
+  }
+}
+
+// Классы Transition — у корня окна, поэтому ссылаемся на него напрямую
+.modal-enter-active,
+.modal-leave-active {
+  transition: opacity .2s ease-in-out;
+
+  .modal__dialog {
+    transition: transform .2s ease-in-out;
+  }
+}
+
+.modal-enter-from,
+.modal-leave-to {
+  opacity: 0;
+
+  .modal__dialog {
+    transform: translateY(20px);
+  }
+}

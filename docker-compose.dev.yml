@@ -16,4 +16,11 @@ services:
       - "${PORT_FRONTEND:-3000}:${PORT_FRONTEND:-3000}"
     command: "yarn dev"
     volumes:
-      - ./frontend/public:/app/public:ro
+      # Исходники с хоста: yarn dev пересобирает страницу при каждой правке
+      - ./frontend:/app
+      # Зависимости и сборка — свои в контейнере: на хосте node_modules собраны под macOS.
+      # Анонимные тома переживают пересоздание контейнера, поэтому make dev их обновляет
+      # (--renew-anon-volumes): иначе после смены зависимостей остались бы старые
+      - /app/node_modules
+      - /app/.nuxt
+      - /app/.output

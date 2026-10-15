@@ -76,5 +76,6 @@
   "contact_form.sending": "Sending…",
   "contact_form.success_title": "Thank you for your message!",
   "contact_form.success_text": "I will reply to your e-mail shortly.",
-  "contact_form.send_error": "Could not send the message, please try again"
+  "contact_form.send_error": "Could not send the message, please try again",
+  "landing.all_reviews": "Read all reviews"
 }

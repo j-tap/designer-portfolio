@@ -1,0 +1,24 @@
+.landing-reviews {
+  &__title {
+    @include landing-title;
+  }
+
+  &__text {
+    @include landing-text;
+    max-width: 875px;
+    margin-top: clamp(15px, 2.1vw, 40px);
+  }
+
+  &__list {
+    margin-top: clamp(30px, 4vw, 80px);
+  }
+
+  &__all {
+    display: inline-block;
+    margin-top: clamp(30px, 3.2vw, 60px);
+
+    @include screen('sm') {
+      display: block;
+    }
+  }
+}

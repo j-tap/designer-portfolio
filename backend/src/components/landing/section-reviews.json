@@ -1,0 +1,27 @@
+{
+  "collectionName": "components_landing_section_reviews",
+  "info": {
+    "displayName": "Посадочная - Отзывы",
+    "description": "Последние опубликованные отзывы из раздела «Отзывы» и кнопка на страницу со всеми отзывами. Ставьте после проектов"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "text": {
+      "type": "richtext"
+    },
+    "limit": {
+      "type": "integer",
+      "default": 3,
+      "required": true,
+      "min": 1,
+      "max": 12
+    },
+    "link_label": {
+      "type": "string"
+    }
+  }
+}

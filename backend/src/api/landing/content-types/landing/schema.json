@@ -74,6 +74,7 @@
       "components": [
         "landing.section-cards",
         "landing.section-cases",
+        "landing.section-reviews",
         "landing.section-faq",
         "landing.section-contact"
       ]

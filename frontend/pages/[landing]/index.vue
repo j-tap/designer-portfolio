@@ -26,7 +26,7 @@
 
 <script setup>
 import { TranslationNotice } from '~/components/common'
-import { LandingCards, LandingCases, LandingContact, LandingFaq, LandingHero } from '~/components/sections'
+import { LandingCards, LandingCases, LandingContact, LandingFaq, LandingHero, LandingReviews } from '~/components/sections'
 import { projectPaths } from '~/config/portfolio'
 
 // Посадочные страницы («Посадочные страницы» в Strapi): /<язык>/<slug>.
@@ -39,6 +39,7 @@ const sectionComponents = {
   'landing.section-cards': LandingCards,
   'landing.section-cases': LandingCases,
   'landing.section-faq': LandingFaq,
+  'landing.section-reviews': LandingReviews,
   'landing.section-contact': LandingContact,
 }
 

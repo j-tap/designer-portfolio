@@ -76,5 +76,6 @@
   "contact_form.sending": "Отправка…",
   "contact_form.success_title": "Спасибо за сообщение!",
   "contact_form.success_text": "Я отвечу вам на почту в ближайшее время.",
-  "contact_form.send_error": "Не удалось отправить сообщение, попробуйте ещё раз"
+  "contact_form.send_error": "Не удалось отправить сообщение, попробуйте ещё раз",
+  "landing.all_reviews": "Читать все отзывы"
 }

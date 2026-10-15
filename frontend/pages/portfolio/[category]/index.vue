@@ -5,6 +5,7 @@
         :projects="projects"
         :category-slug="categorySlug"
         :title="category.title"
+        :locale="category.locale"
         :back="{ to: '/portfolio', title: t('portfolio.back_to_portfolio') }"
       />
     </ContentWrap>

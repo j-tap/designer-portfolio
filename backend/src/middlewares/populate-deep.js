@@ -48,7 +48,8 @@ function buildPopulate(strapi, uid, depth) {
  */
 function buildRootPopulate(strapi, uid) {
   const result = buildPopulate(strapi, uid, DEPTH);
-  if (!strapi.getModel(uid).attributes.localizations) return result === true ? '*' : result.populate;
+  // localizations в схеме есть у всех типов, но заполнить его можно только у переводимых
+  if (!strapi.getModel(uid).pluginOptions?.i18n?.localized) return result === true ? '*' : result.populate;
 
   return { ...(result === true ? {} : result.populate), localizations: { fields: ['locale'] } };
 }

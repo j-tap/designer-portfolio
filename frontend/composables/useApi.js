@@ -1,3 +1,6 @@
+import { contentLocales } from '~/config/i18n'
+import { pickLocaleVersions } from '~/utils/localeVersions'
+
 /**
  * Данные Strapi для страницы: useAsyncData с ключом из запроса (вместе с языком).
  *
@@ -7,6 +10,12 @@
  *
  * По умолчанию `populate=deep` (backend/src/middlewares/populate-deep.js).
  * `single: true` — запрос по фильтру (например, по slug): вместо списка — первая запись или null.
+ * `singleType: true` — одиночный тип (главная, мета-информация): у него другой способ искать перевод.
+ *
+ * Записи без перевода на язык страницы показываются на языке оригинала (contentLocales: язык
+ * по умолчанию, затем остальные), а не пропадают. Язык показанной версии — в её поле `locale`:
+ * по нему страница ставит canonical на оригинал и предупреждает, что текст не переведён.
+ * `fallback: false` — только записи на языке страницы.
  *
  * Одни и те же данные запрашивают несколько компонентов (мета-информацию — app.vue, usePageMeta,
  * useStructuredData…), а Strapi должен получить один запрос:
@@ -20,23 +29,63 @@ function getCachedData (key, nuxtApp) {
   if (import.meta.server || nuxtApp.isHydrating) return nuxtApp.payload.data[key]
 }
 
-export function useStrapiData (name, params = {}, { single = false, ...options } = {}) {
+// Больше записей за запрос Strapi не отдаёт (config/api.js в бэкенде)
+const MAX_PAGE_SIZE = 100
+
+export function useStrapiData (name, params = {}, { single = false, singleType = false, fallback = true, ...options } = {}) {
   const { locale } = useI18n()
   const { find } = useStrapi()
   const query = computed(() => ({ locale: locale.value, populate: 'deep', ...toValue(params) }))
 
+  async function findOrNull (query) {
+    try {
+      const { data } = await find(name, query)
+      return data
+    }
+    catch (error) {
+      // Одиночный тип без версии на этом языке Strapi отдаёт как 404: данных нет, это не сбой
+      if (error?.error?.status === 404) return null
+      throw error
+    }
+  }
+
+  // Одиночный тип не принимает locale=*: языки цепочки перебираются, пока версия не найдётся
+  async function findSingleType (chain) {
+    for (const code of chain) {
+      const data = await findOrNull({ ...query.value, locale: code })
+      if (data) return data
+    }
+    return null
+  }
+
+  // Коллекция — одним запросом на всех языках (locale=*), от каждой записи — лучшая версия.
+  // Записей с версиями на всех языках больше, чем записей, поэтому страницы Strapi читаются
+  // все, а ограничение размера списка (pagination.pageSize) применяется уже к записям
+  async function findCollection (chain) {
+    const { pagination, ...rest } = query.value
+    const rows = []
+    for (let page = 1; ; page++) {
+      const { data, meta } = await find(name, { ...rest, locale: '*', pagination: { page, pageSize: MAX_PAGE_SIZE } })
+      rows.push(...data)
+      if (page >= (meta?.pagination?.pageCount || 1)) break
+    }
+    const list = pickLocaleVersions(rows, chain)
+    return pagination?.pageSize ? list.slice(0, pagination.pageSize) : list
+  }
+
   return useAsyncData(
-    () => `strapi:${name}:${JSON.stringify(query.value)}`,
+    () => `strapi:${name}:${JSON.stringify(query.value)}${fallback ? '' : ':own-locale'}`,
     async () => {
-      try {
-        const { data } = await find(name, query.value)
-        return single ? (data[0] ?? null) : data
+      const chain = fallback ? contentLocales(locale.value) : [locale.value]
+
+      if (singleType) return findSingleType(chain)
+      if (!fallback) {
+        const data = await findOrNull(query.value)
+        return single ? (data?.[0] ?? null) : data
       }
-      catch (error) {
-        // Одиночный тип без версии на этом языке Strapi отдаёт как 404: данных нет, это не сбой
-        if (error?.error?.status === 404) return null
-        throw error
-      }
+
+      const list = await findCollection(chain)
+      return single ? (list[0] ?? null) : list
     },
     { dedupe: 'defer', getCachedData, ...options },
   )

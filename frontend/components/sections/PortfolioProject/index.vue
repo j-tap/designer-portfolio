@@ -9,6 +9,7 @@ import {
   ProjectMore,
   ProjectBack,
 } from '~/components/sections'
+import { TranslationNotice } from '~/components/common'
 import { portfolioPath } from '~/config/portfolio'
 import { safeUrl } from '~/utils/url'
 
@@ -40,6 +41,8 @@ const categoryToComponent = {
   'web-design': ProjectTypeWeb,
 }
 
+const contentLang = useContentLang()
+
 const projectComponent = computed(() => categoryToComponent[props.categorySlug])
 const listPath = computed(() => portfolioPath(props.categorySlug, props.subcategorySlug))
 const presentationImages = computed(() => (Array.isArray(props.project.presentation) ? props.project.presentation : []))
@@ -49,7 +52,7 @@ const links = computed(() => (props.project.links || [])
 </script>
 
 <template>
-  <div class="portfolio-project">
+  <div class="portfolio-project" :lang="contentLang(project)">
     <ul
       v-if="links.length"
       class="portfolio-project__links links-project"
@@ -71,6 +74,7 @@ const links = computed(() => (props.project.links || [])
     </ul>
 
     <header class="portfolio-project__head">
+      <TranslationNotice :locale="project.locale" />
       <h1 class="portfolio-project__title">
         <NuxtLink
           v-if="safeUrl(project.link)"

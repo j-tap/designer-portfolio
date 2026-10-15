@@ -43,8 +43,10 @@ const client = useStrapiClient()
 const title = computed(() => t('menu.reviews'))
 
 const { data: reviews } = await useRequiredStrapiData('reviews', { sort: [{ createdAt: 'desc' }] }, { allowMissing: true })
-const { data: developments } = useStrapiData('reviews-developments')
-const { data: cooperations } = useStrapiData('reviews-cooperations')
+// Варианты ответа формы — только на языке страницы: отзыв сохраняется на этом языке
+// и ссылается на их версии на нём же
+const { data: developments } = useStrapiData('reviews-developments', {}, { fallback: false })
+const { data: cooperations } = useStrapiData('reviews-cooperations', {}, { fallback: false })
 
 // Отзыв уже отправлен с этого браузера — вместо формы благодарность.
 // Значение читается после монтирования, чтобы разметка совпала с серверной

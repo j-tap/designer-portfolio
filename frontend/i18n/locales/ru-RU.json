@@ -62,5 +62,6 @@
   "error.unknown": "Извините, неизвестная ошибка",
   "error.clear": "На главную",
   "menu.toggle": "Меню",
-  "menu.language": "Язык"
+  "menu.language": "Язык",
+  "content.not_translated": "Эта страница ещё не переведена, поэтому показана на языке оригинала."
 }

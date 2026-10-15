@@ -1,4 +1,6 @@
+import { contentLocales } from '~/config/i18n'
 import { sortByRank } from '~/config/portfolio'
+import { pickLocaleVersions } from '~/utils/localeVersions'
 
 // Категория с подкатегориями показывается по подкатегориям: сразу открываем первую.
 // Перенаправление — до рендера страницы категории: так оно одинаково работает и при заходе
@@ -8,14 +10,17 @@ export default defineNuxtRouteMiddleware(async (to) => {
   if (import.meta.client && useNuxtApp().isHydrating) return
 
   try {
+    // Версии категории на всех языках: без перевода страница показывает оригинал (useStrapiData),
+    // и подкатегории берутся у него
     const { data } = await useStrapi().find('category-projects', {
-      // Стратегия i18n — prefix: язык всегда первый сегмент адреса
-      locale: to.path.split('/')[1],
+      locale: '*',
       filters: { slug: { $eq: to.params.category } },
-      fields: ['slug'],
+      fields: ['slug', 'locale'],
       populate: { subcategories: { fields: ['slug', 'rank'] } },
     })
-    const [first] = sortByRank(data[0]?.subcategories)
+    // Стратегия i18n — prefix: язык всегда первый сегмент адреса
+    const [category] = pickLocaleVersions(data, contentLocales(to.path.split('/')[1]))
+    const [first] = sortByRank(category?.subcategories)
     if (first) return navigateTo(`${to.path}/${first.slug}`, { replace: true })
   }
   catch {

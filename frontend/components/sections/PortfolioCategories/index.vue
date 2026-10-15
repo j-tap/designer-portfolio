@@ -3,6 +3,7 @@
     <li
       v-for="item in items"
       :key="item.slug"
+      :lang="contentLang(item)"
       class="portfolio-categories__item"
     >
       <NuxtLink
@@ -26,6 +27,7 @@ import { TitleOutline } from '~/components/common'
 import { portfolioPath } from '~/config/portfolio'
 
 const localePath = useLocalePath()
+const contentLang = useContentLang()
 
 const props = defineProps({
   items: {

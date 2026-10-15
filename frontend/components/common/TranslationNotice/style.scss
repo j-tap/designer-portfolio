@@ -1,0 +1,6 @@
+.translation-notice {
+  margin: clamp(12px, 1.5vw, 24px) 0 0;
+  font-size: clamp(13px, 1vw, 16px);
+  line-height: 1.4;
+  color: $color__gray;
+}

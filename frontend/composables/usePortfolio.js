@@ -93,7 +93,7 @@ export function useProjectPage (project, { categorySlug, subcategorySlug = null 
     keywords: () => project.value.meta?.keywords,
   })
 
-  definePageLocales(project, '/portfolio')
+  definePageLocales(project)
 
   useStructuredData('project', {
     project,
@@ -112,7 +112,7 @@ export function useProjectPage (project, { categorySlug, subcategorySlug = null 
  */
 export function usePortfolioListPage ({ title, description, category, subcategory = null, projects }) {
   usePageMeta({ title, description })
-  definePageLocales(() => toValue(subcategory) || toValue(category), '/portfolio')
+  definePageLocales(() => toValue(subcategory) || toValue(category))
 
   useStructuredData('collection', {
     collection: computed(() => ({

@@ -41,9 +41,7 @@ import { IconBase } from '~/components/common'
 
 const { t, locale, locales } = useI18n()
 const route = useRoute()
-const localePath = useLocalePath()
 const switchLocalePath = useSwitchLocalePath()
-const pageLocales = usePageLocales()
 
 const emit = defineEmits(['select'])
 
@@ -61,28 +59,12 @@ function close (focusToggle = false) {
 onClickOutside(root, () => close())
 watch(() => route.fullPath, () => close())
 
-// Языки страницы известны только после загрузки её данных, а шапка на сервере рендерится раньше
-// страницы. Поэтому до гидратации ссылка ведёт на ту же страницу на другом языке (как в разметке
-// с сервера), после — учитывает, есть ли страница на этом языке. Поисковикам языковые версии
-// сообщает hreflang (app.vue): он собирается после страницы и точен уже в ответе сервера
-const mounted = ref(false)
-onMounted(() => {
-  mounted.value = true
-})
-
 const current = computed(() => locales.value.find(({ code }) => code === locale.value))
 
+// Страница есть на всех языках: записи Strapi без перевода показываются на языке оригинала
 const items = computed(() => locales.value
   .filter(({ code }) => code !== locale.value)
-  .map(({ code, name }) => {
-    const exists = !mounted.value || pageLocales.locales.value.includes(code)
-    return {
-      code,
-      name,
-      // Перевода нет — в раздел на этом языке, а не на 404
-      path: exists ? switchLocalePath(code) : localePath(pageLocales.fallback.value, code),
-    }
-  }))
+  .map(({ code, name }) => ({ code, name, path: switchLocalePath(code) })))
 </script>
 
 <style lang="scss" src="./style.scss" scoped/>

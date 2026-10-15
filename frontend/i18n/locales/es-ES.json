@@ -62,5 +62,6 @@
   "error.unknown": "Lo sentimos, error desconocido",
   "error.clear": "Ir a la página principal",
   "menu.toggle": "Menú",
-  "menu.language": "Idioma"
+  "menu.language": "Idioma",
+  "content.not_translated": "Esta página aún no está traducida, por eso se muestra en el idioma original."
 }

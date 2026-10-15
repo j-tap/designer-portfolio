@@ -62,5 +62,6 @@
   "error.unknown": "Sorry, unknown error",
   "error.clear": "Go to the home page",
   "menu.toggle": "Menu",
-  "menu.language": "Language"
+  "menu.language": "Language",
+  "content.not_translated": "This page hasn't been translated yet, so it is shown in the original language."
 }

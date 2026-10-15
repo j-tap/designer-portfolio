@@ -10,7 +10,15 @@
   }
 
   &__list {
-    margin-top: clamp(30px, 4vw, 80px);
+    display: grid;
+    gap: clamp(30px, 2.6vw, 50px);
+    margin: clamp(30px, 4vw, 80px) 0 0;
+    padding: 0;
+    list-style: none;
+
+    @include screen('lg') {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
   }
 
   &__all {
@@ -20,5 +28,34 @@
     @include screen('sm') {
       display: block;
     }
+  }
+}
+
+.landing-review {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding-top: 15px;
+  border-top: 1px solid $color__white;
+
+  &__text {
+    display: -webkit-box;
+    margin: 0;
+    overflow: hidden;
+    font-size: clamp(14px, 1.1vw, 18px);
+    font-weight: 300;
+    line-height: 1.6;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
+  }
+
+  &__author {
+    margin: 0;
+    font-size: clamp(13px, 1vw, 16px);
+    opacity: .7;
+  }
+
+  &__name {
+    font-weight: 700;
   }
 }

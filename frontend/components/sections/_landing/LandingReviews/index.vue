@@ -3,7 +3,18 @@
     <h2 class="landing-reviews__title">{{ section.title }}</h2>
     <HtmlMarked v-if="section.text" class="landing-reviews__text" :text="section.text" />
 
-    <ReviewsList class="landing-reviews__list" :items="reviews" />
+    <ul class="landing-reviews__list">
+      <li v-for="item in reviews" :key="item.id" class="landing-review">
+        <blockquote class="landing-review__text">«{{ item.text }}»</blockquote>
+        <p class="landing-review__author">
+          <span class="landing-review__name">{{ item.name }}</span>
+          <template v-if="item.company">
+            , <a v-if="safeUrl(item.link)" :href="safeUrl(item.link)" target="_blank" rel="noopener noreferrer nofollow">{{ item.company }}</a>
+            <template v-else>{{ item.company }}</template>
+          </template>
+        </p>
+      </li>
+    </ul>
 
     <NuxtLink class="btn landing-reviews__all" :to="localePath('/reviews')">
       {{ section.link_label || t('landing.all_reviews') }}
@@ -13,7 +24,7 @@
 
 <script setup>
 import { HtmlMarked } from '~/components/common'
-import ReviewsList from '../../_reviews/ReviewsList'
+import { safeUrl } from '~/utils/url'
 
 const props = defineProps({
   section: {

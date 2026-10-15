@@ -61,7 +61,15 @@ const { data: landing } = await useRequiredStrapiData('landings', {
 }, { single: true })
 
 // Пустой раздел (без компонента на сайте) не выводим
-const sections = computed(() => (landing.value.sections ?? []).filter(section => sectionComponents[section.__component]))
+// Блок отзывов подставляется сам (перед формой связи), если его не добавили в Strapi
+const sections = computed(() => {
+  const list = (landing.value.sections ?? []).filter(section => sectionComponents[section.__component])
+  if (list.some(section => section.__component === 'landing.section-reviews')) return list
+
+  const auto = { __component: 'landing.section-reviews', id: 'auto', title: t('landing.reviews_title'), limit: 3 }
+  const contactIndex = list.findIndex(section => section.__component === 'landing.section-contact')
+  return contactIndex === -1 ? [...list, auto] : [...list.slice(0, contactIndex), auto, ...list.slice(contactIndex)]
+})
 
 const anchors = computed(() => Object.fromEntries(Object.entries(ANCHORS)
   .map(([anchor, type]) => [anchor, sections.value.some(section => section.__component === type) ? anchor : null])))

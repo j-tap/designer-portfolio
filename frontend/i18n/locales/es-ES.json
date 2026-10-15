@@ -77,5 +77,6 @@
   "contact_form.success_title": "¡Gracias por tu mensaje!",
   "contact_form.success_text": "Te responderé por correo en breve.",
   "contact_form.send_error": "No se pudo enviar el mensaje, inténtalo de nuevo",
-  "landing.all_reviews": "Leer todas las reseñas"
+  "landing.all_reviews": "Leer todas las reseñas",
+  "landing.reviews_title": "Reseñas de clientes"
 }

@@ -5,6 +5,8 @@ WORKDIR /app
 RUN mkdir -p .yarn/releases
 COPY .yarn/releases/yarn-4.18.1.cjs .yarn/releases/
 COPY .yarnrc.yml ./
+# Local fixes to dependencies (yarn patch), applied by yarn install
+COPY .yarn/patches .yarn/patches
 
 RUN corepack enable && corepack prepare yarn@4.18.1 --activate
 
@@ -21,6 +23,9 @@ COPY . .
 # `strapi build` needs only Strapi's public URL (derived from these), which it bakes into the admin panel.
 ARG SITE_URL
 ARG STRAPI_PUBLIC_URL
+# Shown on the LLM Translator settings page in the admin panel
+ARG STRAPI_ADMIN_LLM_TRANSLATOR_LLM_BASE_URL
+ARG STRAPI_ADMIN_LLM_TRANSLATOR_LLM_MODEL
 
 RUN yarn build
 

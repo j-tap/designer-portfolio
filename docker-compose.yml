@@ -19,6 +19,9 @@ services:
         # `strapi build` bakes Strapi's public URL into the admin panel
         SITE_URL: ${SITE_URL:?set SITE_URL in .env}
         STRAPI_PUBLIC_URL: ${STRAPI_PUBLIC_URL:-}
+        # Only shown on the LLM Translator settings page; requests read them at runtime
+        STRAPI_ADMIN_LLM_TRANSLATOR_LLM_BASE_URL: ${STRAPI_ADMIN_LLM_TRANSLATOR_LLM_BASE_URL:-https://generativelanguage.googleapis.com/v1beta/openai/}
+        STRAPI_ADMIN_LLM_TRANSLATOR_LLM_MODEL: ${STRAPI_ADMIN_LLM_TRANSLATOR_LLM_MODEL:-gemini-3.5-flash-lite}
     environment:
       HOST: 0.0.0.0
       PORT_BACKEND: ${PORT_BACKEND:-1337}
@@ -36,6 +39,11 @@ services:
       SMTP_PASSWORD: ${SMTP_PASSWORD:?set SMTP_PASSWORD in .env}
       SMTP_FROM: ${SMTP_FROM:-}
       NOTIFY_EMAIL: ${NOTIFY_EMAIL:?set NOTIFY_EMAIL in .env}
+      # Defaults are set here, not left empty: the plugin treats an empty value as set
+      # and would send requests to an empty address
+      LLM_TRANSLATOR_LLM_API_KEY: ${LLM_TRANSLATOR_LLM_API_KEY:-}
+      STRAPI_ADMIN_LLM_TRANSLATOR_LLM_BASE_URL: ${STRAPI_ADMIN_LLM_TRANSLATOR_LLM_BASE_URL:-https://generativelanguage.googleapis.com/v1beta/openai/}
+      STRAPI_ADMIN_LLM_TRANSLATOR_LLM_MODEL: ${STRAPI_ADMIN_LLM_TRANSLATOR_LLM_MODEL:-gemini-3.5-flash-lite}
 
   nuxt:
     build:

@@ -1,12 +1,14 @@
 <template>
-  <div class="page-landing">
+  <div class="page-landing" :lang="contentLang(landing)">
     <LandingHero
       :title="landing.title"
       :title-accent="landing.title_accent"
       :hero="landing.hero"
       :contact-href="anchors.contact && `#${anchors.contact}`"
       :projects-href="anchors.projects && `#${anchors.projects}`"
-    />
+    >
+      <TranslationNotice :locale="landing.locale" />
+    </LandingHero>
 
     <div class="page-landing__sections">
       <Component
@@ -23,11 +25,13 @@
 </template>
 
 <script setup>
+import { TranslationNotice } from '~/components/common'
 import { LandingCards, LandingCases, LandingContact, LandingFaq, LandingHero } from '~/components/sections'
 import { projectPaths } from '~/config/portfolio'
 
 // Посадочные страницы («Посадочные страницы» в Strapi): /<язык>/<slug>.
 // Отдельные страницы (/contacts, /portfolio…) Nuxt выбирает раньше этого адреса.
+// Без перевода на язык адреса показывается оригинал, canonical ведёт на него (app.vue).
 // Языковые версии (hreflang, переключатель языков) сообщает middleware/landing.js
 definePageMeta({ middleware: 'landing' })
 
@@ -49,11 +53,11 @@ const route = useRoute()
 const localePath = useLocalePath()
 const siteMeta = useSiteMeta()
 const absoluteUrl = useAbsoluteUrl()
+const contentLang = useContentLang()
 
-// Страница есть только на языках, на которые переведена: без перевода — 404, а не оригинал
 const { data: landing } = await useRequiredStrapiData('landings', {
   filters: { slug: { $eq: route.params.landing } },
-}, { single: true, fallback: false })
+}, { single: true })
 
 // Пустой раздел (без компонента на сайте) не выводим
 const sections = computed(() => (landing.value.sections ?? []).filter(section => sectionComponents[section.__component]))

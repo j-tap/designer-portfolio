@@ -5,10 +5,8 @@
  * - contentLocale — язык показанной версии. Если перевода на язык страницы нет, useStrapiData
  *   отдаёт оригинал, и страница — копия оригинала: canonical ведёт на него (app.vue).
  * Остальные страницы есть на всех языках.
- * Посадочные страницы (middleware/landing.js) сообщают версии через setPageLocales ещё до рендера:
- * - exclusive — страница есть только на языках своих версий, без оригинала на остальных:
- *   переключатель языков ведёт с неё на главную другого языка;
- * - paths — адреса версий: slug у каждой свой, по ним строятся hreflang и переключатель.
+ * Посадочные страницы (middleware/landing.js) сообщают версии через setPageLocales ещё до рендера,
+ * вместе с их адресами (paths): slug у каждой версии свой, по ним строятся hreflang и переключатель.
  *
  * Версии хранятся вместе с адресом страницы: пока новая страница их не сообщила
  * (переход по сайту), для неё действуют все языки, а не языки предыдущей.
@@ -34,10 +32,10 @@ export function definePageLocales (entry) {
 
 /**
  * Версии страницы по адресу path, известные заранее (в middleware — до рендера шапки).
- * paths — { <язык>: <адрес версии> }; exclusive — других версий у страницы нет.
+ * paths — { <язык>: <адрес версии> }.
  */
-export function setPageLocales (path, { contentLocale, paths, exclusive = false }) {
-  usePageLocalesState().value = { path, contentLocale, locales: Object.keys(paths), paths, exclusive }
+export function setPageLocales (path, { contentLocale, paths }) {
+  usePageLocalesState().value = { path, contentLocale, locales: Object.keys(paths), paths }
 }
 
 export function usePageLocales () {
@@ -50,7 +48,6 @@ export function usePageLocales () {
   return {
     locales: computed(() => current.value?.locales ?? localeCodes.value),
     contentLocale: computed(() => current.value?.contentLocale ?? locale.value),
-    exclusive: computed(() => current.value?.exclusive ?? false),
     paths: computed(() => current.value?.paths ?? {}),
   }
 }

@@ -2,6 +2,7 @@
 
 const { addBlurhash } = require('./utils/blurhash');
 const { createVariants, removeVariants, createAllVariants } = require('./utils/image-variants');
+const { grantPublicPermissions } = require('./utils/public-permissions');
 
 module.exports = {
   register({ strapi }) {
@@ -12,7 +13,7 @@ module.exports = {
     };
   },
 
-  bootstrap({ strapi }) {
+  async bootstrap({ strapi }) {
     // beforeUpdate — для замены файла в медиатеке: тогда в данных приходят новые url и mime
     strapi.db.lifecycles.subscribe({
       models: ['plugin::upload.file'],
@@ -23,6 +24,9 @@ module.exports = {
       afterUpdate: ({ result }) => { createVariants(result); },
       afterDelete: ({ result }) => removeVariants(result),
     });
+
+    // Права роли Public — по роутерам API: новый тип доступен сайту без галочек в админке
+    await grantPublicPermissions(strapi);
 
     // Копии для уже загруженных картинок. Первый проход после обновления займёт минуты,
     // сайт тем временем работает: недостающую копию создаст первый же запрос

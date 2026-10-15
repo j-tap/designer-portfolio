@@ -30,7 +30,8 @@ const absoluteUrl = useAbsoluteUrl()
 // - У версий посадочной страницы свои адреса (slug на каждом языке): hreflang ведёт на них
 useHead(computed(() => {
   const exists = code => pageLocales.value.includes(code)
-  const original = contentLocale.value !== locale.value && absoluteUrl(switchLocalePath(contentLocale.value))
+  const original = contentLocale.value !== locale.value
+    && absoluteUrl(pagePaths.value[contentLocale.value] ?? switchLocalePath(contentLocale.value))
   const { link = [], meta = [], ...head } = localeHead.value
   const hreflangLocale = hreflang => (hreflang === 'x-default' ? defaultLocale : hreflang.split('-')[0])
 

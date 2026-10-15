@@ -6,6 +6,8 @@
         {{ ' ' }}
         <TitleOutline v-if="titleParts.rest" class="landing-hero__title-rest">{{ titleParts.rest }}</TitleOutline>
       </h1>
+      <!-- Пометка о непереведённой странице -->
+      <slot />
 
       <p v-if="hero?.lead" class="landing-hero__lead">{{ hero.lead }}</p>
       <HtmlMarked v-if="hero?.text" class="landing-hero__text" :text="hero.text" />

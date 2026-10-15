@@ -42,8 +42,7 @@ import { IconBase } from '~/components/common'
 const { t, locale, locales } = useI18n()
 const route = useRoute()
 const switchLocalePath = useSwitchLocalePath()
-const localePath = useLocalePath()
-const { locales: pageLocales, exclusive, paths } = usePageLocales()
+const { paths } = usePageLocales()
 
 const emit = defineEmits(['select'])
 
@@ -64,15 +63,10 @@ watch(() => route.fullPath, () => close())
 const current = computed(() => locales.value.find(({ code }) => code === locale.value))
 
 // Страница есть на всех языках: записи Strapi без перевода показываются на языке оригинала.
-// Кроме посадочных: у версий свои адреса, а без версии на языке — ссылка на главную
-function pathFor (code) {
-  if (paths.value[code]) return paths.value[code]
-  return exclusive.value && !pageLocales.value.includes(code) ? localePath('/', code) : switchLocalePath(code)
-}
-
+// У версий посадочной страницы свои адреса (slug на каждом языке)
 const items = computed(() => locales.value
   .filter(({ code }) => code !== locale.value)
-  .map(({ code, name }) => ({ code, name, path: pathFor(code) })))
+  .map(({ code, name }) => ({ code, name, path: paths.value[code] ?? switchLocalePath(code) })))
 </script>
 
 <style lang="scss" src="./style.scss" scoped/>

@@ -49,16 +49,21 @@ export function useStrapiData (name, params = {}, { single = false, singleType =
     }
   }
 
-  // Одиночный тип не принимает locale=*: языки цепочки перебираются, пока версия не найдётся
-  async function findSingleType (chain) {
+  // Одна запись (одиночный тип или запись по фильтру) почти всегда переведена: языки цепочки
+  // запрашиваются по одному, запасные — только если версии на языке страницы нет. Так Strapi
+  // отдаёт одну версию, а не все сразу (у populate=deep они тяжёлые), а языки остальных
+  // версий у найденной заполняет populate=deep (localizations)
+  async function findEntry (chain) {
     for (const code of chain) {
       const data = await findOrNull({ ...query.value, locale: code })
-      if (data) return data
+      const entry = singleType ? data : data?.[0]
+      if (entry) return entry
     }
     return null
   }
 
-  // Коллекция — одним запросом на всех языках (locale=*), от каждой записи — лучшая версия.
+  // Список — одним запросом на всех языках (locale=*), от каждой записи — лучшая версия
+  // (одиночный тип locale=* не принимает).
   // Записей с версиями на всех языках больше, чем записей, поэтому страницы Strapi читаются
   // все, а ограничение размера списка (pagination.pageSize) применяется уже к записям
   async function findCollection (chain) {
@@ -78,14 +83,8 @@ export function useStrapiData (name, params = {}, { single = false, singleType =
     async () => {
       const chain = fallback ? contentLocales(locale.value) : [locale.value]
 
-      if (singleType) return findSingleType(chain)
-      if (!fallback) {
-        const data = await findOrNull(query.value)
-        return single ? (data?.[0] ?? null) : data
-      }
-
-      const list = await findCollection(chain)
-      return single ? (list[0] ?? null) : list
+      if (single || singleType) return findEntry(chain)
+      return fallback ? findCollection(chain) : findOrNull(query.value)
     },
     { dedupe: 'defer', getCachedData, ...options },
   )

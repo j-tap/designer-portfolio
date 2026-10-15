@@ -29,10 +29,11 @@ export function usePageMeta (info = {}) {
   const absoluteUrl = useAbsoluteUrl()
   const siteName = useSiteName()
 
-  // На главной — только заголовок сайта, на остальных — «Страница | Сайт»
+  // На главной — только заголовок сайта, на остальных — «Страница | Сайт».
+  // exactTitle — заголовок уже полный (SEO-заголовок из Strapi), выводится как есть
   const title = computed(() => {
     const own = toValue(info.title) || siteMeta.value.title || t('app.name')
-    return getRouteBaseName(route) === 'index' ? own : `${own} | ${siteName.value}`
+    return getRouteBaseName(route) === 'index' || toValue(info.exactTitle) ? own : `${own} | ${siteName.value}`
   })
 
   const description = computed(() => {

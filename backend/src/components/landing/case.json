@@ -1,0 +1,26 @@
+{
+  "collectionName": "components_landing_cases",
+  "info": {
+    "displayName": "Посадочная - Проект",
+    "description": "project_slug — slug проекта из раздела «Проекты»: с него берутся обложка и ссылка на страницу проекта"
+  },
+  "options": {},
+  "attributes": {
+    "project_slug": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "subtitle": {
+      "type": "string"
+    },
+    "text": {
+      "type": "richtext"
+    },
+    "link_label": {
+      "type": "string"
+    }
+  }
+}

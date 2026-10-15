@@ -1,0 +1,26 @@
+{
+  "collectionName": "components_landing_section_cards",
+  "info": {
+    "displayName": "Посадочная - Раздел с карточками",
+    "description": "Услуги, преимущества, этапы работы. numbered — карточки с номерами (этапы)"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "text": {
+      "type": "richtext"
+    },
+    "numbered": {
+      "type": "boolean",
+      "default": false
+    },
+    "items": {
+      "type": "component",
+      "repeatable": true,
+      "component": "landing.card"
+    }
+  }
+}

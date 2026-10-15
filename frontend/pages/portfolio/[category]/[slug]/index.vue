@@ -17,6 +17,7 @@
         :category="subcategory"
         :subcategories="subcategories"
         :title="subcategory.category.title"
+        :locale="subcategory.locale"
         :back="{ to: portfolioPath(categorySlug), title: t('portfolio.back_to_{category}', { category: subcategory.category.title }) }"
       />
     </ContentWrap>

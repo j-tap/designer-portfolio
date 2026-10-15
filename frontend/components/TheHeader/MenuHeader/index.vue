@@ -14,6 +14,12 @@
         <span class="menu__link-text_md-up">{{ t(item.locale) }}</span>
       </NuxtLink>
     </li>
+    <li
+      v-if="$slots.default"
+      class="menu__item menu__item_aside"
+    >
+      <slot/>
+    </li>
   </ul>
 </template>
 

@@ -30,7 +30,8 @@
       </h2>
     </section>
 
-    <section class="page-main__section-info info-section">
+    <section class="page-main__section-info info-section" :lang="contentLang(home)">
+      <TranslationNotice :locale="home?.locale" />
       <h3 class="info-section__title">
         {{ withYears(home?.experience?.title) }}
       </h3>
@@ -65,15 +66,17 @@
 </template>
 
 <script setup>
-import { TitleOutline, MarqueeBlock, HtmlMarked } from '~/components/common'
+import { TitleOutline, MarqueeBlock, HtmlMarked, TranslationNotice } from '~/components/common'
 import { PortfolioCategories } from '~/components/sections'
 import { fillExperience } from '~/utils/experience'
 
 const { t } = useI18n()
 const meta = useSiteMeta()
+const contentLang = useContentLang()
 const withYears = text => fillExperience(text, meta.value.careerStartYear)
 
-const { data: home } = await useRequiredStrapiData('home', {}, { allowMissing: true })
+const { data: home } = await useRequiredStrapiData('home', {}, { singleType: true, allowMissing: true })
+definePageLocales(home)
 const { data: categories } = useStrapiData('category-projects', { sort: [{ rank: 'asc' }] })
 const contacts = useContacts()
 

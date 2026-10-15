@@ -6,7 +6,7 @@ import { fillExperience } from '~/utils/experience'
  * useAsyncData, а app.vue дожидается их до рендера.
  */
 export function useSiteMeta () {
-  const { data } = useStrapiData('meta-info', { populate: { image: true } })
+  const { data } = useStrapiData('meta-info', { populate: { image: true } }, { singleType: true })
 
   return computed(() => {
     const meta = data.value || {}

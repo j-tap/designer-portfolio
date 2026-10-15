@@ -8,10 +8,13 @@
         {{ back.title }}
       </BackLink>
 
+      <TranslationNotice :locale="locale" />
+
       <div class="page-category__head page-category-head">
         <TitleOutline
           class="page-category-head__title"
           tag="h1"
+          :lang="contentLang({ locale })"
         >
           {{ title }}
         </TitleOutline>
@@ -31,6 +34,7 @@
           :id="`project-${project.id}`"
           ref="listItems"
           :data-index="index"
+          :lang="contentLang(project)"
           class="projects-list__item"
         >
           <ProjectPreview
@@ -55,7 +59,7 @@
 </template>
 
 <script setup>
-import { BackLink, TitleOutline } from '~/components/common'
+import { BackLink, TitleOutline, TranslationNotice } from '~/components/common'
 import { ContentWrap } from '~/components/structure'
 import { ProjectPreview, PortfolioSubcategoriesNav } from '~/components/sections'
 import { projectPath } from '~/config/portfolio'
@@ -91,9 +95,15 @@ const props = defineProps({
     type: Object,
     default: () => ({}),
   },
+  // Язык показанной версии категории или подкатегории: без перевода — язык оригинала
+  locale: {
+    type: String,
+    default: null,
+  },
 })
 
 const localePath = useLocalePath()
+const contentLang = useContentLang()
 
 useParallax(useTemplateRef('listItems'))
 

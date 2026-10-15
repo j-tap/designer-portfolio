@@ -1,0 +1,17 @@
+// Посадочные страницы (pages/[landing]): заголовок раздела и основной текст
+
+@mixin landing-title() {
+  margin: 0;
+  padding: 0;
+  font-weight: 700;
+  font-size: clamp(28px, 4.6vw, 88px);
+  line-height: 1.05;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+@mixin landing-text() {
+  font-size: clamp(15px, 1.4vw, 22px);
+  line-height: 1.45;
+  text-wrap: pretty;
+}

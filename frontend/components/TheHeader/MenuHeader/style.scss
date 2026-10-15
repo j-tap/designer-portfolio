@@ -36,6 +36,18 @@
     @include screen('md-up') {
       font-size: calc(13px + .391vw);
     }
+
+    // Второстепенное после разделов (переключатель языков): мельче и без акцента
+    &_aside {
+      @include screen('sm') {
+        margin-top: 20px;
+        font-size: 16px;
+        font-weight: 400;
+      }
+      @include screen('md-up') {
+        font-size: calc(9px + .26vw);
+      }
+    }
   }
   &__link {
     display: block;

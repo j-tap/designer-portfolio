@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_landing_section_faqs",
+  "info": {
+    "displayName": "Посадочная - Вопросы и ответы",
+    "description": "Вопросы попадают и в разметку FAQPage для поисковиков"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "items": {
+      "type": "component",
+      "repeatable": true,
+      "component": "landing.faq-item"
+    }
+  }
+}

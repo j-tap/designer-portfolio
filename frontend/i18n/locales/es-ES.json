@@ -61,5 +61,7 @@
   "reviews.send_error": "No se pudo enviar la reseña, inténtalo de nuevo",
   "error.unknown": "Lo sentimos, error desconocido",
   "error.clear": "Ir a la página principal",
-  "menu.toggle": "Menú"
+  "menu.toggle": "Menú",
+  "menu.language": "Idioma",
+  "content.not_translated": "Esta página aún no está traducida, por eso se muestra en el idioma original."
 }

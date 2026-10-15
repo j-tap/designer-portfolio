@@ -1,0 +1,28 @@
+{
+  "collectionName": "components_landing_heroes",
+  "info": {
+    "displayName": "Посадочная - Первый экран",
+    "description": "Текст под заголовком H1 и кнопки. Кнопки ведут к разделам «Проекты» и «Контакты» страницы"
+  },
+  "options": {},
+  "attributes": {
+    "lead": {
+      "type": "text"
+    },
+    "text": {
+      "type": "richtext"
+    },
+    "cta_label": {
+      "type": "string"
+    },
+    "projects_label": {
+      "type": "string"
+    },
+    "note": {
+      "type": "string"
+    },
+    "marquee": {
+      "type": "string"
+    }
+  }
+}

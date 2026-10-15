@@ -1,0 +1,64 @@
+.landing-cards {
+  $self: &;
+
+  &__title {
+    @include landing-title;
+  }
+
+  &__text {
+    @include landing-text;
+    max-width: 875px;
+    margin-top: clamp(15px, 2.1vw, 40px);
+  }
+
+  &__list {
+    display: grid;
+    gap: clamp(30px, 3.2vw, 60px) clamp(20px, 4vw, 80px);
+    margin: clamp(30px, 4vw, 80px) 0 0;
+    padding: 0;
+    list-style: none;
+
+    @include screen('md-up') {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  &__item {
+    padding-top: clamp(16px, 1.6vw, 30px);
+    border-top: 1px solid rgba($color__white, .3);
+  }
+
+  &__item-title {
+    margin: 0;
+    font-size: clamp(18px, 2vw, 34px);
+    font-weight: 700;
+    line-height: 1.2;
+    text-wrap: balance;
+  }
+
+  &__item-text {
+    @include landing-text;
+    margin-top: clamp(10px, 1vw, 20px);
+    color: rgba($color__white, .8);
+  }
+
+  &_numbered {
+    #{$self}__list {
+      @include screen('lg') {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+    }
+
+    #{$self}__item {
+      border-top: none;
+      padding-top: 0;
+    }
+
+    #{$self}__number {
+      display: block;
+      font-size: clamp(56px, 6.4vw, 120px);
+      line-height: 1;
+      margin-bottom: clamp(12px, 1.5vw, 28px);
+    }
+  }
+}

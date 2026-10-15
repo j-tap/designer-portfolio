@@ -1,0 +1,64 @@
+// Белый блок во всю ширину контента — как «важное» на главной
+.landing-contact {
+  background: $color__white;
+  color: $color__dark;
+  padding: clamp(30px, 4.2vw, 80px) clamp(20px, 4.2vw, 80px);
+
+  &__title {
+    @include landing-title;
+    font-family: $font__decor;
+  }
+
+  &__text {
+    @include landing-text;
+    max-width: 875px;
+    margin-top: clamp(15px, 2.1vw, 40px);
+  }
+
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: clamp(16px, 2.6vw, 50px);
+    margin-top: clamp(28px, 3.2vw, 60px);
+  }
+
+  // На белом фоне белая подсветка кнопки из .btn не видна
+  &__cta {
+    &:hover,
+    &:focus-visible {
+      background-color: $color__dark;
+      color: $color__white;
+    }
+
+    @include screen('sm') {
+      width: 100%;
+    }
+  }
+
+  &__whatsapp {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-size: clamp(16px, 1.2vw, 20px);
+    font-weight: 600;
+    text-underline-offset: .25em;
+    transition: color .15s ease-in-out;
+
+    &:hover,
+    &:focus-visible {
+      color: #1f8a4c;
+    }
+  }
+
+  &__whatsapp &__whatsapp-icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  &__signature {
+    margin: clamp(30px, 3.2vw, 60px) 0 0;
+    color: #666;
+    font-size: clamp(13px, 1vw, 17px);
+  }
+}

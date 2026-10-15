@@ -273,24 +273,33 @@
   }
   @include screen('md') {
     margin-right: -$content__indent-x_md;
-    max-width: 80%;
+    min-width: 80%;
     margin-left: auto;
   }
+  // Ширина блока (80% / 73%) — наименьшая: если заголовок с текстом не помещаются
+  // (длинный заголовок на другом языке), блок растёт влево, а не сжимает текст
   @include  screen('md-up') {
     display: flex;
     align-items: center;
+    width: max-content;
+    max-width: calc(100% - 20px);
 
     &__title {
       font-family: $font__decor;
+      // Перенос — только если блок упёрся в край
+      white-space: normal;
+      text-wrap: balance;
 
       & + * {
+        flex: 1 0 auto;
+        width: 12em;
         margin: 0 0 0 2.8vw;
       }
     }
   }
   @include screen('lg') {
     margin-right: -$content__indent-x_lg;
-    max-width: 73%;
+    min-width: 73%;
     margin-left: auto;
   }
 

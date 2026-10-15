@@ -10,13 +10,16 @@
         :items="menuMain"
         :open="openMenu"
         @click-item="closeMenu"
-      />
+      >
+        <LangSwitcher @select="closeMenu"/>
+      </MenuHeader>
     </nav>
   </header>
 </template>
 
 <script setup>
 import MenuHeader from './MenuHeader'
+import LangSwitcher from './LangSwitcher'
 import { BurgerBtn } from '~/components/common'
 
 const menuMain = [

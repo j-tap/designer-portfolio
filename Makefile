@@ -21,7 +21,7 @@ generate_traefik: check_env
 	envsubst '$${TRAEFIK_DOMAIN} $${PORT_BACKEND} $${PORT_FRONTEND}' < docker-compose.traefik.template.yml > docker-compose.traefik.yml
 
 dev: clean check_env
-	$(COMPOSE_DEV) up --build
+	$(COMPOSE_DEV) up --build --renew-anon-volumes
 
 prod: check_env generate_traefik build
 	$(COMPOSE_PROD) up -d

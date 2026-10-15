@@ -1,0 +1,25 @@
+.page-landing {
+  &__sections {
+    @include screen('sm') {
+      padding: 0 $content__indent-x_sm;
+    }
+    @include screen('md') {
+      padding: 0 $content__indent-x_md;
+    }
+    @include screen('lg') {
+      padding: 0 $content__indent-x_lg;
+    }
+  }
+
+  &__section {
+    margin-top: clamp(80px, 9vw, 180px);
+  }
+
+  // Белый блок контактов — до краёв экрана на телефоне, как блоки главной
+  &__section_contact {
+    @include screen('sm') {
+      margin-left: -$content__indent-x_sm;
+      margin-right: -$content__indent-x_sm;
+    }
+  }
+}

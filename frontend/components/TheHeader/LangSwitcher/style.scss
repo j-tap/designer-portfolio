@@ -1,0 +1,93 @@
+.lang-switcher {
+  position: relative;
+  font: inherit;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+
+  &__toggle {
+    display: flex;
+    align-items: center;
+    gap: .4em;
+    margin: 0;
+    font: inherit;
+    letter-spacing: inherit;
+    text-transform: inherit;
+    color: $color__white;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    appearance: none;
+    transition: color .2s ease-in;
+
+    @include screen('sm') {
+      padding: 10px 0;
+    }
+    @include screen('md-up') {
+      padding: 6px 0;
+    }
+
+    &:hover {
+      color: $color__blue;
+    }
+  }
+
+  &__arrow {
+    transition: transform .2s ease-in;
+  }
+
+  &__list {
+    @include widget-bg();
+    position: absolute;
+    z-index: 1;
+    top: 100%;
+    margin: 0;
+    padding: 4px 0;
+    list-style: none;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-4px);
+    transition: opacity .2s ease-in, visibility .2s ease-in, transform .2s ease-in;
+
+    // В мобильном меню кнопка у левого края, на десктопе — у правого края шапки
+    @include screen('sm') {
+      left: 0;
+    }
+    @include screen('md-up') {
+      left: 50%;
+      margin-left: -2em;
+      width: 4em;
+      text-align: center;
+    }
+  }
+
+  &__link {
+    display: block;
+    color: $color__gray;
+    text-decoration: none;
+    transition: color .2s ease-in;
+
+    @include screen('sm') {
+      padding: 10px 0;
+    }
+    @include screen('md-up') {
+      padding: 6px 0;
+    }
+
+    &:hover,
+    &:focus-visible {
+      color: $color__blue;
+    }
+  }
+
+  &_open {
+    .lang-switcher__arrow {
+      transform: rotate(180deg);
+    }
+
+    .lang-switcher__list {
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+    }
+  }
+}

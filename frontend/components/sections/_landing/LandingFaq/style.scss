@@ -1,0 +1,60 @@
+.landing-faq {
+  &__title {
+    @include landing-title;
+  }
+
+  &__list {
+    margin-top: clamp(30px, 4vw, 80px);
+    border-bottom: 1px solid rgba($color__white, .3);
+  }
+
+  &__item {
+    border-top: 1px solid rgba($color__white, .3);
+
+    &[open] .landing-faq__arrow {
+      transform: rotate(180deg);
+    }
+  }
+
+  &__question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: clamp(18px, 1.8vw, 34px) 0;
+    cursor: pointer;
+    list-style: none;
+    transition: color .15s ease-in-out;
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+
+    &:hover {
+      color: $color__blue;
+    }
+  }
+
+  &__question-text {
+    margin: 0;
+    font-size: clamp(17px, 1.8vw, 30px);
+    font-weight: 600;
+    line-height: 1.25;
+    text-wrap: balance;
+  }
+
+  // Внутри вопроса, чтобы перебить размер значка из IconBase
+  &__question &__arrow {
+    flex-shrink: 0;
+    width: clamp(16px, 1.6vw, 26px);
+    height: clamp(16px, 1.6vw, 26px);
+    transition: transform .2s ease-in-out;
+  }
+
+  &__answer {
+    @include landing-text;
+    max-width: 900px;
+    padding-bottom: clamp(18px, 1.8vw, 34px);
+    color: rgba($color__white, .8);
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "collectionName": "components_landing_section_contacts",
+  "info": {
+    "displayName": "Посадочная - Контакты",
+    "description": "Кнопка — письмо на E-mail из «Контактов», ссылка — WhatsApp оттуда же. К разделу ведёт главная кнопка первого экрана"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "text": {
+      "type": "richtext"
+    },
+    "cta_label": {
+      "type": "string"
+    },
+    "email_subject": {
+      "type": "string"
+    },
+    "whatsapp_label": {
+      "type": "string"
+    },
+    "whatsapp_message": {
+      "type": "text"
+    },
+    "signature": {
+      "type": "string"
+    }
+  }
+}

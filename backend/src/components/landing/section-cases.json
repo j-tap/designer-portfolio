@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_landing_section_cases",
+  "info": {
+    "displayName": "Посадочная - Проекты",
+    "description": "К этому разделу ведёт кнопка «проекты» первого экрана"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "text": {
+      "type": "richtext"
+    },
+    "items": {
+      "type": "component",
+      "repeatable": true,
+      "component": "landing.case"
+    }
+  }
+}

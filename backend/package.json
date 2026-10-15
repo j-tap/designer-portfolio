@@ -7,7 +7,8 @@
     "develop": "ENV_PATH=../.env strapi develop",
     "start": "ENV_PATH=../.env strapi start",
     "build": "ENV_PATH=../.env strapi build",
-    "strapi": "ENV_PATH=../.env strapi"
+    "strapi": "ENV_PATH=../.env strapi",
+    "seed:landing": "ENV_PATH=../.env node scripts/seed-landing-diseno-ux-ui.js"
   },
   "dependencies": {
     "@retikolo/drag-drop-content-types": "^2.0.0",

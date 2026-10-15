@@ -1,0 +1,29 @@
+{
+  "collectionName": "components_common_seos",
+  "info": {
+    "displayName": "SEO",
+    "description": "Заголовок и описание для поисковиков и соцсетей. Заголовок выводится как есть, без названия сайта"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "maxLength": 70
+    },
+    "description": {
+      "type": "text",
+      "maxLength": 160
+    },
+    "keywords": {
+      "type": "text"
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    }
+  }
+}

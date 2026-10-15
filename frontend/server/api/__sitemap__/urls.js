@@ -2,7 +2,7 @@ import qs from 'qs'
 import { asSitemapUrl, defineSitemapEventHandler } from '#imports'
 import { fetchAllPosts } from '~/server/utils/postsCache'
 import i18nConfig from '~/config/i18n'
-import { listOnly, portfolioPath, projectPath } from '~/config/portfolio'
+import { listOnly, portfolioPath, projectPaths } from '~/config/portfolio'
 
 const locales = i18nConfig.locales.map(locale => locale.code)
 
@@ -78,17 +78,16 @@ export default defineSitemapEventHandler(async () => {
 
     projects.forEach((project) => {
       const lastmod = project.updatedAt || project.time?.end || project.time?.start
-      // Проект в подкатегориях — по адресам подкатегорий, иначе — по адресам категорий
-      const places = project.subcategories?.length
-        ? project.subcategories.map(subcategory => ({ category: subcategory.category?.slug, subcategory: subcategory.slug }))
-        : project.categories.map(category => ({ category: category.slug }))
-
-      places
-        .filter(place => place.category)
-        .map(place => projectPath(place, project.slug))
-        .filter(Boolean)
-        .forEach(path => add(locale, path, { lastmod }))
+      projectPaths(project).forEach(path => add(locale, path, { lastmod }))
     })
+
+    // Посадочная страница есть только на языках, на которые переведена: у каждой версии свой slug
+    const landings = await safeFindAll('landings', { fields: ['slug', 'updatedAt'], locale }, locale)
+    landings.forEach(landing => add(locale, `/${landing.slug}`, {
+      priority: 0.9,
+      changefreq: 'monthly',
+      lastmod: landing.updatedAt,
+    }))
   }
 
   // Страницы постов берём из того же кеша, что и /posts (внешний источник может быть недоступен)

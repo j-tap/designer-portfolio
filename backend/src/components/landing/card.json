@@ -1,0 +1,17 @@
+{
+  "collectionName": "components_landing_cards",
+  "info": {
+    "displayName": "Посадочная - Карточка",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "text": {
+      "type": "richtext"
+    }
+  }
+}

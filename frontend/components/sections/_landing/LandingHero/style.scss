@@ -1,0 +1,94 @@
+.landing-hero {
+  overflow: hidden;
+
+  &__inner {
+    @include screen('sm') {
+      padding: 0 $content__indent-x_sm;
+    }
+    @include screen('md') {
+      padding: 0 $content__indent-x_md;
+    }
+    @include screen('lg') {
+      padding: 0 $content__indent-x_lg;
+    }
+  }
+
+  &__title {
+    margin: 0;
+    font-family: $font__decor;
+    font-weight: 700;
+    font-size: clamp(30px, 6vw, 110px);
+    line-height: 1.05;
+    text-transform: uppercase;
+    text-wrap: balance;
+  }
+
+  &__title-accent {
+    color: $color__white;
+  }
+
+  // Внутри заголовка, чтобы перебить inline-block самого TitleOutline: строки контура переносятся вместе с текстом
+  &__title &__title-rest {
+    display: inline;
+  }
+
+  &__lead {
+    margin: clamp(24px, 3.2vw, 60px) 0 0;
+    max-width: 900px;
+    font-size: clamp(18px, 2.1vw, 36px);
+    font-weight: 600;
+    line-height: 1.25;
+    text-wrap: balance;
+  }
+
+  &__text {
+    @include landing-text;
+    max-width: 875px;
+    margin-top: clamp(14px, 1.5vw, 28px);
+  }
+
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: clamp(16px, 2vw, 36px);
+    margin-top: clamp(28px, 3.2vw, 60px);
+  }
+
+  &__cta {
+    @include screen('sm') {
+      width: 100%;
+      height: auto;
+      min-height: $control__size;
+      line-height: 1.2;
+      padding-top: 20px;
+      padding-bottom: 20px;
+    }
+  }
+
+  &__link {
+    font-size: $btn__fs;
+    text-underline-offset: .25em;
+    transition: color .15s ease-in-out;
+
+    &:hover,
+    &:focus-visible {
+      color: $color__blue;
+    }
+  }
+
+  &__note {
+    margin: clamp(20px, 2.1vw, 40px) 0 0;
+    color: $color__gray;
+    font-size: clamp(13px, 1vw, 17px);
+    line-height: 1.4;
+  }
+
+  &__marquee {
+    margin-top: clamp(50px, 6vw, 110px);
+    font-size: clamp(46px, 8.9vw, 170px);
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+}

@@ -103,7 +103,7 @@ function rating(value) {
 async function sanitizeReview(data) {
   const locale = await resolveLocale(data.locale);
 
-  return {
+  const review = {
     name: text(data.name, 'name', { required: true }),
     company: text(data.company, 'company', { required: true }),
     link: link(data.link),
@@ -112,6 +112,8 @@ async function sanitizeReview(data) {
     developments: { connect: await relation('api::reviews-development.reviews-development', data.developments, locale) },
     cooperations: { connect: await relation('api::reviews-cooperation.reviews-cooperation', data.cooperations, locale) },
   };
+
+  return { review, locale };
 }
 
 /**
@@ -168,7 +170,7 @@ module.exports = createCoreController(UID, () => ({
       throw new ValidationError('Форма устарела, обновите страницу и попробуйте ещё раз');
     }
 
-    const review = await sanitizeReview(data);
+    const { review, locale } = await sanitizeReview(data);
 
     // Попытку засчитываем только за заполненную форму (исправление опечаток лимит не тратит),
     // но до обработки файлов: перекодирование картинок — самая тяжёлая часть запроса
@@ -181,6 +183,8 @@ module.exports = createCoreController(UID, () => ({
     try {
       // Без status документ создаётся черновиком и ждёт модерации в админке
       const document = await strapi.documents(UID).create({
+        // Отзыв сохраняется на языке автора, переводы на другие языки добавляет админ
+        locale,
         data: { ...review, files: uploaded.map(({ id }) => id) },
       });
 

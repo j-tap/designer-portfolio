@@ -1,0 +1,106 @@
+diff --git a/dist/server/index.js b/dist/server/index.js
+index 1d2a78c66f0113adab6e4951ba375b4b1c5c1a4d..59d7df3ba9edaa81d629eb75b4d57500ad288346 100644
+--- a/dist/server/index.js
++++ b/dist/server/index.js
+@@ -185,10 +185,13 @@ const llmClient = process.env.STRAPI_ADMIN_LLM_TRANSLATOR_AZURE_API_VERSION ? ne
+   apiVersion: process.env.STRAPI_ADMIN_LLM_TRANSLATOR_AZURE_API_VERSION
+ }) : new openai.OpenAI({
+   baseURL: process.env.STRAPI_ADMIN_LLM_TRANSLATOR_LLM_BASE_URL ?? DEFAULT_LLM_BASE_URL,
+-  apiKey: process.env.LLM_TRANSLATOR_LLM_API_KEY ?? "not_set"
++  apiKey: process.env.LLM_TRANSLATOR_LLM_API_KEY ?? "not_set",
++  // patch: free tiers often answer 429 (requests per minute) and 503 (model overloaded)
++  maxRetries: 5
+ });
+ const LLM_MODEL = process.env.STRAPI_ADMIN_LLM_TRANSLATOR_LLM_MODEL ?? DEFAULT_LLM_MODEL;
+-const BATCH_SIZE = 10;
++// patch: fewer, larger requests stay within free-tier per-minute limits
++const BATCH_SIZE = 50;
+ const deepMerge = (target, source) => {
+   const output = { ...target };
+   for (const key in source) {
+@@ -312,7 +315,8 @@ const generateSlug = async (data, field, contentTypeUID) => {
+ const findUIDFields = (contentType) => {
+   const uidFields = [];
+   Object.entries(contentType.attributes || {}).forEach(([fieldName, schema]) => {
+-    if (schema.type === "uid" && schema.targetField) {
++    // patch: a uid marked as not localized (e.g. a project slug shared by all languages) stays as it is
++    if (schema.type === "uid" && schema.targetField && schema.pluginOptions?.i18n?.localized !== false) {
+       uidFields.push({
+         fieldName,
+         targetField: schema.targetField
+@@ -352,14 +356,14 @@ const llmService = ({ strapi: strapi2 }) => ({
+         batches.push(translatableFields.slice(i, i + BATCH_SIZE));
+       }
+       const systemPrompt = await buildSystemPrompt(userConfig);
+-      const translatedResults = await Promise.all(
+-        batches.map(async (batch) => {
+-          const translationPayload = prepareTranslationPayload(batch);
+-          const prompt = buildPrompt(translationPayload, config2.targetLanguage);
+-          const response = await callLLMProvider(prompt, systemPrompt, userConfig);
+-          return await parseLLMResponse(response);
+-        })
+-      );
++      // patch: one request at a time instead of all batches at once
++      const translatedResults = [];
++      for (const batch of batches) {
++        const translationPayload = prepareTranslationPayload(batch);
++        const prompt = buildPrompt(translationPayload, config2.targetLanguage);
++        const response = await callLLMProvider(prompt, systemPrompt, userConfig);
++        translatedResults.push(await parseLLMResponse(response));
++      }
+       const translatedData = translatedResults.reduce((acc, curr) => {
+         return deepMerge(acc, curr);
+       }, {});
+diff --git a/dist/server/index.mjs b/dist/server/index.mjs
+index eadf6b398639f38a92a8b1a560263dae0e4bedc1..7918f4f07643757f831d2148032dc5fb7acf8c66 100644
+--- a/dist/server/index.mjs
++++ b/dist/server/index.mjs
+@@ -184,10 +184,13 @@ const llmClient = process.env.STRAPI_ADMIN_LLM_TRANSLATOR_AZURE_API_VERSION ? ne
+   apiVersion: process.env.STRAPI_ADMIN_LLM_TRANSLATOR_AZURE_API_VERSION
+ }) : new OpenAI({
+   baseURL: process.env.STRAPI_ADMIN_LLM_TRANSLATOR_LLM_BASE_URL ?? DEFAULT_LLM_BASE_URL,
+-  apiKey: process.env.LLM_TRANSLATOR_LLM_API_KEY ?? "not_set"
++  apiKey: process.env.LLM_TRANSLATOR_LLM_API_KEY ?? "not_set",
++  // patch: free tiers often answer 429 (requests per minute) and 503 (model overloaded)
++  maxRetries: 5
+ });
+ const LLM_MODEL = process.env.STRAPI_ADMIN_LLM_TRANSLATOR_LLM_MODEL ?? DEFAULT_LLM_MODEL;
+-const BATCH_SIZE = 10;
++// patch: fewer, larger requests stay within free-tier per-minute limits
++const BATCH_SIZE = 50;
+ const deepMerge = (target, source) => {
+   const output = { ...target };
+   for (const key in source) {
+@@ -311,7 +314,8 @@ const generateSlug = async (data, field, contentTypeUID) => {
+ const findUIDFields = (contentType) => {
+   const uidFields = [];
+   Object.entries(contentType.attributes || {}).forEach(([fieldName, schema]) => {
+-    if (schema.type === "uid" && schema.targetField) {
++    // patch: a uid marked as not localized (e.g. a project slug shared by all languages) stays as it is
++    if (schema.type === "uid" && schema.targetField && schema.pluginOptions?.i18n?.localized !== false) {
+       uidFields.push({
+         fieldName,
+         targetField: schema.targetField
+@@ -351,14 +355,14 @@ const llmService = ({ strapi: strapi2 }) => ({
+         batches.push(translatableFields.slice(i, i + BATCH_SIZE));
+       }
+       const systemPrompt = await buildSystemPrompt(userConfig);
+-      const translatedResults = await Promise.all(
+-        batches.map(async (batch) => {
+-          const translationPayload = prepareTranslationPayload(batch);
+-          const prompt = buildPrompt(translationPayload, config2.targetLanguage);
+-          const response = await callLLMProvider(prompt, systemPrompt, userConfig);
+-          return await parseLLMResponse(response);
+-        })
+-      );
++      // patch: one request at a time instead of all batches at once
++      const translatedResults = [];
++      for (const batch of batches) {
++        const translationPayload = prepareTranslationPayload(batch);
++        const prompt = buildPrompt(translationPayload, config2.targetLanguage);
++        const response = await callLLMProvider(prompt, systemPrompt, userConfig);
++        translatedResults.push(await parseLLMResponse(response));
++      }
+       const translatedData = translatedResults.reduce((acc, curr) => {
+         return deepMerge(acc, curr);
+       }, {});

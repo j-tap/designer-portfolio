@@ -23,6 +23,7 @@
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.30.3",
     "sharp": "0.35.5",
+    "strapi-llm-translator": "patch:strapi-llm-translator@npm%3A0.11.0#~/.yarn/patches/strapi-llm-translator-npm-0.11.0-26ead12c51.patch",
     "strapi-plugin-multi-select": "^2.1.2",
     "styled-components": "^6.6.0"
   },

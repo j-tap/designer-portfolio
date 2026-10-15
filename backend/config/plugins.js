@@ -12,6 +12,13 @@ module.exports = ({ env }) => {
       enabled: true,
     },
 
+    // Кнопка «Translate with AI» в редакторе записи: переводит содержимое формы на язык
+    // открытой локали. Модель, адрес API и ключ плагин берёт из переменных окружения
+    // (переменные с LLM_TRANSLATOR в имени, см. .env.example), запись сам не сохраняет
+    'strapi-llm-translator': {
+      enabled: true,
+    },
+
     upload: {
       config: {
         providerOptions: {

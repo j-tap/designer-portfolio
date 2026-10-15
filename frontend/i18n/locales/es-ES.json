@@ -69,7 +69,7 @@
   "contact_form.name": "Nombre",
   "contact_form.name_placeholder": "Cómo debo llamarte",
   "contact_form.email": "E-mail",
-  "contact_form.email_placeholder": "name@example.com",
+  "contact_form.email_placeholder": "name{'@'}example.com",
   "contact_form.message": "Mensaje",
   "contact_form.message_placeholder": "Cuéntame sobre tu proyecto",
   "contact_form.submit": "Enviar",

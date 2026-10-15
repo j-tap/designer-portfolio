@@ -69,7 +69,7 @@
   "contact_form.name": "Имя",
   "contact_form.name_placeholder": "Как к вам обращаться",
   "contact_form.email": "E-mail",
-  "contact_form.email_placeholder": "name@example.com",
+  "contact_form.email_placeholder": "name{'@'}example.com",
   "contact_form.message": "Сообщение",
   "contact_form.message_placeholder": "Расскажите о задаче",
   "contact_form.submit": "Отправить",

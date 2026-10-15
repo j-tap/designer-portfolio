@@ -61,5 +61,6 @@
   "reviews.send_error": "Could not send the review, please try again",
   "error.unknown": "Sorry, unknown error",
   "error.clear": "Go to the home page",
-  "menu.toggle": "Menu"
+  "menu.toggle": "Menu",
+  "menu.language": "Language"
 }

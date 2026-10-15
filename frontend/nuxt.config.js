@@ -31,7 +31,7 @@ export default defineNuxtConfig({
 					'Referrer-Policy': 'strict-origin-when-cross-origin',
 				},
 			},
-			// Корень только перенаправляет на язык браузера: ответ зависит от Accept-Language и cookie
+			// Корень только перенаправляет на язык посетителя: ответ зависит от Accept-Language и cookie
 			'/': { headers: { 'Cache-Control': 'no-store' } },
 			'/_nuxt/**': { headers: { 'Cache-Control': 'public, max-age=31536000, immutable' } },
 			'/favicon.ico': { headers: { 'Cache-Control': 'public, max-age=31536000, immutable' } },

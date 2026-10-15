@@ -5,11 +5,13 @@ export const defaultLocale = 'en'
 export default {
   defaultLocale,
   strategy: 'prefix',
+  // Язык страницы задаёт префикс адреса (/ru/…), браузер на такие адреса не влияет.
+  // Адрес без префикса (/, /contacts) ведёт на язык, выбранный переключателем (cookie),
+  // иначе на язык браузера, если сайт его поддерживает, иначе на английский
   detectBrowserLanguage: {
+    redirectOn: 'no prefix',
     useCookie: true,
     cookieKey: 'i18n_redirected',
-    redirectOn: 'root',
-    alwaysRedirect: false,
     fallbackLocale: defaultLocale,
   },
   locales: [

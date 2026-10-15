@@ -3,6 +3,12 @@
   display: inline-block;
   color: inherit;
 
+  // Значок рядом с мелким текстом (стрелка переключателя языков)
+  &_size-xs {
+    width: 10px;
+    height: 10px;
+  }
+
   &_size-md {
     @include screen('sm') {
       width: 24px;

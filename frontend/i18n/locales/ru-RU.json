@@ -61,5 +61,6 @@
   "reviews.send_error": "Не удалось отправить отзыв, попробуйте ещё раз",
   "error.unknown": "Извините, неизвестная ошибка",
   "error.clear": "На главную",
-  "menu.toggle": "Меню"
+  "menu.toggle": "Меню",
+  "menu.language": "Язык"
 }

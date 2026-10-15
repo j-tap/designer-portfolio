@@ -93,6 +93,8 @@ export function useProjectPage (project, { categorySlug, subcategorySlug = null 
     keywords: () => project.value.meta?.keywords,
   })
 
+  definePageLocales(project, '/portfolio')
+
   useStructuredData('project', {
     project,
     breadcrumbs: usePortfolioBreadcrumbs(() => ({
@@ -110,6 +112,7 @@ export function useProjectPage (project, { categorySlug, subcategorySlug = null 
  */
 export function usePortfolioListPage ({ title, description, category, subcategory = null, projects }) {
   usePageMeta({ title, description })
+  definePageLocales(() => toValue(subcategory) || toValue(category), '/portfolio')
 
   useStructuredData('collection', {
     collection: computed(() => ({

@@ -43,6 +43,17 @@ function buildPopulate(strapi, uid, depth) {
 }
 
 /**
+ * populate самой записи: связи на глубину DEPTH и, у переводимых типов, языки её версий —
+ * без содержимого. По ним сайт не ведёт переключатель языков и hreflang на несуществующую версию.
+ */
+function buildRootPopulate(strapi, uid) {
+  const result = buildPopulate(strapi, uid, DEPTH);
+  if (!strapi.getModel(uid).attributes.localizations) return result === true ? '*' : result.populate;
+
+  return { ...(result === true ? {} : result.populate), localizations: { fields: ['locale'] } };
+}
+
+/**
  * Адрес <префикс API>/<имя>: у коллекций в адресе pluralName, у одиночных типов — singularName.
  */
 function contentTypesByRoute(strapi) {
@@ -68,9 +79,8 @@ module.exports = (config, { strapi }) => {
       const uid = routes.get(ctx.path.slice(prefix.length).split('/')[0]);
 
       if (uid) {
-        if (!cache.has(uid)) cache.set(uid, buildPopulate(strapi, uid, DEPTH));
-        const result = cache.get(uid);
-        ctx.query = { ...ctx.query, populate: result === true ? '*' : result.populate };
+        if (!cache.has(uid)) cache.set(uid, buildRootPopulate(strapi, uid));
+        ctx.query = { ...ctx.query, populate: cache.get(uid) };
       }
     }
 

@@ -1,11 +1,15 @@
-// Тег Google Рекламы: только в браузере (.client) и только с номером аккаунта (GOOGLE_ADS_ID).
+// Тег Google Рекламы: только в браузере (.client), только с номером аккаунта (GOOGLE_ADS_ID)
+// и только на посадочной странице или после перехода из объявления (useTrackingActive).
 // $trackContactConversion отправляет конверсию «Контакты» — без GOOGLE_ADS_CONTACT_LABEL ничего не делает
 export default defineNuxtPlugin(() => {
   const config = useRuntimeConfig()
   const { googleAdsId, googleAdsContactLabel } = config.public
   const enabled = googleAdsId && !import.meta.dev
+  let loaded = false
 
-  if (enabled) {
+  function load () {
+    loaded = true
+
     const script = document.createElement('script')
     script.async = true
     script.src = `https://www.googletagmanager.com/gtag/js?id=${googleAdsId}`
@@ -35,10 +39,17 @@ export default defineNuxtPlugin(() => {
     })
   }
 
+  if (enabled) {
+    const active = useTrackingActive()
+    watch(active, (value) => {
+      if (value && !loaded) load()
+    }, { immediate: true })
+  }
+
   return {
     provide: {
       trackContactConversion () {
-        if (enabled && googleAdsContactLabel) {
+        if (loaded && googleAdsContactLabel) {
           window.gtag('event', 'conversion', { send_to: `${googleAdsId}/${googleAdsContactLabel}` })
         }
       },

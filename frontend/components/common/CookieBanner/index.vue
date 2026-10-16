@@ -1,5 +1,5 @@
 <template>
-  <section v-if="visible" class="cookie-banner" role="region" :aria-label="t('cookies.label')">
+  <section v-if="active && undecided" class="cookie-banner" role="region" :aria-label="t('cookies.label')">
     <p class="cookie-banner__text">{{ t('cookies.text') }}</p>
     <div class="cookie-banner__actions">
       <button class="btn btn_xs cookie-banner__btn" type="button" @click="choose('granted')">{{ t('cookies.accept') }}</button>
@@ -11,19 +11,21 @@
 <script setup>
 /**
  * Баннер согласия на cookie (GDPR). Кнопки «Принять» и «Отклонить» одинаковые — этого требует
- * испанский регулятор (AEPD). Показывается, пока посетитель не выбрал; выбор читается только
- * в браузере, поэтому баннер появляется после монтирования, а не при серверном рендере
+ * испанский регулятор (AEPD). Показывается только там, где включены аналитика и реклама
+ * (useTrackingActive), и пока посетитель не выбрал; выбор читается только в браузере,
+ * поэтому баннер появляется после монтирования, а не при серверном рендере
  */
 const { t } = useI18n()
-const visible = ref(false)
+const active = useTrackingActive()
+const undecided = ref(false)
 
 onMounted(() => {
-  visible.value = readCookieConsent() === null
+  undecided.value = readCookieConsent() === null
 })
 
 function choose (value) {
   saveCookieConsent(value)
-  visible.value = false
+  undecided.value = false
 }
 </script>
 

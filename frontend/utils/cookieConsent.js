@@ -4,6 +4,21 @@ const STORAGE_KEY = 'cookie-consent'
 
 export const COOKIE_CONSENT_EVENT = 'cookie-consent'
 
+// Метки клика по рекламе Google в адресе страницы
+const AD_CLICK_PARAMS = ['gclid', 'gbraid', 'wbraid']
+
+/**
+ * Страница, на которой нужны аналитика и реклама: посадочная страница или любая страница,
+ * открытая из объявления (дополнительные ссылки ведут на портфолио, отзывы и контакты)
+ * @param {import('vue-router').RouteLocationNormalized} route
+ * @returns {boolean}
+ */
+export function isTrackedRoute (route) {
+  const name = String(route.name ?? '')
+  return name === 'landing' || name.startsWith('landing___')
+    || AD_CLICK_PARAMS.some(param => param in route.query)
+}
+
 /**
  * Сохранённый выбор посетителя
  * @returns {'granted'|'denied'|null} null — посетитель ещё не выбирал

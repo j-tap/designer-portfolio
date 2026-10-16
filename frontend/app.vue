@@ -3,11 +3,13 @@
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>
+    <CookieBanner />
   </div>
 </template>
 
 <script setup>
 import { defaultLocale } from '~/config/i18n'
+import CookieBanner from '~/components/common/CookieBanner/index.vue'
 
 const { isLoading } = useLoadingIndicator()
 

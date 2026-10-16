@@ -13,9 +13,9 @@ export default defineNuxtPlugin(() => {
 
     window.dataLayer = window.dataLayer || []
     window.gtag = function () { window.dataLayer.push(arguments) }
-    // Режим согласия (Consent Mode v2) для посетителей из ЕЭЗ: баннера cookie на сайте нет,
-    // поэтому по умолчанию всё запрещено — тег не ставит рекламные cookie и шлёт Google
-    // только обезличенные сигналы, по которым тот моделирует конверсии
+    // Режим согласия (Consent Mode v2) для посетителей из ЕЭЗ: пока посетитель не нажал «Принять»
+    // в баннере cookie, всё запрещено — тег не ставит рекламные cookie и шлёт Google только
+    // обезличенные сигналы, по которым тот моделирует конверсии
     window.gtag('consent', 'default', {
       ad_storage: 'denied',
       ad_user_data: 'denied',
@@ -24,6 +24,15 @@ export default defineNuxtPlugin(() => {
     })
     window.gtag('js', new Date())
     window.gtag('config', googleAdsId)
+
+    onCookieConsentGranted(() => {
+      window.gtag('consent', 'update', {
+        ad_storage: 'granted',
+        ad_user_data: 'granted',
+        ad_personalization: 'granted',
+        analytics_storage: 'granted',
+      })
+    })
   }
 
   return {

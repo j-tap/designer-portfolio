@@ -78,5 +78,9 @@
   "contact_form.success_text": "I will reply to your e-mail shortly.",
   "contact_form.send_error": "Could not send the message, please try again",
   "landing.all_reviews": "Read all reviews",
-  "landing.reviews_title": "Client reviews"
+  "landing.reviews_title": "Client reviews",
+  "cookies.text": "I use analytics and advertising cookies to measure visits and improve the site.",
+  "cookies.accept": "Accept",
+  "cookies.reject": "Decline",
+  "cookies.label": "Cookie notice"
 }

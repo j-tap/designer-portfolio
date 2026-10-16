@@ -78,5 +78,9 @@
   "contact_form.success_text": "Te responderé por correo en breve.",
   "contact_form.send_error": "No se pudo enviar el mensaje, inténtalo de nuevo",
   "landing.all_reviews": "Leer todas las reseñas",
-  "landing.reviews_title": "Reseñas de clientes"
+  "landing.reviews_title": "Reseñas de clientes",
+  "cookies.text": "Uso cookies de análisis y publicidad para medir las visitas y mejorar el sitio.",
+  "cookies.accept": "Aceptar",
+  "cookies.reject": "Rechazar",
+  "cookies.label": "Aviso de cookies"
 }

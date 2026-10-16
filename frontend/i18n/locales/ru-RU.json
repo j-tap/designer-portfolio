@@ -78,5 +78,9 @@
   "contact_form.success_text": "Я отвечу вам на почту в ближайшее время.",
   "contact_form.send_error": "Не удалось отправить сообщение, попробуйте ещё раз",
   "landing.all_reviews": "Читать все отзывы",
-  "landing.reviews_title": "Отзывы клиентов"
+  "landing.reviews_title": "Отзывы клиентов",
+  "cookies.text": "Я использую аналитические и рекламные cookie, чтобы измерять посещаемость и улучшать сайт.",
+  "cookies.accept": "Принять",
+  "cookies.reject": "Отклонить",
+  "cookies.label": "Уведомление о cookie"
 }

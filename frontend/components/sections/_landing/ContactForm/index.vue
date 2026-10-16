@@ -43,6 +43,7 @@ const emit = defineEmits(['sent'])
 const { t, locale } = useI18n()
 const client = useStrapiClient()
 const route = useRoute()
+const { $trackContactConversion } = useNuxtApp()
 
 const form = reactive({ name: '', email: '', message: '', website: '' })
 const formToken = ref(null)
@@ -71,6 +72,7 @@ async function send () {
       body: { data: { ...form, formToken: formToken.value, locale: locale.value, page: route.fullPath } },
     })
     sent.value = true
+    $trackContactConversion()
     emit('sent')
   }
   catch (e) {

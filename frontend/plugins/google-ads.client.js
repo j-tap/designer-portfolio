@@ -25,10 +25,11 @@ export default defineNuxtPlugin(() => {
       ad_user_data: 'denied',
       ad_personalization: 'denied',
       analytics_storage: 'denied',
+      // Тег ждёт ответа из баннера, прежде чем отправлять первые данные
+      wait_for_update: 500,
     })
-    window.gtag('js', new Date())
-    window.gtag('config', googleAdsId)
 
+    // До config: если посетитель уже соглашался раньше, первый же визит уходит в Google с согласием
     onCookieConsentGranted(() => {
       window.gtag('consent', 'update', {
         ad_storage: 'granted',
@@ -37,6 +38,9 @@ export default defineNuxtPlugin(() => {
         analytics_storage: 'granted',
       })
     })
+
+    window.gtag('js', new Date())
+    window.gtag('config', googleAdsId)
   }
 
   if (enabled) {

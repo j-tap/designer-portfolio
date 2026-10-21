@@ -8,7 +8,7 @@ services:
       # HTTPS
       - "traefik.http.routers.konoiko-strapi.rule=Host(`${TRAEFIK_DOMAIN}`) && PathPrefix(`/strapi`)"
       - "traefik.http.middlewares.strip-strapi.stripprefix.prefixes=/strapi"
-      - "traefik.http.routers.konoiko-strapi.middlewares=strip-strapi,konoiko-security"
+      - "traefik.http.routers.konoiko-strapi.middlewares=strip-strapi,konoiko-security,konoiko-compress"
       - "traefik.http.routers.konoiko-strapi.entrypoints=websecure"
       - "traefik.http.routers.konoiko-strapi.tls.certresolver=myresolver"
       - "traefik.http.services.konoiko-strapi.loadbalancer.server.port=${PORT_BACKEND}"
@@ -27,7 +27,7 @@ services:
       # HTTPS
       - "traefik.http.routers.konoiko.rule=Host(`${TRAEFIK_DOMAIN}`)"
       - "traefik.http.routers.konoiko.entrypoints=websecure"
-      - "traefik.http.routers.konoiko.middlewares=konoiko-security"
+      - "traefik.http.routers.konoiko.middlewares=konoiko-security,konoiko-compress"
       - "traefik.http.routers.konoiko.tls.certresolver=myresolver"
       - "traefik.http.services.konoiko.loadbalancer.server.port=${PORT_FRONTEND}"
 
@@ -44,3 +44,7 @@ services:
       - "traefik.http.middlewares.konoiko-security.headers.stsSeconds=31536000"
       - "traefik.http.middlewares.konoiko-security.headers.contentTypeNosniff=true"
       - "traefik.http.middlewares.konoiko-security.headers.referrerPolicy=strict-origin-when-cross-origin"
+
+      # Gzip/Brotli for HTML and Strapi JSON. Nuxt already pre-compresses its static files,
+      # and Traefik skips responses that already have Content-Encoding.
+      - "traefik.http.middlewares.konoiko-compress.compress=true"

@@ -45,7 +45,7 @@ body {
     background-color: $color__dark;
   }
   &::-webkit-scrollbar-thumb {
-    background-color: rgba(255, 255, 255, .4);
+    background-color: rgba($color__white, .4);
   }
 
   @include screen('sm') {

@@ -13,7 +13,7 @@
   margin: 0 auto;
   padding: clamp(14px, 1.2vw, 20px) clamp(16px, 1.6vw, 26px);
   background-color: $color__dark;
-  border: 1px solid rgba(255, 255, 255, .2);
+  border: 1px solid rgba($color__white, .2);
   color: $color__white;
 
   &__text {

@@ -7,7 +7,7 @@
 
 @mixin widget-bg() {
   color: $color__white;
-  background-color: rgba(26, 26, 26, 0.8);
+  background-color: rgba($color__dark, .8);
   backdrop-filter: blur(6.5px);
 }
 

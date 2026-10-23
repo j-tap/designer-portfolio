@@ -12,7 +12,9 @@
 <script setup>
 import TheHeader from '~/components/TheHeader/index.vue'
 const isMenuOpen = useMobileMenu()
-const isLoaded = ref(false)
+// Размытие-прелоадер до загрузки скриптов. Страница с preloader: false в definePageMeta
+// (посадочная) показывается сразу: посетитель из рекламы не должен ждать
+const isLoaded = ref(useRoute().meta.preloader === false)
 
 const classes = computed(() => [
   'layout-default',

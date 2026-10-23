@@ -35,7 +35,6 @@
 <script setup>
 import { HtmlMarked, IconBase, ModalBase } from '~/components/common'
 import ContactForm from '../ContactForm'
-import { safeUrl } from '~/utils/url'
 
 const props = defineProps({
   section: {
@@ -45,24 +44,8 @@ const props = defineProps({
 })
 
 const { t } = useI18n()
-const contacts = useContacts()
 const isFormOpen = ref(false)
-
-// WhatsApp — из «Контактов» в Strapi (wa.me)
-const findContact = test => contacts.value.find(item => test(item.link || ''))?.link
-
-const whatsappHref = computed(() => {
-  const link = safeUrl(findContact(link => /wa\.me|whatsapp/i.test(link)))
-  if (!link || !props.section.whatsapp_message) return link
-  try {
-    const url = new URL(link)
-    url.searchParams.set('text', props.section.whatsapp_message)
-    return url.toString()
-  }
-  catch {
-    return link
-  }
-})
+const whatsappHref = useWhatsappLink(() => props.section.whatsapp_message)
 </script>
 
 <style lang="scss" src="./style.scss" scoped />

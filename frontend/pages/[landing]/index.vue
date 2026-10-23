@@ -11,29 +11,41 @@
     </LandingHero>
 
     <div class="page-landing__sections">
-      <Component
-        :is="sectionComponents[section.__component]"
-        v-for="(section, index) in sections"
-        :id="sectionIds[index]"
-        :key="`${section.__component}-${section.id}`"
-        :section="section"
-        :items="section.__component === 'landing.section-cases' ? casesItems(section) : undefined"
-        :class="['page-landing__section', `page-landing__section_${section.__component.split('-').pop()}`]"
-      />
+      <template v-for="(section, index) in sections" :key="`${section.__component}-${section.id}`">
+        <Component
+          :is="sectionComponents[section.__component]"
+          :id="sectionIds[index]"
+          :section="section"
+          :items="section.__component === 'landing.section-cases' ? casesItems(section) : undefined"
+          :class="['page-landing__section', `page-landing__section_${section.__component.split('-').pop()}`]"
+        />
+        <LandingCta
+          v-if="index === ctaAfterIndex"
+          class="page-landing__section page-landing__section_cta"
+          :label="contactSection?.cta_label || t('contact_form.title')"
+          :whatsapp-href="whatsappHref"
+        />
+      </template>
     </div>
+
+    <LandingWhatsappFloat
+      v-if="whatsappHref"
+      :href="whatsappHref"
+      :label="contactSection?.whatsapp_label"
+    />
   </div>
 </template>
 
 <script setup>
 import { TranslationNotice } from '~/components/common'
-import { LandingCards, LandingCases, LandingContact, LandingFaq, LandingHero, LandingReviews } from '~/components/sections'
+import { LandingCards, LandingCases, LandingContact, LandingCta, LandingFaq, LandingHero, LandingReviews, LandingWhatsappFloat } from '~/components/sections'
 import { projectPaths } from '~/config/portfolio'
 
 // Посадочные страницы («Посадочные страницы» в Strapi): /<язык>/<slug>.
 // Отдельные страницы (/contacts, /portfolio…) Nuxt выбирает раньше этого адреса.
 // Без перевода на язык адреса показывается оригинал, canonical ведёт на него (app.vue).
 // Языковые версии (hreflang, переключатель языков) сообщает middleware/landing.js
-definePageMeta({ middleware: 'landing' })
+definePageMeta({ middleware: 'landing', preloader: false })
 
 const sectionComponents = {
   'landing.section-cards': LandingCards,
@@ -72,6 +84,17 @@ const sections = computed(() => {
   const at = casesIndex !== -1 ? casesIndex + 1 : contactIndex !== -1 ? contactIndex : list.length
   return [...list.slice(0, at), auto, ...list.slice(at)]
 })
+
+// Призыв связаться посреди страницы: после отзывов (иначе после проектов), если ниже есть блок контактов
+const contactSection = computed(() => sections.value.find(section => section.__component === 'landing.section-contact'))
+
+const ctaAfterIndex = computed(() => {
+  const types = sections.value.map(section => section.__component)
+  const after = [types.lastIndexOf('landing.section-reviews'), types.lastIndexOf('landing.section-cases')].find(i => i !== -1) ?? -1
+  return after !== -1 && after < types.indexOf('landing.section-contact') - 1 ? after : -1
+})
+
+const whatsappHref = useWhatsappLink(() => contactSection.value?.whatsapp_message)
 
 const anchors = computed(() => Object.fromEntries(Object.entries(ANCHORS)
   .map(([anchor, type]) => [anchor, sections.value.some(section => section.__component === type) ? anchor : null])))

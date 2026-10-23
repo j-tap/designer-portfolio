@@ -1,5 +1,5 @@
 <template>
-  <section v-if="active && undecided" class="cookie-banner" role="region" :aria-label="t('cookies.label')">
+  <section v-if="open" class="cookie-banner" role="region" :aria-label="t('cookies.label')">
     <p class="cookie-banner__text">{{ t('cookies.text') }}</p>
     <div class="cookie-banner__actions">
       <button class="btn btn_xs cookie-banner__btn" type="button" @click="choose('granted')">{{ t('cookies.accept') }}</button>
@@ -18,6 +18,10 @@
 const { t } = useI18n()
 const active = useTrackingActive()
 const undecided = ref(false)
+const open = computed(() => active.value && undecided.value)
+
+const bannerOpen = useCookieBannerOpen()
+watch(open, (value) => { bannerOpen.value = value }, { immediate: true })
 
 onMounted(() => {
   undecided.value = readCookieConsent() === null

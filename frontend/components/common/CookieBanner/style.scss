@@ -31,4 +31,28 @@
   &__btn {
     min-width: 110px;
   }
+
+  // На телефоне — тонкая полоса у самого края, чтобы не закрывать кнопку первого экрана
+  @include screen('sm') {
+    left: 0;
+    right: 0;
+    bottom: 0;
+    gap: 8px;
+    padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+    border-width: 1px 0 0;
+
+    &__text {
+      flex-basis: 100%;
+      font-size: 12px;
+    }
+
+    &__actions {
+      width: 100%;
+    }
+
+    &__btn {
+      flex: 1;
+      min-width: 0;
+    }
+  }
 }

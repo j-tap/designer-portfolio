@@ -1,0 +1,38 @@
+// Фирменный зелёный WhatsApp: значок узнают с первого взгляда
+$whatsapp-green: #25D366;
+
+.landing-whatsapp-float {
+  position: fixed;
+  right: 16px;
+  bottom: calc(16px + env(safe-area-inset-bottom));
+  z-index: 80;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background-color: $whatsapp-green;
+  color: $color__white;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, .35);
+
+  @include screen('lg') {
+    display: none;
+  }
+
+  & &__icon {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+.landing-whatsapp-float-enter-active,
+.landing-whatsapp-float-leave-active {
+  transition: opacity .2s ease, transform .2s ease;
+}
+
+.landing-whatsapp-float-enter-from,
+.landing-whatsapp-float-leave-to {
+  opacity: 0;
+  transform: translateY(12px);
+}

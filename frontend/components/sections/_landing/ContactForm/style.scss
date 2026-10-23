@@ -7,6 +7,64 @@
     overflow: hidden;
   }
 
+  &__choices {
+    margin: 0;
+    padding: 0;
+    border: none;
+  }
+
+  &__legend {
+    padding: 0;
+    // legend не участвует в gap у fieldset
+    margin-bottom: clamp(14px, 1vw, 20px);
+  }
+
+  &__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  &__chip {
+    padding: 10px 18px;
+    background-color: transparent;
+    color: $color__white;
+    border: 1px solid $color__white;
+    font-size: clamp(14px, 1vw, 18px);
+    cursor: pointer;
+    transition: background-color .15s ease-in-out, border-color .15s ease-in-out, color .15s ease-in-out;
+
+    &:hover {
+      border-color: $color__blue;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color__blue;
+      outline-offset: 2px;
+    }
+
+    &_active {
+      background-color: $color__blue;
+      border-color: $color__blue;
+      color: $color__dark;
+    }
+  }
+
+  // Имя и e-mail — в одну строку, если окно достаточно широкое
+  &__row {
+    display: grid;
+    gap: inherit;
+
+    @include screen('md-up') {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  &__optional {
+    font-weight: 300;
+    opacity: .7;
+  }
+
   &__error {
     margin: 0;
     color: $color__blue;

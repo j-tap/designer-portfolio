@@ -38,6 +38,13 @@
   padding-top: 15px;
   border-top: 1px solid $color__white;
 
+  &__quote {
+    margin: 0;
+    font-size: clamp(18px, 1.5vw, 26px);
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
   &__text {
     display: -webkit-box;
     margin: 0;

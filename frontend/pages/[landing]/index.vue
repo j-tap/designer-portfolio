@@ -39,6 +39,7 @@
 <script setup>
 import { TranslationNotice } from '~/components/common'
 import { LandingCards, LandingCases, LandingContact, LandingCta, LandingFaq, LandingHero, LandingReviews, LandingWhatsappFloat } from '~/components/sections'
+import { landingCover } from '~/config/landing'
 import { projectPaths } from '~/config/portfolio'
 
 // Посадочные страницы («Посадочные страницы» в Strapi): /<язык>/<slug>.
@@ -61,12 +62,13 @@ const ANCHORS = {
   contact: 'landing.section-contact',
 }
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const route = useRoute()
 const localePath = useLocalePath()
 const siteMeta = useSiteMeta()
 const absoluteUrl = useAbsoluteUrl()
 const contentLang = useContentLang()
+const { mediaUrl, mediaSrcset } = useMedia()
 
 const { data: landing } = await useRequiredStrapiData('landings', {
   filters: { slug: { $eq: route.params.landing } },
@@ -106,7 +108,8 @@ const sectionIds = computed(() => sections.value.map((section, index) => {
 }))
 
 // Обложки и адреса проектов из раздела «Проекты». Проекты могут быть не переведены на язык
-// страницы — тогда берётся оригинал: нужны только обложка и slug
+// страницы — тогда берётся оригинал: нужны только обложка и slug.
+// Обложка посадочной (config/landing.js) важнее обложки из портфолио
 const caseSlugs = [...new Set(sections.value
   .filter(section => section.__component === 'landing.section-cases')
   .flatMap(section => section.items?.map(item => item.project_slug?.trim()) ?? [])
@@ -124,10 +127,17 @@ const { data: projects } = await useStrapiData('projects', {
 
 function casesItems (section) {
   return (section.items ?? []).map((item) => {
-    const project = projects.value.find(({ slug }) => slug === item.project_slug?.trim())
+    const slug = item.project_slug?.trim()
+    const project = projects.value.find(project => project.slug === slug)
     const [path] = project ? projectPaths(project) : []
-    return { ...item, preview: project?.preview ?? null, to: path ? localePath(path) : null }
+    return { ...item, image: landingCover(slug, locale.value) ?? previewImage(project?.preview), to: path ? localePath(path) : null }
   })
+}
+
+function previewImage (file) {
+  if (!file) return null
+  const { url, width, height, blurhash } = file
+  return { src: mediaUrl(url), srcset: mediaSrcset(file), width, height, blurhash }
 }
 
 usePageMeta({

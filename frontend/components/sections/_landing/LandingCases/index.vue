@@ -18,14 +18,14 @@
           aria-hidden="true"
         >
           <ImgBlock
-            v-if="item.preview"
+            v-if="item.image"
             class="landing-case__img"
-            :src="mediaUrl(item.preview.url)"
-            :srcset="mediaSrcset(item.preview)"
+            :src="item.image.src"
+            :srcset="item.image.srcset"
             sizes="(max-width: 1023px) 100vw, 33vw"
-            :blurhash="item.preview.blurhash"
-            :width="item.preview.width"
-            :height="item.preview.height"
+            :blurhash="item.image.blurhash"
+            :width="item.image.width"
+            :height="item.image.height"
             alt=""
           />
           <TitleOutline v-else class="landing-case__placeholder">{{ item.title }}</TitleOutline>
@@ -48,14 +48,12 @@
 import { NuxtLink } from '#components'
 import { HtmlMarked, ImgBlock, TitleOutline } from '~/components/common'
 
-const { mediaUrl, mediaSrcset } = useMedia()
-
 defineProps({
   section: {
     type: Object,
     required: true,
   },
-  // Проекты раздела с обложкой (preview) и адресом страницы (to), если проект нашёлся в Strapi
+  // Проекты раздела с обложкой (image: src, srcset, размеры) и адресом страницы (to), если проект нашёлся в Strapi
   items: {
     type: Array,
     default: () => [],

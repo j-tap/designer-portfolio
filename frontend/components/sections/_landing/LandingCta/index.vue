@@ -15,7 +15,7 @@
       </a>
     </div>
 
-    <ModalBase v-model="isFormOpen" :title="label">
+    <ModalBase v-model="isFormOpen" :title="label" wide>
       <ContactForm />
     </ModalBase>
   </aside>

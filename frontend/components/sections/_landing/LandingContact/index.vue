@@ -26,7 +26,7 @@
 
     <p v-if="section.signature" class="landing-contact__signature">{{ section.signature }}</p>
 
-    <ModalBase v-model="isFormOpen" :title="section.cta_label || t('contact_form.title')">
+    <ModalBase v-model="isFormOpen" :title="section.cta_label || t('contact_form.title')" wide>
       <ContactForm />
     </ModalBase>
   </section>

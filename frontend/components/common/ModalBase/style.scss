@@ -23,6 +23,10 @@
     &:focus {
       outline: none;
     }
+
+    &_wide {
+      max-width: 960px;
+    }
   }
 
   &__close {

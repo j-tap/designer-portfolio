@@ -8,7 +8,7 @@
       >
         <div
           ref="dialog"
-          class="modal__dialog"
+          :class="['modal__dialog', { modal__dialog_wide: wide }]"
           role="dialog"
           aria-modal="true"
           :aria-labelledby="title ? titleId : undefined"
@@ -37,6 +37,11 @@ defineProps({
   title: {
     type: String,
     default: null,
+  },
+  // Шире обычного: длинное содержимое (форма) меньше растёт в высоту
+  wide: {
+    type: Boolean,
+    default: false,
   },
 })
 

@@ -36,7 +36,8 @@
     }
   }
 
-  &__whatsapp {
+  // WhatsApp и почта
+  &__link {
     display: inline-flex;
     align-items: center;
     gap: 12px;
@@ -51,7 +52,7 @@
     }
   }
 
-  &__whatsapp &__whatsapp-icon {
+  &__link &__link-icon {
     width: 28px;
     height: 28px;
   }

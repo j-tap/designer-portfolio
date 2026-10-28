@@ -2464,37 +2464,34 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@modelcontextprotocol/core@npm:2.0.0":
-  version: 2.0.0
-  resolution: "@modelcontextprotocol/core@npm:2.0.0"
+"@modelcontextprotocol/core@npm:2.3.1":
+  version: 2.3.1
+  resolution: "@modelcontextprotocol/core@npm:2.3.1"
   dependencies:
     zod: "npm:^4.2.0"
-  checksum: 10c0/1cb96fcebfb60651775bcaa3b1e92b47b9317239e9e0352a2d6a404f77d1abfb68ce5b462becd073cddc4db08f2f0024cd3c7dd2582e3463ddb958f65b73fbe3
+  checksum: 10c0/73b5b0b0b58cdb6b1cc59cdc702004ff881d00e065c182473a9e69507ec499ce5705ff494aa08b076e2151ba6bc039ecc514162ccb9d7a20d2fa98f2df7afedc
   languageName: node
   linkType: hard
 
-"@modelcontextprotocol/node@npm:2.0.0":
-  version: 2.0.0
-  resolution: "@modelcontextprotocol/node@npm:2.0.0"
+"@modelcontextprotocol/node@npm:2.1.1":
+  version: 2.1.1
+  resolution: "@modelcontextprotocol/node@npm:2.1.1"
   dependencies:
     "@hono/node-server": "npm:^1.19.9"
+    hono: "npm:^4.11.4"
   peerDependencies:
-    "@modelcontextprotocol/server": ^2.0.0
-    hono: ^4.11.4
-  peerDependenciesMeta:
-    hono:
-      optional: true
-  checksum: 10c0/751be8a3af4f2c12d9335830ea4c8d92820d6b2b0db902ff705f98d437f32ac2a3bf5d1a135d6e2a893b4afcab13aa6f3445f535f9f6a4678036e1a663c6112a
+    "@modelcontextprotocol/server": ^2.3.0
+  checksum: 10c0/3ae1b8379f8479e2a524ed8e4cb7c524cec573dea39e987a789402eb72c7a2ce835b4ade223c4f765b735085d73b35412291953e17373fdacca2768b7f0942c4
   languageName: node
   linkType: hard
 
-"@modelcontextprotocol/server@npm:2.0.0":
-  version: 2.0.0
-  resolution: "@modelcontextprotocol/server@npm:2.0.0"
+"@modelcontextprotocol/server@npm:2.3.1":
+  version: 2.3.1
+  resolution: "@modelcontextprotocol/server@npm:2.3.1"
   dependencies:
-    "@modelcontextprotocol/core": "npm:2.0.0"
+    "@modelcontextprotocol/core": "npm:2.3.1"
     zod: "npm:^4.2.0"
-  checksum: 10c0/18f5dbb4c533eda392a66565d8177d792c8018d3455d2cb241102917f660c0c73181e80cbf2b76b1c0e8efae22e7ee0fbb1c27e667d439ba596f1c6059c1d8af
+  checksum: 10c0/f3e8159af5cb51211109ae4817c0cfcdf349171c090d4a355dafe6117038f9a807052289cb1376d67ad4c005e3772cf1af076dbded498636a022d7c641253f12
   languageName: node
   linkType: hard
 
@@ -8099,15 +8096,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dompurify@npm:3.4.13":
-  version: 3.4.13
-  resolution: "dompurify@npm:3.4.13"
+"dompurify@npm:3.4.17":
+  version: 3.4.17
+  resolution: "dompurify@npm:3.4.17"
   dependencies:
     "@types/trusted-types": "npm:^2.0.7"
   dependenciesMeta:
     "@types/trusted-types":
       optional: true
-  checksum: 10c0/9c2a1a71e1a1d8b77953db7a39ffc935ef4ed4f10fe40770232128c2cbfd4c3dc677d3d7bae51eb24cc52d9ff3548612dc540ecb4343e89b26e809d2be2e0cfe
+  checksum: 10c0/6a12251ef5e700fc91b6d96d33e9f8b5fd590c55276f632cf42d182c5808e9f48d5bef435ab26eac235dfcc05ed8fe95e1c8308dcc502bf1050e561f14d0361a
   languageName: node
   linkType: hard
 
@@ -9431,6 +9428,13 @@ __metadata:
   dependencies:
     parse-passwd: "npm:^1.0.0"
   checksum: 10c0/3c099844f94b8b438f124bd5698bdcfef32b2d455115fb8050d7148e7f7b95fc89ba9922586c491f0e1cdebf437b1053c84ecddb8d596e109e9ac69c5b4a9e27
+  languageName: node
+  linkType: hard
+
+"hono@npm:^4.11.4":
+  version: 4.13.14
+  resolution: "hono@npm:4.13.14"
+  checksum: 10c0/fdedcb49186e3a5eb0fff39c4fd66112718dc1a98c6df9a385f2fc4799c0e59140e3c45fbac12929d658b659d9eb9ddb9ac09161104336023c23f335668c93fd
   languageName: node
   linkType: hard
 
@@ -11028,9 +11032,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"markdown-it@npm:14.3.2, markdown-it@npm:^14.1.1":
-  version: 14.3.2
-  resolution: "markdown-it@npm:14.3.2"
+"markdown-it@npm:14.3.3, markdown-it@npm:^14.1.1":
+  version: 14.3.3
+  resolution: "markdown-it@npm:14.3.3"
   dependencies:
     argparse: "npm:^2.0.1"
     entities: "npm:^4.5.0"
@@ -11040,7 +11044,7 @@ __metadata:
     uc.micro: "npm:^2.1.0"
   bin:
     markdown-it: bin/markdown-it.mjs
-  checksum: 10c0/51d03a244bbacc84aa7229fd784ccc16a76cb853cf93f668c4dfc1e9eb22d03138678e7743accac2304e03151a995068492fde56c7a9fbe6785b4169036cf590
+  checksum: 10c0/d6075ad320731d7fb9f127e496677f4e36cbdba839d7387dabf1f0d07b5c02bdffb46fb3969033817c04e60017e05d4269e4aa74bee58cc0a562a17cc0b6b8ff
   languageName: node
   linkType: hard
 
@@ -15209,9 +15213,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite@npm:6.4.3":
-  version: 6.4.3
-  resolution: "vite@npm:6.4.3"
+"vite@npm:6.4.5":
+  version: 6.4.5
+  resolution: "vite@npm:6.4.5"
   dependencies:
     esbuild: "npm:^0.25.0"
     fdir: "npm:^6.4.4"
@@ -15260,7 +15264,7 @@ __metadata:
       optional: true
   bin:
     vite: bin/vite.js
-  checksum: 10c0/23ce22e50d5c7a87321f04b155c5bc3cf915e34e6c40918975741ed5e8b0c257039a643f1bc1cd829ee814ad92a138704e82084b7ebe40b399a62d8effea630c
+  checksum: 10c0/e9bb246caa72197d2cac0ad05cf2c7c2f71d0affa45ce981e555176b26028db5769b98fc919ca7ff368499ae95c534710e56c4e4adfd8d57ea4b41c396ccd7b0
   languageName: node
   linkType: hard
 

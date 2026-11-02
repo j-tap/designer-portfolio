@@ -31,3 +31,21 @@ export function fillExperience (text, startYear) {
   const years = experienceYears(startYear)
   return years === null ? text : text.replace(PLACEHOLDER, String(years))
 }
+
+/**
+ * fillExperience для всех строк записи Strapi, включая вложенные компоненты и списки —
+ * например, для посадочной страницы, где {years} может стоять в любом блоке.
+ *
+ * @template T
+ * @param {T} value
+ * @param {number} startYear
+ * @return {T}
+ */
+export function fillExperienceDeep (value, startYear) {
+  if (typeof value === 'string') return fillExperience(value, startYear)
+  if (Array.isArray(value)) return value.map(item => fillExperienceDeep(item, startYear))
+  if (value && typeof value === 'object') {
+    return Object.fromEntries(Object.entries(value).map(([key, item]) => [key, fillExperienceDeep(item, startYear)]))
+  }
+  return value
+}

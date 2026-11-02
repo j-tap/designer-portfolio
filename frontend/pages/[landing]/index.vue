@@ -41,6 +41,7 @@ import { TranslationNotice } from '~/components/common'
 import { LandingCards, LandingCases, LandingContact, LandingCta, LandingFaq, LandingHero, LandingReviews, LandingWhatsappFloat } from '~/components/sections'
 import { landingCover } from '~/config/landing'
 import { projectPaths } from '~/config/portfolio'
+import { fillExperienceDeep } from '~/utils/experience'
 
 // Посадочные страницы («Посадочные страницы» в Strapi): /<язык>/<slug>.
 // Отдельные страницы (/contacts, /portfolio…) Nuxt выбирает раньше этого адреса.
@@ -70,9 +71,12 @@ const absoluteUrl = useAbsoluteUrl()
 const contentLang = useContentLang()
 const { mediaUrl, mediaSrcset } = useMedia()
 
-const { data: landing } = await useRequiredStrapiData('landings', {
+const { data: landingData } = await useRequiredStrapiData('landings', {
   filters: { slug: { $eq: route.params.landing } },
 }, { single: true })
+
+// Стаж в текстах пишется как {years} и считается от года начала карьеры (meta-info)
+const landing = computed(() => fillExperienceDeep(landingData.value, siteMeta.value.careerStartYear))
 
 // Пустой раздел (без компонента на сайте) не выводим
 // Блок отзывов подставляется сам (после проектов), если его не добавили в Strapi

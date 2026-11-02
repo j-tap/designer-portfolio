@@ -12,8 +12,9 @@
 /**
  * Баннер согласия на cookie (GDPR). Кнопки «Принять» и «Отклонить» одинаковые — этого требует
  * испанский регулятор (AEPD). Показывается только там, где включены аналитика и реклама
- * (useTrackingActive), и пока посетитель не выбрал; выбор читается только в браузере,
- * поэтому баннер появляется после монтирования, а не при серверном рендере
+ * (useTrackingActive), только посетителям из Европы (consentRequired) и пока посетитель не выбрал;
+ * выбор и часовой пояс известны только в браузере, поэтому баннер появляется после монтирования,
+ * а не при серверном рендере
  */
 const { t } = useI18n()
 const active = useTrackingActive()
@@ -24,7 +25,7 @@ const bannerOpen = useCookieBannerOpen()
 watch(open, (value) => { bannerOpen.value = value }, { immediate: true })
 
 onMounted(() => {
-  undecided.value = readCookieConsent() === null
+  undecided.value = consentRequired() && readCookieConsent() === null
 })
 
 function choose (value) {

@@ -7,6 +7,26 @@ export const COOKIE_CONSENT_EVENT = 'cookie-consent'
 // Метки клика по рекламе Google в адресе страницы
 const AD_CLICK_PARAMS = ['gclid', 'gbraid', 'wbraid']
 
+// Часовые пояса Европы, где согласие на cookie обязательно (ЕЭЗ, Великобритания, Швейцария):
+// Europe/* плюс европейские острова в Атлантике и Кипр. Под Europe/* попадают и страны вне ЕЭЗ
+// (Сербия, Турция и др.) — лишний баннер там не вредит
+const CONSENT_TIME_ZONE = /^(Europe\/|Atlantic\/(Canary|Madeira|Azores|Faroe|Reykjavik)|Africa\/Ceuta|Asia\/(Nicosia|Famagusta)|Arctic\/Longyearbyen)/
+
+/**
+ * Нужно ли спрашивать согласие на cookie. Страну без запроса к серверу не узнать,
+ * поэтому ориентируемся на часовой пояс устройства; неизвестный пояс считаем европейским
+ * @returns {boolean}
+ */
+export function consentRequired () {
+  try {
+    const zone = Intl.DateTimeFormat().resolvedOptions().timeZone
+    return !zone || CONSENT_TIME_ZONE.test(zone)
+  }
+  catch {
+    return true
+  }
+}
+
 /**
  * Страница, на которой нужны аналитика и реклама: посадочная страница или любая страница,
  * открытая из объявления (дополнительные ссылки ведут на портфолио, отзывы и контакты)
@@ -48,11 +68,12 @@ export function saveCookieConsent (value) {
 }
 
 /**
- * Вызывает callback, когда посетитель дал согласие: сразу, если оно уже сохранено, иначе — после выбора
+ * Вызывает callback, когда посетитель дал согласие: сразу, если оно уже сохранено
+ * или не требуется (consentRequired), иначе — после выбора
  * @param {() => void} callback
  */
 export function onCookieConsentGranted (callback) {
-  if (readCookieConsent() === 'granted') {
+  if (!consentRequired() || readCookieConsent() === 'granted') {
     callback()
     return
   }

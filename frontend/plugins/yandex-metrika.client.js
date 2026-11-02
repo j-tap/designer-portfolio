@@ -1,6 +1,6 @@
 // Яндекс Метрика: только в браузере (.client), только с номером счётчика (YANDEX_METRIKA_ID),
 // только на посадочной странице или после перехода из объявления (useTrackingActive)
-// и только после согласия посетителя на cookie (баннер CookieBanner)
+// и только после согласия на cookie там, где оно нужно (Европа, см. consentRequired и баннер CookieBanner)
 export default defineNuxtPlugin(() => {
   const config = useRuntimeConfig()
   if (!config.public.yandexMetrikaId || import.meta.dev) return

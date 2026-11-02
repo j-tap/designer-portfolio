@@ -34,7 +34,8 @@ export default defineNuxtPlugin(() => {
       wait_for_update: 500,
     })
 
-    // До config: если посетитель уже соглашался раньше, первый же визит уходит в Google с согласием
+    // До config: если посетитель уже соглашался раньше или он не из Европы (согласие не требуется),
+    // первый же визит уходит в Google с согласием
     onCookieConsentGranted(() => {
       window.gtag('consent', 'update', {
         ad_storage: 'granted',

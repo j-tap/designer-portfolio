@@ -4,7 +4,8 @@
     <p>{{ t('contact_form.success_text') }}</p>
   </div>
 
-  <form v-else class="form contact-form" @submit.prevent="send">
+  <!-- data-clarity-mask: то, что посетитель вводит в форму, не попадает в записи Clarity -->
+  <form v-else class="form contact-form" data-clarity-mask="True" @submit.prevent="send">
     <fieldset v-for="group in choiceGroups" :key="group.name" class="form__item contact-form__choices">
       <legend class="label contact-form__legend">{{ group.label }}</legend>
       <div class="contact-form__chips">

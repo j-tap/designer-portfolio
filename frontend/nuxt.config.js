@@ -63,6 +63,7 @@ export default defineNuxtConfig({
 				url: strapi.publicUrl
 			},
 			yandexMetrikaId: process.env.YANDEX_METRIKA_ID,
+			clarityId: process.env.CLARITY_ID,
 			googleAdsId: process.env.GOOGLE_ADS_ID,
 			googleAdsContactLabel: process.env.GOOGLE_ADS_CONTACT_LABEL,
 			googleAdsContactClickLabel: process.env.GOOGLE_ADS_CONTACT_CLICK_LABEL,

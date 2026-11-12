@@ -2,7 +2,7 @@
   <aside class="landing-cta">
     <p class="landing-cta__text">{{ t('landing.cta_text') }}</p>
     <div class="landing-cta__actions">
-      <button class="btn landing-cta__btn" type="button" @click="isFormOpen = true">{{ label }}</button>
+      <button class="btn landing-cta__btn" type="button" @click="formOpen = true">{{ label }}</button>
       <a
         v-if="whatsappHref"
         class="landing-cta__whatsapp"
@@ -14,10 +14,6 @@
         WhatsApp
       </a>
     </div>
-
-    <ModalBase v-model="isFormOpen" :title="label" wide>
-      <ContactForm />
-    </ModalBase>
   </aside>
 </template>
 
@@ -26,8 +22,7 @@
  * Призыв связаться посреди посадочной страницы (после проектов и отзывов):
  * чтобы не листать до блока контактов в самом низу
  */
-import { IconBase, ModalBase } from '~/components/common'
-import ContactForm from '../ContactForm'
+import { IconBase } from '~/components/common'
 
 defineProps({
   // Текст кнопки — тот же, что в блоке контактов
@@ -42,7 +37,8 @@ defineProps({
 })
 
 const { t } = useI18n()
-const isFormOpen = ref(false)
+// Окно с формой — одно на страницу, его показывает pages/[landing]
+const formOpen = useContactFormOpen()
 </script>
 
 <style lang="scss" src="./style.scss" scoped />

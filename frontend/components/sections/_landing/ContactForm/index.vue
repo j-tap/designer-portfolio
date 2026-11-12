@@ -6,22 +6,6 @@
 
   <!-- data-clarity-mask: то, что посетитель вводит в форму, не попадает в записи Clarity -->
   <form v-else class="form contact-form" data-clarity-mask="True" @submit.prevent="send">
-    <fieldset v-for="group in choiceGroups" :key="group.name" class="form__item contact-form__choices">
-      <legend class="label contact-form__legend">{{ group.label }}</legend>
-      <div class="contact-form__chips">
-        <button
-          v-for="option in group.options"
-          :key="option"
-          :class="['contact-form__chip', { 'contact-form__chip_active': isChosen(group, option) }]"
-          type="button"
-          :aria-pressed="isChosen(group, option)"
-          @click="choose(group, option)"
-        >
-          {{ option }}
-        </button>
-      </div>
-    </fieldset>
-
     <div class="contact-form__row">
       <label class="form__item">
         <span class="label">{{ t('contact_form.name') }} *</span>
@@ -33,6 +17,24 @@
         <input v-model="form.email" class="field" type="email" name="email" autocomplete="email" :placeholder="t('contact_form.email_placeholder')" maxlength="200" required />
       </label>
     </div>
+
+    <fieldset class="form__item contact-form__choices">
+      <legend class="label contact-form__legend">
+        {{ t('contact_form.topics_label') }} <span class="contact-form__optional">{{ t('contact_form.optional') }}</span>
+      </legend>
+      <div class="contact-form__chips">
+        <button
+          v-for="option in topics"
+          :key="option"
+          :class="['contact-form__chip', { 'contact-form__chip_active': form.topics.includes(option) }]"
+          type="button"
+          :aria-pressed="form.topics.includes(option)"
+          @click="toggleTopic(option)"
+        >
+          {{ option }}
+        </button>
+      </div>
+    </fieldset>
 
     <label class="form__item">
       <span class="label">{{ t('contact_form.message') }} <span class="contact-form__optional">{{ t('contact_form.optional') }}</span></span>
@@ -48,6 +50,12 @@
     <p v-if="error" class="contact-form__error" role="alert">{{ error }}</p>
 
     <button class="btn" type="submit" :disabled="sending">{{ sending ? t('contact_form.sending') : t('contact_form.submit') }}</button>
+
+    <!-- Кому не хочется заполнять форму, может сразу написать в WhatsApp -->
+    <a v-if="whatsappHref" class="contact-form__alt" :href="whatsappHref" target="_blank" rel="noopener">
+      <IconBase class="contact-form__alt-icon" name="social-whatsapp" />
+      {{ t('contact_form.whatsapp_alt') }}
+    </a>
   </form>
 </template>
 
@@ -56,7 +64,18 @@
  * Форма связи. Защита от ботов та же, что у формы отзывов: подписанный токен от сервера
  * (форма, отправленная быстрее нескольких секунд, отклоняется), скрытое поле-ловушка и лимит
  * отправок на сервере. Токен запрашивается при монтировании — то есть при открытии окна.
+ * Обязательны только имя и e-mail: остальное посетитель заполняет, если хочет.
  */
+import { IconBase } from '~/components/common'
+
+defineProps({
+  // Запасной путь для тех, кому проще написать в мессенджер, чем заполнять форму
+  whatsappHref: {
+    type: String,
+    default: null,
+  },
+})
+
 const emit = defineEmits(['sent'])
 
 const { t, locale } = useI18n()
@@ -64,42 +83,28 @@ const client = useStrapiClient()
 const route = useRoute()
 const { $trackContactConversion } = useNuxtApp()
 
-const form = reactive({ name: '', email: '', message: '', website: '', topics: [], timeline: '' })
+const emptyDraft = () => ({ name: '', email: '', message: '', website: '', topics: [] })
 
-// Готовые ответы вместо текста: что нужно (можно несколько) и когда начинать (один).
-// Выбранное уходит в начало сообщения
-const choiceGroups = computed(() => [
-  {
-    name: 'topics',
-    multiple: true,
-    label: t('contact_form.topics_label'),
-    options: ['new', 'redesign', 'audit', 'crm'].map(key => t(`contact_form.topic_${key}`)),
-  },
-  {
-    name: 'timeline',
-    multiple: false,
-    label: t('contact_form.timeline_label'),
-    options: ['asap', 'soon', 'exploring'].map(key => t(`contact_form.timeline_${key}`)),
-  },
-])
+// Черновик живёт дольше окна: закрыл форму кликом мимо или по Esc — при повторном открытии
+// введённое на месте
+const form = useState('contact-form-draft', emptyDraft).value
 
-function isChosen (group, option) {
-  return group.multiple ? form[group.name].includes(option) : form[group.name] === option
-}
+// Готовые ответы вместо текста: что нужно (можно несколько). Выбранное уходит в начало сообщения
+const topics = computed(() => ['new', 'redesign', 'audit', 'crm'].map(key => t(`contact_form.topic_${key}`)))
 
 // Повторный клик снимает выбор
-function choose (group, option) {
-  const value = form[group.name]
-  if (!group.multiple) form[group.name] = value === option ? '' : option
-  else form[group.name] = value.includes(option) ? value.filter(item => item !== option) : [...value, option]
+function toggleTopic (option) {
+  form.topics = form.topics.includes(option)
+    ? form.topics.filter(item => item !== option)
+    : [...form.topics, option]
 }
 
+// Сервер требует непустое сообщение, а для посетителя оно необязательно
 function composeMessage () {
   return [
     form.topics.length && `${t('contact_form.topics_label')} ${form.topics.join(', ')}`,
-    form.timeline && `${t('contact_form.timeline_label')} ${form.timeline}`,
     form.message.trim(),
-  ].filter(Boolean).join('\n\n')
+  ].filter(Boolean).join('\n\n') || '—'
 }
 const formToken = ref(null)
 const error = ref(null)
@@ -119,10 +124,6 @@ onMounted(loadFormToken)
 
 async function send () {
   const message = composeMessage()
-  if (!message) {
-    error.value = t('contact_form.empty_error')
-    return
-  }
 
   sending.value = true
   error.value = null
@@ -143,6 +144,7 @@ async function send () {
       },
     })
     sent.value = true
+    Object.assign(form, emptyDraft())
     $trackContactConversion()
     emit('sent')
   }

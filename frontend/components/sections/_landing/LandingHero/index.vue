@@ -13,7 +13,8 @@
       <HtmlMarked v-if="hero?.text" class="landing-hero__text" :text="hero.text" />
 
       <div v-if="hasActions" class="landing-hero__actions">
-        <a v-if="contactHref && hero.cta_label" class="btn landing-hero__cta" :href="contactHref">
+        <!-- Сразу открывает форму; ссылка на блок контактов — запасной путь без JavaScript -->
+        <a v-if="contactHref && hero.cta_label" class="btn landing-hero__cta" :href="contactHref" @click.prevent="formOpen = true">
           {{ hero.cta_label }}
         </a>
         <a v-if="projectsHref && hero.projects_label" class="landing-hero__link" :href="projectsHref">
@@ -58,6 +59,8 @@ const props = defineProps({
     default: null,
   },
 })
+
+const formOpen = useContactFormOpen()
 
 const titleParts = computed(() => {
   const accent = props.titleAccent?.trim()

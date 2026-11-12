@@ -1,11 +1,7 @@
 <template>
   <Teleport to="body">
     <Transition name="modal">
-      <div
-        v-if="model"
-        class="modal"
-        @mousedown.self="close"
-      >
+      <div v-if="model" class="modal">
         <div
           ref="dialog"
           :class="['modal__dialog', { modal__dialog_wide: wide }]"
@@ -28,7 +24,8 @@ import { useEventListener, useScrollLock } from '@vueuse/core'
 
 /**
  * Универсальное всплывающее окно: затемнённый экран с размытием и блок по центру.
- * Открывается через v-model, закрывается крестиком, Esc или кликом по фону.
+ * Открывается через v-model, закрывается крестиком или Esc. Клик по фону окно не закрывает:
+ * в окнах у нас формы, и случайный клик мимо не должен прятать введённое.
  * Содержимое — в слоте; заголовок (необязательный) — в пропе title.
  */
 const model = defineModel({ type: Boolean, default: false })

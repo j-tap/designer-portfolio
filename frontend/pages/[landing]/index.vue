@@ -33,12 +33,17 @@
       :href="whatsappHref"
       :label="contactSection?.whatsapp_label"
     />
+
+    <!-- Одно окно с формой на страницу: его открывают кнопки первого экрана, середины и контактов -->
+    <ModalBase v-model="formOpen" :title="contactSection?.cta_label || t('contact_form.title')" wide>
+      <ContactForm :whatsapp-href="whatsappHref" />
+    </ModalBase>
   </div>
 </template>
 
 <script setup>
-import { TranslationNotice } from '~/components/common'
-import { LandingCards, LandingCases, LandingContact, LandingCta, LandingFaq, LandingHero, LandingReviews, LandingWhatsappFloat } from '~/components/sections'
+import { ModalBase, TranslationNotice } from '~/components/common'
+import { ContactForm, LandingCards, LandingCases, LandingContact, LandingCta, LandingFaq, LandingHero, LandingReviews, LandingWhatsappFloat } from '~/components/sections'
 import { landingCover } from '~/config/landing'
 import { projectPaths } from '~/config/portfolio'
 import { fillExperienceDeep } from '~/utils/experience'
@@ -101,6 +106,13 @@ const ctaAfterIndex = computed(() => {
 })
 
 const whatsappHref = useWhatsappLink(() => contactSection.value?.whatsapp_message)
+
+// Состояние окна общее для всего приложения: уходя со страницы, закрываем его,
+// чтобы на другой посадочной оно не открылось само
+const formOpen = useContactFormOpen()
+onBeforeUnmount(() => {
+  formOpen.value = false
+})
 
 const anchors = computed(() => Object.fromEntries(Object.entries(ANCHORS)
   .map(([anchor, type]) => [anchor, sections.value.some(section => section.__component === type) ? anchor : null])))

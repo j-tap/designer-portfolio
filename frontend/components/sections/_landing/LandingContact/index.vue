@@ -8,7 +8,7 @@
         v-if="section.cta_label"
         class="btn landing-contact__cta"
         type="button"
-        @click="isFormOpen = true"
+        @click="formOpen = true"
       >
         {{ section.cta_label }}
       </button>
@@ -29,17 +29,12 @@
     </div>
 
     <p v-if="section.signature" class="landing-contact__signature">{{ section.signature }}</p>
-
-    <ModalBase v-model="isFormOpen" :title="section.cta_label || t('contact_form.title')" wide>
-      <ContactForm />
-    </ModalBase>
   </section>
 </template>
 
 <script setup>
-import { HtmlMarked, IconBase, ModalBase } from '~/components/common'
+import { HtmlMarked, IconBase } from '~/components/common'
 import { safeUrl } from '~/utils/url'
-import ContactForm from '../ContactForm'
 
 const props = defineProps({
   section: {
@@ -48,8 +43,8 @@ const props = defineProps({
   },
 })
 
-const { t } = useI18n()
-const isFormOpen = ref(false)
+// Окно с формой — одно на страницу, его показывает pages/[landing]
+const formOpen = useContactFormOpen()
 const whatsappHref = useWhatsappLink(() => props.section.whatsapp_message)
 
 // Почта из «Контактов» в Strapi: адрес виден целиком, чтобы его можно было скопировать.

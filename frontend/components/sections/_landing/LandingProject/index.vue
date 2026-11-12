@@ -26,9 +26,9 @@
       </div>
 
       <PortfolioProject
-        v-else-if="project && place"
+        v-else-if="previewProject && place"
         key="project"
-        :project="project"
+        :project="previewProject"
         :category-slug="place.category"
         :subcategory-slug="place.subcategory"
         embedded
@@ -58,11 +58,14 @@
  * Проект в окне на посадочной странице: та же раскладка, что на странице проекта в портфолио
  * (PortfolioProject), но без ссылок, уводящих со страницы. В конце — призыв связаться
  * и ссылка на полную страницу проекта. Клик по картинке открывает её на весь экран.
+ * Из экранов проекта показывается один, главный (config/landing.js), — остальные на странице проекта.
  * Данные загружаются при открытии окна, а не вместе с посадочной.
  */
 import { ImageZoom } from '~/components/common'
 import { PortfolioProject } from '~/components/sections'
+import { landingScreen } from '~/config/landing'
 import { projectPath, projectPlaces } from '~/config/portfolio'
+import { getPagesByType, pageTypes } from '~/utils/projectPages'
 
 const props = defineProps({
   slug: {
@@ -78,14 +81,31 @@ const props = defineProps({
 
 const emit = defineEmits(['contact'])
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const localePath = useLocalePath()
+const origin = useRequestURL().origin
 
 const { data: project, pending } = useProject({ slug: { $eq: props.slug } }, { required: false })
 
 // Раздел портфолио определяет раскладку проекта и адрес его страницы
 const place = computed(() => (project.value ? projectPlaces(project.value)[0] : null))
 const pagePath = computed(() => place.value && projectPath(place.value, props.slug))
+
+// Один экран: переведённый главный экран из config/landing.js, а если его нет —
+// первый экран первой основной страницы проекта. Шрифты и цвета проекта остаются
+const previewProject = computed(() => {
+  if (!project.value) return null
+  const page = getPagesByType(project.value.pages, pageTypes.default)[0]
+  const local = landingScreen(props.slug, locale.value)
+  const image = local
+    ? { id: `landing-screen-${props.slug}`, url: `${origin}${local.url}`, width: local.width, height: local.height }
+    : page?.images?.[0]
+  return {
+    ...project.value,
+    presentation: [],
+    pages: page && image ? [{ ...page, images: [image] }] : [],
+  }
+})
 
 const zoomSrc = ref(null)
 const zoomAlt = ref('')

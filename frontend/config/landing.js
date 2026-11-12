@@ -18,6 +18,22 @@ export function landingCover (slug, locale) {
   }
 }
 
+// Главный экран проекта для окна предпросмотра на посадочной: один экран вместо всех.
+// Экраны переведены в макетах Figma (копия «… EN (для лендинга)» рядом с оригиналом):
+// на русской посадочной — оригинал, на остальных — английская версия.
+// Файлы в public/landing: <slug>-screen-<ru|en>.webp. Проекта нет в списке — в окне первый экран из Strapi
+const landingScreens = {
+  bizteka: { width: 1920, height: 5742 },
+  reab: { width: 1934, height: 4776 },
+  'vr-logistic': { width: 1920, height: 9922 },
+}
+
+export function landingScreen (slug, locale) {
+  const size = landingScreens[slug]
+  if (!size) return null
+  return { url: `/landing/${slug}-screen-${locale === 'ru' ? 'ru' : 'en'}.webp`, ...size }
+}
+
 // Отзывы в разделе «Отзывы»: сначала эти, в этом порядке, остальные — после них, от новых к старым.
 // Отзыв узнаётся по адресу сайта компании (link). quote — короткая цитата крупно над текстом,
 // company — название компании на странице (по языку; без языка — как в Strapi)

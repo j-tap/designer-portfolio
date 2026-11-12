@@ -8,6 +8,11 @@
     cursor: pointer;
   }
 
+  // В окне один главный экран: на всю ширину, а не в колонку, как на странице проекта
+  :deep(.uiux-pages) {
+    column-count: 1;
+  }
+
   &__status {
     @include landing-text;
     margin: 0;

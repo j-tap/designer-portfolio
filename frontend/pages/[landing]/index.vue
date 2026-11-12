@@ -22,7 +22,7 @@
         <LandingCta
           v-if="index === ctaAfterIndex"
           class="page-landing__section page-landing__section_cta"
-          :label="contactSection?.cta_label || t('contact_form.title')"
+          :label="contactLabel"
           :whatsapp-href="whatsappHref"
         />
       </template>
@@ -35,15 +35,26 @@
     />
 
     <!-- Одно окно с формой на страницу: его открывают кнопки первого экрана, середины и контактов -->
-    <ModalBase v-model="formOpen" :title="contactSection?.cta_label || t('contact_form.title')" wide>
+    <ModalBase v-model="formOpen" :title="contactLabel" wide>
       <ContactForm :whatsapp-href="whatsappHref" />
+    </ModalBase>
+
+    <!-- Проект из раздела «Проекты» — в окне поверх посадочной, а не переходом в портфолио -->
+    <ModalBase v-model="previewOpen" :label="previewTitle" large>
+      <LandingProject
+        v-if="previewOpen"
+        :key="preview.slug.value"
+        :slug="preview.slug.value"
+        :contact-label="contactLabel"
+        @contact="contactFromPreview"
+      />
     </ModalBase>
   </div>
 </template>
 
 <script setup>
 import { ModalBase, TranslationNotice } from '~/components/common'
-import { ContactForm, LandingCards, LandingCases, LandingContact, LandingCta, LandingFaq, LandingHero, LandingReviews, LandingWhatsappFloat } from '~/components/sections'
+import { ContactForm, LandingCards, LandingCases, LandingContact, LandingCta, LandingFaq, LandingHero, LandingProject, LandingReviews, LandingWhatsappFloat } from '~/components/sections'
 import { landingCover } from '~/config/landing'
 import { projectPaths } from '~/config/portfolio'
 import { fillExperienceDeep } from '~/utils/experience'
@@ -113,6 +124,40 @@ const formOpen = useContactFormOpen()
 onBeforeUnmount(() => {
   formOpen.value = false
 })
+
+const contactLabel = computed(() => contactSection.value?.cta_label || t('contact_form.title'))
+
+// Предпросмотр проекта: открытый проект — в адресе (?project=). Окно показывается только
+// в браузере: открыть его сразу при серверном рендере Teleport в body не даст
+const preview = useProjectPreview()
+const mounted = ref(false)
+onMounted(() => {
+  mounted.value = true
+})
+
+const previewOpen = computed({
+  get: () => mounted.value && Boolean(preview.slug.value),
+  set: (value) => {
+    if (!value) preview.close()
+  },
+})
+
+const previewTitle = computed(() => sections.value
+  .filter(section => section.__component === 'landing.section-cases')
+  .flatMap(section => section.items ?? [])
+  .find(item => item.project_slug?.trim() === preview.slug.value)?.title ?? null)
+
+// «Обсудить проект» в конце предпросмотра: окно проекта закрывается, открывается форма.
+// Форму открываем, когда окно проекта уже закрылось (адрес меняется не сразу): иначе оно,
+// закрываясь, сняло бы блокировку прокрутки страницы под формой
+function contactFromPreview () {
+  const stop = watch(previewOpen, (open) => {
+    if (open) return
+    stop()
+    formOpen.value = true
+  })
+  preview.close()
+}
 
 const anchors = computed(() => Object.fromEntries(Object.entries(ANCHORS)
   .map(([anchor, type]) => [anchor, sections.value.some(section => section.__component === type) ? anchor : null])))

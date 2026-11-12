@@ -4,10 +4,11 @@
       <div v-if="model" class="modal">
         <div
           ref="dialog"
-          :class="['modal__dialog', { modal__dialog_wide: wide }]"
+          :class="['modal__dialog', { modal__dialog_wide: wide, modal__dialog_large: large }]"
           role="dialog"
           aria-modal="true"
           :aria-labelledby="title ? titleId : undefined"
+          :aria-label="title ? undefined : label || undefined"
           tabindex="-1"
         >
           <button class="modal__close" type="button" :aria-label="t('modal.close')" @click="close">×</button>
@@ -39,6 +40,16 @@ defineProps({
   wide: {
     type: Boolean,
     default: false,
+  },
+  // Почти во весь экран: страница в окне (предпросмотр проекта); крестик остаётся на виду при прокрутке
+  large: {
+    type: Boolean,
+    default: false,
+  },
+  // Подпись окна для экранных чтецов, если заголовка нет
+  label: {
+    type: String,
+    default: null,
   },
 })
 

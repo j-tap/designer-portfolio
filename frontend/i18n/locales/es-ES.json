@@ -90,5 +90,9 @@
   "cookies.accept": "Aceptar",
   "cookies.reject": "Rechazar",
   "cookies.label": "Aviso de cookies",
-  "landing.cta_text": "¿Quieres un resultado así para tu producto? Cuéntame tu proyecto y te preparo una propuesta."
+  "landing.cta_text": "¿Quieres un resultado así para tu producto? Cuéntame tu proyecto y te preparo una propuesta.",
+  "landing.project_loading": "Cargando el proyecto…",
+  "landing.project_error": "No se pudo cargar el proyecto. Puedes verlo en su página.",
+  "landing.project_page": "Abrir la página del proyecto",
+  "image_zoom.label": "Imagen ampliada"
 }

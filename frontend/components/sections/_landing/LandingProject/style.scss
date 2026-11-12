@@ -1,0 +1,64 @@
+.landing-project {
+  // Картинки проекта открываются на весь экран
+  :deep(.img-block__img) {
+    cursor: zoom-in;
+  }
+
+  :deep(a .img-block__img) {
+    cursor: pointer;
+  }
+
+  &__status {
+    @include landing-text;
+    margin: 0;
+    padding: clamp(40px, 6vw, 120px) 0;
+    text-align: center;
+  }
+
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: clamp(16px, 2.1vw, 40px);
+    margin-top: clamp(40px, 5vw, 100px);
+    padding: clamp(24px, 3.2vw, 60px) clamp(20px, 4.2vw, 80px);
+    border: 1px solid rgba($color__white, .2);
+  }
+
+  &__text {
+    @include landing-text;
+    flex: 1 1 320px;
+    margin: 0;
+    font-weight: 600;
+  }
+
+  &__buttons {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: clamp(16px, 2.1vw, 40px);
+
+    @include screen('sm') {
+      width: 100%;
+    }
+  }
+
+  &__btn {
+    @include screen('sm') {
+      width: 100%;
+    }
+  }
+
+  &__page-link {
+    font-size: clamp(16px, 1.2vw, 20px);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    transition: color .15s ease-in-out;
+
+    &:hover,
+    &:focus-visible {
+      color: $color__blue;
+    }
+  }
+}

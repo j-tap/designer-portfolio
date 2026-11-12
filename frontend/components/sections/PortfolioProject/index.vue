@@ -31,6 +31,12 @@ const props = defineProps({
     type: String,
     default: null,
   },
+  // Проект в окне поверх другой страницы (предпросмотр на посадочной): без ссылок «Назад»
+  // и «Ещё проекты», уводящих со страницы, и без второго h1 на ней
+  embedded: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 // Раскладка страницы проекта зависит от категории; у остальных категорий (identity)
@@ -75,7 +81,7 @@ const links = computed(() => (props.project.links || [])
 
     <header class="portfolio-project__head">
       <TranslationNotice :locale="project.locale" />
-      <h1 class="portfolio-project__title">
+      <Component :is="embedded ? 'h2' : 'h1'" class="portfolio-project__title">
         <NuxtLink
           v-if="safeUrl(project.link)"
           :to="safeUrl(project.link)"
@@ -85,7 +91,7 @@ const links = computed(() => (props.project.links || [])
           {{ project.title }}
         </NuxtLink>
         <template v-else>{{ project.title }}</template>
-      </h1>
+      </Component>
       <div
         v-if="project.subtitle"
         class="portfolio-project__subtitle"
@@ -107,6 +113,7 @@ const links = computed(() => (props.project.links || [])
     />
 
     <ProjectBack
+      v-if="!embedded"
       class="portfolio-project__back"
       :list-path="listPath"
       :project-id="project.id"
@@ -125,13 +132,14 @@ const links = computed(() => (props.project.links || [])
     </div>
 
     <ProjectBack
+      v-if="!embedded"
       class="portfolio-project__back"
       :list-path="listPath"
       :project-id="project.id"
     />
 
     <ProjectMore
-      v-if="moreProjects.length"
+      v-if="moreProjects.length && !embedded"
       :items="moreProjects"
       :category-slug="categorySlug"
       :subcategory-slug="subcategorySlug"

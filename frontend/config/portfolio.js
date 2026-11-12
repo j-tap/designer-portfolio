@@ -22,15 +22,19 @@ export function projectPath ({ category, subcategory = null }, slug) {
   return hasProjectPages({ category, subcategory }) ? portfolioPath(category, subcategory, slug) : null
 }
 
-// Все адреса страницы проекта: в подкатегориях — по адресам подкатегорий, иначе — по адресам категорий.
+// Разделы портфолио, где лежит проект: подкатегории (с их категориями), а если их нет — категории.
 // Нужны categories.slug и subcategories.slug с subcategories.category.slug
-export function projectPaths (project) {
+export function projectPlaces (project) {
   const places = project.subcategories?.length
     ? project.subcategories.map(subcategory => ({ category: subcategory.category?.slug, subcategory: subcategory.slug }))
     : (project.categories ?? []).map(category => ({ category: category.slug }))
 
-  return places
-    .filter(place => place.category)
+  return places.filter(place => place.category)
+}
+
+// Все адреса страницы проекта: в подкатегориях — по адресам подкатегорий, иначе — по адресам категорий
+export function projectPaths (project) {
+  return projectPlaces(project)
     .map(place => projectPath(place, project.slug))
     .filter(Boolean)
 }

@@ -16,6 +16,7 @@
           class="landing-case__media"
           :tabindex="item.to ? -1 : undefined"
           aria-hidden="true"
+          @click.capture="openPreview($event, item)"
         >
           <ImgBlock
             v-if="item.image"
@@ -36,7 +37,7 @@
           <span v-if="item.subtitle" class="landing-case__subtitle">{{ item.subtitle }}</span>
         </h3>
         <HtmlMarked v-if="item.text" class="landing-case__text" :text="item.text" />
-        <NuxtLink v-if="item.to" class="landing-case__link" :to="item.to">
+        <NuxtLink v-if="item.to" class="landing-case__link" :to="item.to" @click.capture="openPreview($event, item)">
           {{ item.link_label || item.title }}
         </NuxtLink>
       </li>
@@ -59,6 +60,18 @@ defineProps({
     default: () => [],
   },
 })
+
+const preview = useProjectPreview()
+
+// Обычный клик открывает проект в окне поверх посадочной; с Ctrl/Cmd/Shift или средней кнопкой —
+// как ссылка, страницей проекта в новой вкладке. Ссылка остаётся ссылкой и для поисковиков.
+// Перехват — в фазе погружения: раньше, чем переход по ссылке у NuxtLink
+function openPreview (event, item) {
+  const slug = item.project_slug?.trim()
+  if (!slug || !item.to || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return
+  event.preventDefault()
+  preview.open(slug)
+}
 </script>
 
 <style lang="scss" src="./style.scss" scoped />

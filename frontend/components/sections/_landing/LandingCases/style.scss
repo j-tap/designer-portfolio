@@ -54,6 +54,61 @@
     transform: scale(1.03);
   }
 
+  // Ссылка-картинка: затемнение и подсказка «Смотреть проект» поверх обложки
+  a#{&}__media {
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-color: rgba($color__dark, .45);
+      opacity: 0;
+      transition: opacity .3s ease-out;
+    }
+  }
+
+  &__hint {
+    position: absolute;
+    z-index: 1;
+    padding: 12px 22px;
+    background-color: $color__blue;
+    color: $color__dark;
+    font-size: clamp(14px, 1.1vw, 18px);
+    font-weight: 600;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity .3s ease-out, transform .3s ease-out;
+
+    &::after {
+      content: ' →';
+    }
+  }
+
+  @media (hover: hover) {
+    a#{&}__media:hover::after {
+      opacity: 1;
+    }
+
+    a#{&}__media:hover &__hint {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  // Наведения нет (телефоны, планшеты): подсказка видна всегда, небольшая, в углу обложки
+  @media (hover: none) {
+    &__hint {
+      right: 12px;
+      bottom: 12px;
+      padding: 8px 14px;
+      font-size: 14px;
+      opacity: 1;
+      transform: none;
+    }
+  }
+
   // Проект без обложки (не нашёлся в Strapi): название контуром. Внутри __media — чтобы перебить
   // inline-block самого TitleOutline
   &__media &__placeholder {

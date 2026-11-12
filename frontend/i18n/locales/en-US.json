@@ -94,5 +94,6 @@
   "landing.project_loading": "Loading the project…",
   "landing.project_error": "The project could not be loaded. You can see it on its page.",
   "landing.project_page": "Open the project page",
+  "landing.case_view": "View project",
   "image_zoom.label": "Enlarged image"
 }

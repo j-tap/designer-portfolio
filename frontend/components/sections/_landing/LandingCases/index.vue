@@ -30,6 +30,8 @@
             alt=""
           />
           <TitleOutline v-else class="landing-case__placeholder">{{ item.title }}</TitleOutline>
+          <!-- Подсказка, что проект открывается: при наведении, а на сенсорных экранах — всегда -->
+          <span v-if="item.to" class="landing-case__hint">{{ t('landing.case_view') }}</span>
         </Component>
 
         <h3 class="landing-case__title">
@@ -61,6 +63,7 @@ defineProps({
   },
 })
 
+const { t } = useI18n()
 const preview = useProjectPreview()
 
 // Обычный клик открывает проект в окне поверх посадочной; с Ctrl/Cmd/Shift или средней кнопкой —

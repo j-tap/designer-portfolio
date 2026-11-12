@@ -94,5 +94,6 @@
   "landing.project_loading": "Cargando el proyecto…",
   "landing.project_error": "No se pudo cargar el proyecto. Puedes verlo en su página.",
   "landing.project_page": "Abrir la página del proyecto",
+  "landing.case_view": "Ver proyecto",
   "image_zoom.label": "Imagen ampliada"
 }

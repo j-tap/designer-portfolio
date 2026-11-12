@@ -94,5 +94,6 @@
   "landing.project_loading": "Загружаю проект…",
   "landing.project_error": "Не удалось загрузить проект. Его можно посмотреть на отдельной странице.",
   "landing.project_page": "Открыть страницу проекта",
+  "landing.case_view": "Смотреть проект",
   "image_zoom.label": "Увеличенное изображение"
 }

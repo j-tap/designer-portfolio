@@ -4,9 +4,12 @@ import { contentLocales } from '~/config/i18n'
 // раньше страницы, а slug у каждой версии свой. Саму запись и 404 загружает страница.
 // Без перевода на язык адреса страница показывает оригинал (как проекты), а адрес с чужим slug
 // при переведённой версии ведёт на её адрес
-export default defineNuxtRouteMiddleware(async (to) => {
+export default defineNuxtRouteMiddleware(async (to, from) => {
   // При гидратации версии уже в payload
   if (import.meta.client && useNuxtApp().isHydrating) return
+  // Та же страница, сменились только параметры (открыли проект: ?project=) — версии уже известны,
+  // а лишний запрос задержал бы открытие окна
+  if (import.meta.client && from && to.path === from.path) return
 
   // Стратегия i18n — prefix: язык всегда первый сегмент адреса
   const locale = to.path.split('/')[1]

@@ -17,6 +17,12 @@
     }
   }
 
+  // В окне (предпросмотр на посадочной) плашка не выходит за поля окна и стоит ниже крестика
+  &_embedded &__links {
+    width: auto;
+    margin: 32px 0 0;
+  }
+
   &__head {
     margin-bottom: clamp(30px, 6vw, 80px);
   }

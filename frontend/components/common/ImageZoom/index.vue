@@ -63,10 +63,10 @@ watch(src, async (value) => {
   if (value) {
     opener = document.activeElement
     await nextTick()
-    root.value?.focus()
+    root.value?.focus({ preventScroll: true })
   }
   else {
-    opener?.focus?.()
+    opener?.focus?.({ preventScroll: true })
     opener = null
   }
 })

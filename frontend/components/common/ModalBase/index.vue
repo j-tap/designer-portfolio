@@ -74,7 +74,7 @@ watch(model, async (open) => {
   if (open) {
     opener = document.activeElement
     await nextTick()
-    dialog.value?.focus()
+    dialog.value?.focus({ preventScroll: true })
   }
   else {
     opener?.focus?.()

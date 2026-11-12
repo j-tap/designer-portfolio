@@ -58,7 +58,7 @@ const links = computed(() => (props.project.links || [])
 </script>
 
 <template>
-  <div class="portfolio-project" :lang="contentLang(project)">
+  <div :class="['portfolio-project', { 'portfolio-project_embedded': embedded }]" :lang="contentLang(project)">
     <ul
       v-if="links.length"
       class="portfolio-project__links links-project"

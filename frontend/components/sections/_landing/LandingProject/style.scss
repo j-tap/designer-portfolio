@@ -62,3 +62,119 @@
     }
   }
 }
+
+// Скелет проекта, пока грузятся данные: те же отступы и пропорции, что у PortfolioProject,
+// тонкие светлые рамки — как контурные заголовки сайта, и бегущий блик.
+// Высота — не меньше экрана: окно сразу стоит наверху и не перескакивает
+.project-skeleton {
+  min-height: calc(100vh - 2 * clamp(16px, 4vw, 60px));
+
+  &__bar {
+    position: relative;
+    overflow: hidden;
+    background-color: rgba($color__white, .03);
+    border: 1px solid rgba($color__white, .14);
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(100deg, transparent 20%, rgba($color__white, .08) 50%, transparent 80%);
+      transform: translateX(-100%);
+      animation: project-skeleton-shine 1.6s ease-in-out infinite;
+    }
+
+    &_links {
+      height: clamp(40px, 4vw, 64px);
+      margin-top: 32px;
+    }
+
+    &_title {
+      width: min(60%, 520px);
+      height: clamp(36px, 6vw, 100px);
+      margin-top: clamp(20px, 4vw, 40px);
+    }
+
+    &_subtitle {
+      width: min(80%, 460px);
+      height: clamp(18px, 2vw, 26px);
+      margin-top: 1vw;
+    }
+
+    &_label {
+      width: 140px;
+      height: clamp(14px, 2vw, 25px);
+      margin-bottom: 12px;
+    }
+
+    &_value {
+      width: min(100%, 420px);
+      height: clamp(30px, 5vw, 90px);
+
+      & + & {
+        margin-top: 10px;
+      }
+    }
+
+    &_step {
+      width: min(100%, 300px);
+      height: 22px;
+    }
+
+    &_image {
+      aspect-ratio: 16 / 10;
+    }
+  }
+
+  &__facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: clamp(30px, 8vw, 100px);
+    margin-top: clamp(30px, 6vw, 80px);
+  }
+
+  &__fact {
+    flex: 1 1 260px;
+  }
+
+  &__steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 14px clamp(20px, 3vw, 60px);
+    margin-top: clamp(30px, 6vw, 50px);
+  }
+
+  &__images {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: clamp(16px, 2vw, 40px);
+    margin-top: clamp(30px, 6vw, 6vw);
+
+    @include screen('sm') {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+@keyframes project-skeleton-shine {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project-skeleton__bar::after {
+    animation: none;
+  }
+}
+
+// Скелет плавно сменяется проектом
+.landing-project-fade-enter-active,
+.landing-project-fade-leave-active {
+  transition: opacity .25s ease-in-out;
+}
+
+.landing-project-fade-enter-from,
+.landing-project-fade-leave-to {
+  opacity: 0;
+}

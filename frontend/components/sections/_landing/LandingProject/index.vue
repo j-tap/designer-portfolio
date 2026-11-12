@@ -1,19 +1,45 @@
 <template>
   <div class="landing-project" @click="zoomImage">
-    <p v-if="pending" class="landing-project__status">{{ t('landing.project_loading') }}</p>
+    <Transition name="landing-project-fade" mode="out-in">
+      <!-- Скелет в форме проекта: окно сразу нужной высоты и не прыгает, пока грузятся данные -->
+      <div v-if="pending" key="skeleton" class="project-skeleton" role="status">
+        <span class="sr-only">{{ t('landing.project_loading') }}</span>
+        <div class="project-skeleton__bar project-skeleton__bar_links" />
+        <div class="project-skeleton__bar project-skeleton__bar_title" />
+        <div class="project-skeleton__bar project-skeleton__bar_subtitle" />
 
-    <PortfolioProject
-      v-else-if="project && place"
-      :project="project"
-      :category-slug="place.category"
-      :subcategory-slug="place.subcategory"
-      embedded
-    />
+        <div class="project-skeleton__facts">
+          <div v-for="fact in 2" :key="fact" class="project-skeleton__fact">
+            <div class="project-skeleton__bar project-skeleton__bar_label" />
+            <div class="project-skeleton__bar project-skeleton__bar_value" />
+            <div class="project-skeleton__bar project-skeleton__bar_value" />
+          </div>
+        </div>
 
-    <!-- Проект не загрузился: остаётся ссылка на его страницу -->
-    <p v-else class="landing-project__status">{{ t('landing.project_error') }}</p>
+        <div class="project-skeleton__steps">
+          <div v-for="step in 4" :key="step" class="project-skeleton__bar project-skeleton__bar_step" />
+        </div>
 
-    <aside class="landing-project__actions">
+        <div class="project-skeleton__images">
+          <div v-for="image in 4" :key="image" class="project-skeleton__bar project-skeleton__bar_image" />
+        </div>
+      </div>
+
+      <PortfolioProject
+        v-else-if="project && place"
+        key="project"
+        :project="project"
+        :category-slug="place.category"
+        :subcategory-slug="place.subcategory"
+        embedded
+      />
+
+      <!-- Проект не загрузился: остаётся ссылка на его страницу -->
+      <p v-else key="error" class="landing-project__status">{{ t('landing.project_error') }}</p>
+    </Transition>
+
+    <!-- Появляется вместе с проектом, а не до него: иначе блок уезжал бы вниз, когда проект загрузится -->
+    <aside v-if="!pending" class="landing-project__actions">
       <p class="landing-project__text">{{ t('landing.cta_text') }}</p>
       <div class="landing-project__buttons">
         <button class="btn landing-project__btn" type="button" @click="emit('contact')">{{ contactLabel }}</button>

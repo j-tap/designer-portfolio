@@ -3,6 +3,8 @@
 const { addBlurhash } = require('./utils/blurhash');
 const { createVariants, removeVariants, createAllVariants } = require('./utils/image-variants');
 const { grantPublicPermissions } = require('./utils/public-permissions');
+const { configureAdminView } = require('./utils/notification-admin-view');
+const { startTelegramPolling } = require('./utils/telegram');
 
 module.exports = {
   register({ strapi }) {
@@ -27,6 +29,10 @@ module.exports = {
 
     // Права роли Public — по роутерам API: новый тип доступен сайту без галочек в админке
     await grantPublicPermissions(strapi);
+
+    // «Уведомления»: подписи полей в админке и бот Telegram, который отвечает номером чата
+    await configureAdminView(strapi);
+    startTelegramPolling();
 
     // Копии для уже загруженных картинок. Первый проход после обновления займёт минуты,
     // сайт тем временем работает: недостающую копию создаст первый же запрос

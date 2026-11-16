@@ -2,6 +2,7 @@
 
 const { siteUrl } = require('../../../utils/urls');
 const { notifyRecipients } = require('../../../utils/notify-recipients');
+const { sendTelegram, escapeHtml: tg, clip } = require('../../../utils/telegram');
 
 function escapeHtml(value) {
   return String(value ?? '')
@@ -28,6 +29,18 @@ async function notifyNewReview(review) {
   const name = escapeHtml(review.name);
   const company = escapeHtml(review.company);
   const text = escapeHtml(review.text).replace(/\n/g, '<br>');
+
+  // Telegram — независимо от почты: чаты из админки («Уведомления»), без них ничего не уходит
+  sendTelegram([
+    '<b>Новый отзыв на сайте</b>',
+    '',
+    `<b>${tg(review.name)}</b>${review.company ? `, ${tg(review.company)}` : ''}`,
+    `<b>Оценка:</b> ${Number(review.rating) || '—'}`,
+    '',
+    review.text ? `<blockquote expandable>${tg(clip(review.text, 2500))}</blockquote>` : '',
+    '',
+    `<a href="${tg(adminUrl)}">Открыть в админке</a>`,
+  ].join('\n').replace(/\n{3,}/g, '\n\n'));
 
   // Адреса из админки («Уведомления»), без них — NOTIFY_EMAIL из .env
   const to = await notifyRecipients();

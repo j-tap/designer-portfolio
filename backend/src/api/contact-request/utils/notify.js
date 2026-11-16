@@ -2,6 +2,7 @@
 
 const { siteUrl } = require('../../../utils/urls');
 const { notifyRecipients } = require('../../../utils/notify-recipients');
+const { sendTelegram, escapeHtml: tg, clip } = require('../../../utils/telegram');
 
 function escapeHtml(value) {
   return String(value ?? '')
@@ -113,6 +114,21 @@ async function notifyNewContactRequest(request) {
     ['Страница', page.url || page.path],
     ['Язык страницы', language],
   ].filter(([, value]) => value).map(([label, value]) => `${label}: ${value}`);
+
+  // Telegram — независимо от почты: чаты из админки («Уведомления»), без них ничего не уходит
+  sendTelegram([
+    '<b>Новая заявка с сайта</b>',
+    '',
+    `<b>Имя:</b> ${tg(request.name)}`,
+    `<b>Почта:</b> ${tg(request.email)}`,
+    topics && `<b>Что нужно:</b> ${tg(topics)}`,
+    page.path && `<b>Страница:</b> ${tg(page.path)}`,
+    language && `<b>Язык страницы:</b> ${tg(language)}`,
+    '',
+    text ? `<blockquote expandable>${tg(clip(text, 2500))}</blockquote>` : '<i>Посетитель ничего не написал.</i>',
+    '',
+    `<a href="${tg(adminUrl)}">Открыть в админке</a>`,
+  ].filter(line => typeof line === 'string').join('\n'));
 
   // Адреса из админки («Уведомления»), без них — NOTIFY_EMAIL из .env
   const to = await notifyRecipients();

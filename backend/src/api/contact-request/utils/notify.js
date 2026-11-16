@@ -1,6 +1,7 @@
 'use strict';
 
 const { siteUrl } = require('../../../utils/urls');
+const { notifyRecipients } = require('../../../utils/notify-recipients');
 
 function escapeHtml(value) {
   return String(value ?? '')
@@ -113,9 +114,16 @@ async function notifyNewContactRequest(request) {
     ['Язык страницы', language],
   ].filter(([, value]) => value).map(([label, value]) => `${label}: ${value}`);
 
+  // Адреса из админки («Уведомления»), без них — NOTIFY_EMAIL из .env
+  const to = await notifyRecipients();
+  if (!to.length) {
+    strapi.log.error('Письмо о новом обращении не отправлено: не задан ни один адрес для уведомлений');
+    return;
+  }
+
   try {
     await strapi.plugin('email').service('email').send({
-      to: process.env.NOTIFY_EMAIL,
+      to,
       // Адрес попадает в заголовок: переводы строк в нём недопустимы (validation в контроллере уже отсекает пробелы)
       replyTo: request.email,
       subject,

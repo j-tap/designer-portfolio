@@ -1,6 +1,7 @@
 'use strict';
 
 const { siteUrl } = require('../../../utils/urls');
+const { notifyRecipients } = require('../../../utils/notify-recipients');
 
 function escapeHtml(value) {
   return String(value ?? '')
@@ -28,9 +29,16 @@ async function notifyNewReview(review) {
   const company = escapeHtml(review.company);
   const text = escapeHtml(review.text).replace(/\n/g, '<br>');
 
+  // Адреса из админки («Уведомления»), без них — NOTIFY_EMAIL из .env
+  const to = await notifyRecipients();
+  if (!to.length) {
+    strapi.log.error('Письмо о новом отзыве не отправлено: не задан ни один адрес для уведомлений');
+    return;
+  }
+
   try {
     await strapi.plugin('email').service('email').send({
-      to: process.env.NOTIFY_EMAIL,
+      to,
       subject: `Новый отзыв на сайте ${domain}`,
       text: `Новый отзыв на сайте ${domain}\n\n${review.text || ''}\n\nОценка: ${review.rating}\n— ${review.name}, ${review.company}\n\nПерейти к просмотру: ${adminUrl}`,
       html: `

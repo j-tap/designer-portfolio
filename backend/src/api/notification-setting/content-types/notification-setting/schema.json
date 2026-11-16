@@ -1,0 +1,19 @@
+{
+  "kind": "singleType",
+  "collectionName": "notification_settings",
+  "info": {
+    "singularName": "notification-setting",
+    "pluralName": "notification-settings",
+    "displayName": "Уведомления",
+    "description": "Адреса, на которые сайт отправляет письма о новых заявках и отзывах"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "emails": {
+      "type": "text"
+    }
+  }
+}

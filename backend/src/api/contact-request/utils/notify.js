@@ -11,33 +11,125 @@ function escapeHtml(value) {
     .replace(/'/g, '&#39;');
 }
 
+const LOCALES = { es: 'испанский', en: 'английский', ru: 'русский' };
+
+/**
+ * Адрес страницы без меток после «?»: рекламные метки длинные и нечитаемые,
+ * а по самой странице и так видно, откуда пришёл человек
+ */
+function parsePage(page) {
+  if (!page) return { path: null, url: null };
+
+  let parsed;
+  try {
+    parsed = new URL(page, siteUrl());
+  }
+  catch {
+    return { path: page, url: null };
+  }
+
+  let path = parsed.pathname;
+  try {
+    path = decodeURI(path);
+  }
+  catch {
+    // Битая кодировка в адресе — показываем как есть
+  }
+
+  return { path, url: `${parsed.origin}${parsed.pathname}` };
+}
+
+// Подпись к выбранным в форме вариантам — как contact_form.topics_label во frontend/i18n/locales.
+// Форма ставит их первым абзацем сообщения: «Что нужно? Редизайн платформы, UX-аудит»
+const TOPIC_LABELS = ['Что нужно?', '¿Qué necesitas?', 'What do you need?'];
+
+/**
+ * Делит сообщение на выбранные в форме варианты и текст, который посетитель написал сам.
+ * Пустое сообщение форма присылает как «—»
+ */
+function splitMessage(message) {
+  let text = String(message ?? '').trim();
+  let topics = null;
+
+  const label = TOPIC_LABELS.find(item => text.startsWith(item));
+  if (label) {
+    const end = text.search(/\n\s*\n/);
+    topics = (end === -1 ? text : text.slice(0, end)).slice(label.length).trim() || null;
+    text = end === -1 ? '' : text.slice(end).trim();
+  }
+
+  return { topics, text: text === '—' ? '' : text };
+}
+
+// Текст посетителя: абзацы через пустую строку, переводы строк внутри абзаца сохраняются
+function messageHtml(text) {
+  return text
+    .split(/\n\s*\n/)
+    .map(paragraph => `<p style="margin:0 0 12px">${escapeHtml(paragraph.trim()).replace(/\n/g, '<br>')}</p>`)
+    .join('\n');
+}
+
 /**
  * Письмо админу о новом обращении. Reply-To — адрес отправителя, чтобы ответить можно было
  * прямо из почты. Ошибка SMTP не мешает сохранению (обращение останется в админке) —
  * она только логируется, поэтому функцию можно не ждать.
+ * Разметка простая, без оформления: таблица с данными, ниже текст сообщения.
+ * Подписи серые, значения и текст посетителя — обычным чёрным текстом
  */
 async function notifyNewContactRequest(request) {
   const domain = new URL(siteUrl()).host;
   const adminUrl = `${strapi.config.get('admin.absoluteUrl')}/content-manager/collection-types/api::contact-request.contact-request/${request.documentId}`;
+  const page = parsePage(request.page);
+  const language = LOCALES[request.locale_code] || request.locale_code || null;
+  // Имя — в теме письма, чтобы заявку было видно в списке писем. Переводы строк в теме недопустимы
+  const subject = `Заявка с сайта ${domain}: ${String(request.name).replace(/\s+/g, ' ').slice(0, 60)}`;
 
-  // Поля пишет кто угодно: без экранирования в письмо можно вставить свою разметку
-  const name = escapeHtml(request.name);
-  const email = escapeHtml(request.email);
-  const message = escapeHtml(request.message).replace(/\n/g, '<br>');
+  const { topics, text } = splitMessage(request.message);
+
+  // Строки таблицы: подпись и значение (уже в HTML). Пустые не показываем
+  const rows = [
+    ['Имя', escapeHtml(request.name)],
+    ['Почта', `<a href="mailto:${escapeHtml(request.email)}">${escapeHtml(request.email)}</a>`],
+    ['Что нужно', escapeHtml(topics)],
+    ['Страница', page.url ? `<a href="${escapeHtml(page.url)}" target="_blank">${escapeHtml(page.path)}</a>` : escapeHtml(page.path)],
+    ['Язык страницы', escapeHtml(language)],
+  ].filter(([, value]) => value);
+
+  const gray = 'color:#888';
+  const cell = 'padding:4px 16px 4px 0;vertical-align:top';
+  const table = rows
+    .map(([label, value]) => `<tr><td style="${cell};${gray};white-space:nowrap">${label}</td><td style="${cell}">${value}</td></tr>`)
+    .join('\n');
+
+  const messageBlock = text
+    ? `<div style="border-left:3px solid #ddd;padding:2px 0 2px 14px;margin:0 0 24px">\n${messageHtml(text)}\n</div>`
+    : `<p style="margin:0 0 24px;${gray}">Посетитель ничего не написал.</p>`;
+
+  const textRows = [
+    ['Имя', request.name],
+    ['Почта', request.email],
+    ['Что нужно', topics],
+    ['Страница', page.url || page.path],
+    ['Язык страницы', language],
+  ].filter(([, value]) => value).map(([label, value]) => `${label}: ${value}`);
 
   try {
     await strapi.plugin('email').service('email').send({
       to: process.env.NOTIFY_EMAIL,
       // Адрес попадает в заголовок: переводы строк в нём недопустимы (validation в контроллере уже отсекает пробелы)
       replyTo: request.email,
-      subject: `Новое сообщение с сайта ${domain}`,
-      text: `Новое сообщение с сайта ${domain}\n\nОт: ${request.name} <${request.email}>\n\n${request.message}\n\nСтраница: ${request.page || '—'}\nВ админке: ${adminUrl}`,
+      subject,
+      text: `Новая заявка с сайта ${domain}\n\n${textRows.join('\n')}\n\nСообщение посетителя:\n\n${text || '(ничего не написал)'}\n\nОтветить: просто ответьте на это письмо\nВ админке: ${adminUrl}`,
       html: `
-<p>Новое сообщение с сайта ${escapeHtml(domain)}</p>
-<p><b>${name}</b> &lt;<a href="mailto:${email}">${email}</a>&gt;</p>
-<blockquote><p>${message}</p></blockquote>
-<p>Страница: ${escapeHtml(request.page || '—')}</p>
-<p><a href="${adminUrl}" target="_blank">Открыть в админке</a></p>
+<div style="font-family:-apple-system,'Segoe UI',Roboto,Arial,sans-serif;font-size:15px;line-height:1.5;color:#222;max-width:640px">
+<h2 style="font-size:20px;margin:0 0 16px;font-weight:600">Новая заявка с сайта ${escapeHtml(domain)}</h2>
+<table cellpadding="0" cellspacing="0" style="border-collapse:collapse;margin:0 0 24px">
+${table}
+</table>
+<p style="margin:0 0 8px;${gray}">Сообщение посетителя</p>
+${messageBlock}
+<p style="margin:0;${gray}">Чтобы ответить, просто ответьте на это письмо. · <a href="${adminUrl}" target="_blank">Открыть в админке</a></p>
+</div>
 `,
     });
   }
